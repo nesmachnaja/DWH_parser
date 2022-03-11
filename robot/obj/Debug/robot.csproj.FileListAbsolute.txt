@@ -1,0 +1,7 @@
+C:\Users\Людмила\source\repos\robot\robot\bin\Debug\robot.exe.config
+C:\Users\Людмила\source\repos\robot\robot\bin\Debug\robot.exe
+C:\Users\Людмила\source\repos\robot\robot\bin\Debug\robot.pdb
+C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.csprojAssemblyReference.cache
+C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.csproj.CoreCompileInputs.cache
+C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.exe
+C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.pdb
