@@ -12,17 +12,11 @@ namespace robot
         private static string path;
         static void Main(string[] args)
         {
-            //await GetPath();
-
-            cl_Parser Parser = new cl_Parser();
+            cl_Parser_BIH Parser = new cl_Parser_BIH();
             Parser.OpenFile();
+            //cl_Parser_MKD Parser = new cl_Parser_MKD();
+            //Parser.OpenFile();
         }
 
-        async Task GetPath()
-        {
-            OpenFileDialog openDialog = new OpenFileDialog();
-            openDialog.ShowDialog();
-            path = openDialog.FileName;
-        }
     }
 }
