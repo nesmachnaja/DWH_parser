@@ -28,8 +28,6 @@ namespace robot
 
         public void parse_BIH_DCA(Excel.Application ex)
         {
-            //ex.WorksheetFunction.CountA()
-
             lastUsedRow = 0;
             string fileName = ex.Workbooks.Item[1].Name;
             
@@ -47,8 +45,8 @@ namespace robot
             {
                 SP sp = new SP();
                 sp.sp_BIH2_DCA(BIH_DCA.Reestr_date);
-                //sp.sp_BIH_TOTAL_DCA(BIH_DCA.Reestr_date);
-                Console.WriteLine("Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.");
+                sp.sp_BIH_TOTAL_DCA(BIH_DCA.Reestr_date);
+                Console.WriteLine("Loading is ready. " + (lastUsedRow).ToString() + " rows were processed.");
             }
             catch (Exception exc)
             {
@@ -59,9 +57,6 @@ namespace robot
             
             ex.Quit();
 
-            //SP sp = new SP();
-            //sp.sp_BIH_TOTAL_DCA(BIH_DCA.Reestr_date);
-
             Console.ReadKey();
 
         }
@@ -70,32 +65,20 @@ namespace robot
         {
             Excel.Range last = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
             Excel.Range range = sheet.get_Range("A1", last);
-            lastUsedRow = lastUsedRow + last.Row - 1; // Последняя строка в документе
             int lastUsedColumn = last.Column;
 
             int firstNull = 0;
 
-            //int LastRow = sheet.UsedRange.Count;
-            //LastRow = LastRow + sheet.UsedRange.Row - 1;
-            for (int firstEmpty = 1; firstEmpty <= lastUsedRow; firstEmpty++)
+            for (int firstEmpty = 1; firstEmpty < last.Row; firstEmpty++)
             {
                 if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) == 0)
                 {
                     firstNull = firstEmpty;
                     break;
                 }
-                    //for (int eachEmpty = firstEmpty; eachEmpty <= lastUsedRow; eachEmpty++)
-                    //{
-                    //    (sheet.Rows[eachEmpty] as Range).Delete();
-                    //    break;
-                    //}
             }
 
-            //cl_BIH_DCA BIH_DCA = new cl_BIH_DCA();
-
-            //DateTime reestr_date = (DateTime)(sheet.Cells[2, 2] as Excel.Range).Value;
-            //BIH_DCA.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
-
+            lastUsedRow = lastUsedRow + firstNull - 2; // Последняя строка в документе
 
             int i = 2; // Строка начала периода
 
@@ -124,7 +107,7 @@ namespace robot
                     {
                         COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                         logAdapter.InsertRow("cl_Parser_BIH", "BIH", DateTime.Now, false, exc.Message);
-                        Console.WriteLine("Error "+i+BIH_DCA.Debt_collector);
+                        Console.WriteLine("Error");
                     }
 
                     i++;
@@ -136,7 +119,7 @@ namespace robot
             {
                 COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_BIH", "BIH", DateTime.Now, false, exc.Message);
-                Console.WriteLine("Error" + i + BIH_DCA.Debt_collector);
+                Console.WriteLine("Error");
             }
 
 
