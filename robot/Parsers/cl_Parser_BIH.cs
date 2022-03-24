@@ -10,9 +10,12 @@ namespace robot
     {
         private int lastUsedRow;
         cl_BIH_DCA BIH_DCA = new cl_BIH_DCA();
+        COUNTRY_LogTableAdapter logAdapter;
 
         public void OpenFile()
         {
+            logAdapter = new COUNTRY_LogTableAdapter();
+
             string pathFile = @"C:\Users\Людмила\source\repos\robot\external_collection_02.2022.xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
@@ -23,11 +26,14 @@ namespace robot
                 Type.Missing, Type.Missing); //открываем файл
 
             if (pathFile.Contains("external_collection")) parse_BIH_DCA(ex);
-            //if (pathFile.Contains("SNAP_")) parse_BIH_SNAP(ex);
+            if (pathFile.Contains("snapshot")) parse_BIH_SNAP(ex);
         }
 
         public void parse_BIH_DCA(Excel.Application ex)
         {
+            string report = "Loading started.";
+            logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, true, report);
+
             lastUsedRow = 0;
             string fileName = ex.Workbooks.Item[1].Name;
             
@@ -38,6 +44,7 @@ namespace robot
             for (int j = 1; j <= 2; j++)
             {
                 Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(j); // берем первый лист;
+                Console.WriteLine("Sheet #" + j.ToString());
                 parse_BIH_DCA_current_sheet(sheet);
             }
 
@@ -46,16 +53,19 @@ namespace robot
                 SP sp = new SP();
                 sp.sp_BIH2_DCA(BIH_DCA.Reestr_date);
                 sp.sp_BIH_TOTAL_DCA(BIH_DCA.Reestr_date);
-                Console.WriteLine("Loading is ready. " + (lastUsedRow).ToString() + " rows were processed.");
+                Console.WriteLine("Loading is ready. " + lastUsedRow.ToString() + " rows were processed.");
             }
             catch (Exception exc)
             {
-                COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                logAdapter.InsertRow("cl_Parser_BIH", "BIH", DateTime.Now, false, exc.Message);
+                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
+                logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
             }
             
             ex.Quit();
+
+            report = "Loading is ready. " + lastUsedRow.ToString() + " rows were processed.";
+            logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, true, report);
 
             Console.ReadKey();
 
@@ -102,11 +112,12 @@ namespace robot
                     try
                     {
                         ad_BIH_DCA_raw.InsertRow(BIH_DCA.Reestr_date.ToString("yyyy-MM-dd"), BIH_DCA.Loan, BIH_DCA.Client, BIH_DCA.DPD, BIH_DCA.Bucket, BIH_DCA.Debt_collector, BIH_DCA.Amount, BIH_DCA.Percent, BIH_DCA.Fee_amount);
+                        Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
                     }
                     catch (Exception exc)
                     {
-                        COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                        logAdapter.InsertRow("cl_Parser_BIH", "BIH", DateTime.Now, false, exc.Message);
+                        //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
+                        logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
                     }
 
@@ -117,19 +128,22 @@ namespace robot
             }
             catch (Exception exc)
             {
-                COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                logAdapter.InsertRow("cl_Parser_BIH", "BIH", DateTime.Now, false, exc.Message);
+                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
+                logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
             }
 
 
 
-            //Xml                                                           ----TO_DO
+            //report                                                           ----TO_DO
         }
 
-        /*
+
         public void parse_BIH_SNAP(Excel.Application ex)
         {
+            string report = "Loading started.";
+            logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
+            
             Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
             Excel.Range last = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
             Excel.Range range = sheet.get_Range("A1", last);
@@ -152,31 +166,35 @@ namespace robot
                 BIH_SNAP_rawTableAdapter ad_BIH_SNAP_raw = new BIH_SNAP_rawTableAdapter();
                 ad_BIH_SNAP_raw.DeletePeriod(BIH_SNAP.Reestr_date.ToString("yyyy-MM-dd"));
 
-                while (i <= lastUsedRow)
+                while (i < lastUsedRow)
                 {
-                    BIH_SNAP.Loan = (int)(sheet.Cells[i, 1] as Excel.Range).Value;
-                    BIH_SNAP.Current_status = (sheet.Cells[i, 2] as Excel.Range).Value;
-                    BIH_SNAP.Loan_disbursement_date = DateTime.Parse((sheet.Cells[i, 3] as Excel.Range).Value);
-                    BIH_SNAP.Product = (sheet.Cells[i, 4] as Excel.Range).Value;
-                    BIH_SNAP.DPD = (int)(sheet.Cells[i, 5] as Excel.Range).Value;
-                    BIH_SNAP.Historical_loan_status = (sheet.Cells[i, 6] as Excel.Range).Value;
-                    BIH_SNAP.Principal_balance = (double)(sheet.Cells[i, 7] as Excel.Range).Value;
-                    BIH_SNAP.Monthly_fee_balance = (double)(sheet.Cells[i, 8] as Excel.Range).Value;
-                    BIH_SNAP.Guarantor_fee_balance = (double)(sheet.Cells[i, 9] as Excel.Range).Value;
-                    BIH_SNAP.Penalty_fee_balance = (double)(sheet.Cells[i, 10] as Excel.Range).Value;
-                    BIH_SNAP.Penalty_interest_balance = (double)(sheet.Cells[i, 11] as Excel.Range).Value;
-                    BIH_SNAP.Interest_balance = (double)(sheet.Cells[i, 12] as Excel.Range).Value;
+                    BIH_SNAP.Loan = int.Parse((sheet.Cells[i, 1] as Excel.Range).Value);
+                    BIH_SNAP.Client = (sheet.Cells[i, 2] as Excel.Range).Value;
+                    BIH_SNAP.Status = (sheet.Cells[i, 3] as Excel.Range).Value;
+                    BIH_SNAP.Loan_disbursment_date = DateTime.Parse((sheet.Cells[i, 4] as Excel.Range).Value);
+                    BIH_SNAP.Product = (sheet.Cells[i, 5] as Excel.Range).Value;
+                    BIH_SNAP.DPD = (int)(sheet.Cells[i, 6] as Excel.Range).Value;
+                    BIH_SNAP.Matured_principle = (double)(sheet.Cells[i, 7] as Excel.Range).Value;
+                    BIH_SNAP.Outstanding_principle = (double)(sheet.Cells[i, 8] as Excel.Range).Value;
+                    BIH_SNAP.Principal_balance = (double)(sheet.Cells[i, 9] as Excel.Range).Value;
+                    BIH_SNAP.Monthly_fee = (double)(sheet.Cells[i, 10] as Excel.Range).Value;
+                    BIH_SNAP.Guarantor_fee = (double)(sheet.Cells[i, 11] as Excel.Range).Value;
+                    BIH_SNAP.Penalty_fee = (double)(sheet.Cells[i, 12] as Excel.Range).Value;
+                    BIH_SNAP.Penalty_interest = (double)(sheet.Cells[i, 13] as Excel.Range).Value;
+                    BIH_SNAP.Interest_balance = (double)(sheet.Cells[i, 14] as Excel.Range).Value;
+                    BIH_SNAP.Credit_amount = (double)(sheet.Cells[i, 15] as Excel.Range).Value;
+                    BIH_SNAP.Available_limit = (double)(sheet.Cells[i, 16] as Excel.Range).Value;
 
                     try
                     {
-                        ad_BIH_SNAP_raw.InsertRow(BIH_SNAP.Reestr_date.ToString("yyyy-MM-dd"), BIH_SNAP.Loan, BIH_SNAP.Current_status, BIH_SNAP.Loan_disbursement_date.ToString("yyyy-MM-dd"),
-                            BIH_SNAP.Product, BIH_SNAP.DPD, BIH_SNAP.Historical_loan_status, BIH_SNAP.Principal_balance, BIH_SNAP.Monthly_fee_balance, BIH_SNAP.Guarantor_fee_balance, BIH_SNAP.Penalty_fee_balance,
-                            BIH_SNAP.Penalty_interest_balance, BIH_SNAP.Interest_balance);
+                        ad_BIH_SNAP_raw.InsertRow(BIH_SNAP.Reestr_date.ToString("yyyy-MM-dd"), BIH_SNAP.Loan, BIH_SNAP.Client, BIH_SNAP.Status, BIH_SNAP.Loan_disbursment_date.ToString("yyyy-MM-dd"),
+                            BIH_SNAP.Product, BIH_SNAP.DPD, BIH_SNAP.Matured_principle, BIH_SNAP.Outstanding_principle, BIH_SNAP.Principal_balance, BIH_SNAP.Monthly_fee,
+                            BIH_SNAP.Guarantor_fee, BIH_SNAP.Penalty_fee, BIH_SNAP.Penalty_interest, BIH_SNAP.Interest_balance, BIH_SNAP.Credit_amount, BIH_SNAP.Available_limit);
+                        Console.WriteLine((i - 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
                     }
                     catch (Exception exc)
                     {
-                        COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                        logAdapter.InsertRow("cl_Parser", "BIH", DateTime.Now, false, exc.Message);
+                        logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
                     }
 
@@ -184,27 +202,30 @@ namespace robot
                 }
 
                 SP sp = new SP();
-                sp.sp_BIH2_portfolio_snapshot();
-                sp.sp_BIH_TOTAL_SNAP();
+                sp.sp_BIH2_portfolio_snapshot(BIH_SNAP.Reestr_date);
+                sp.sp_BIH_TOTAL_SNAP(BIH_SNAP.Reestr_date);
 
                 Console.WriteLine("Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.");
             }
             catch (Exception exc)
             {
-                COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                logAdapter.InsertRow("cl_Parser", "BIH", DateTime.Now, false, exc.Message);
+                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
+                logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
             }
 
 
             ex.Quit();
 
+            report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
+            logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
+
             Console.ReadKey();
 
-            //Xml                                                           ----TO_DO
+            //report                                                           ----TO_DO
 
         }
-        */
+
 
     }
 }

@@ -32,6 +32,8 @@ namespace robot {
         
         private BIH_DCA_rawDataTable tableBIH_DCA_raw;
         
+        private BIH_SNAP_rawDataTable tableBIH_SNAP_raw;
+        
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -71,6 +73,9 @@ namespace robot {
                 }
                 if ((ds.Tables["BIH_DCA_raw"] != null)) {
                     base.Tables.Add(new BIH_DCA_rawDataTable(ds.Tables["BIH_DCA_raw"]));
+                }
+                if ((ds.Tables["BIH_SNAP_raw"] != null)) {
+                    base.Tables.Add(new BIH_SNAP_rawDataTable(ds.Tables["BIH_SNAP_raw"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -127,6 +132,16 @@ namespace robot {
         public BIH_DCA_rawDataTable BIH_DCA_raw {
             get {
                 return this.tableBIH_DCA_raw;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public BIH_SNAP_rawDataTable BIH_SNAP_raw {
+            get {
+                return this.tableBIH_SNAP_raw;
             }
         }
         
@@ -209,6 +224,9 @@ namespace robot {
                 if ((ds.Tables["BIH_DCA_raw"] != null)) {
                     base.Tables.Add(new BIH_DCA_rawDataTable(ds.Tables["BIH_DCA_raw"]));
                 }
+                if ((ds.Tables["BIH_SNAP_raw"] != null)) {
+                    base.Tables.Add(new BIH_SNAP_rawDataTable(ds.Tables["BIH_SNAP_raw"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -266,6 +284,12 @@ namespace robot {
                     this.tableBIH_DCA_raw.InitVars();
                 }
             }
+            this.tableBIH_SNAP_raw = ((BIH_SNAP_rawDataTable)(base.Tables["BIH_SNAP_raw"]));
+            if ((initTable == true)) {
+                if ((this.tableBIH_SNAP_raw != null)) {
+                    this.tableBIH_SNAP_raw.InitVars();
+                }
+            }
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -284,6 +308,8 @@ namespace robot {
             base.Tables.Add(this.tableCOUNTRY_Log);
             this.tableBIH_DCA_raw = new BIH_DCA_rawDataTable();
             base.Tables.Add(this.tableBIH_DCA_raw);
+            this.tableBIH_SNAP_raw = new BIH_SNAP_rawDataTable();
+            base.Tables.Add(this.tableBIH_SNAP_raw);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -307,6 +333,12 @@ namespace robot {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private bool ShouldSerializeBIH_DCA_raw() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        private bool ShouldSerializeBIH_SNAP_raw() {
             return false;
         }
         
@@ -376,6 +408,9 @@ namespace robot {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public delegate void BIH_DCA_rawRowChangeEventHandler(object sender, BIH_DCA_rawRowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        public delegate void BIH_SNAP_rawRowChangeEventHandler(object sender, BIH_SNAP_rawRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -1815,6 +1850,497 @@ namespace robot {
         }
         
         /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class BIH_SNAP_rawDataTable : global::System.Data.TypedTableBase<BIH_SNAP_rawRow> {
+            
+            private global::System.Data.DataColumn columnreestr_date;
+            
+            private global::System.Data.DataColumn columnLoan;
+            
+            private global::System.Data.DataColumn columnClient;
+            
+            private global::System.Data.DataColumn columnStatus;
+            
+            private global::System.Data.DataColumn columnLoan_disbursment_date;
+            
+            private global::System.Data.DataColumn columnProduct;
+            
+            private global::System.Data.DataColumn columnDPD;
+            
+            private global::System.Data.DataColumn columnMatured_principle;
+            
+            private global::System.Data.DataColumn columnOutstanding_principle;
+            
+            private global::System.Data.DataColumn columnPrincipal_balance;
+            
+            private global::System.Data.DataColumn columnMonthly_fee;
+            
+            private global::System.Data.DataColumn columnGuarantor_fee;
+            
+            private global::System.Data.DataColumn columnPenalty_fee;
+            
+            private global::System.Data.DataColumn columnPenalty_interest;
+            
+            private global::System.Data.DataColumn columnInterest_balance;
+            
+            private global::System.Data.DataColumn columnCredit_amount;
+            
+            private global::System.Data.DataColumn columnAvailable_limit;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public BIH_SNAP_rawDataTable() {
+                this.TableName = "BIH_SNAP_raw";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            internal BIH_SNAP_rawDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected BIH_SNAP_rawDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn reestr_dateColumn {
+                get {
+                    return this.columnreestr_date;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn LoanColumn {
+                get {
+                    return this.columnLoan;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn ClientColumn {
+                get {
+                    return this.columnClient;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn StatusColumn {
+                get {
+                    return this.columnStatus;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Loan_disbursment_dateColumn {
+                get {
+                    return this.columnLoan_disbursment_date;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn ProductColumn {
+                get {
+                    return this.columnProduct;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn DPDColumn {
+                get {
+                    return this.columnDPD;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Matured_principleColumn {
+                get {
+                    return this.columnMatured_principle;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Outstanding_principleColumn {
+                get {
+                    return this.columnOutstanding_principle;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Principal_balanceColumn {
+                get {
+                    return this.columnPrincipal_balance;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Monthly_feeColumn {
+                get {
+                    return this.columnMonthly_fee;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Guarantor_feeColumn {
+                get {
+                    return this.columnGuarantor_fee;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Penalty_feeColumn {
+                get {
+                    return this.columnPenalty_fee;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Penalty_interestColumn {
+                get {
+                    return this.columnPenalty_interest;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Interest_balanceColumn {
+                get {
+                    return this.columnInterest_balance;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Credit_amountColumn {
+                get {
+                    return this.columnCredit_amount;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Available_limitColumn {
+                get {
+                    return this.columnAvailable_limit;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public BIH_SNAP_rawRow this[int index] {
+                get {
+                    return ((BIH_SNAP_rawRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public event BIH_SNAP_rawRowChangeEventHandler BIH_SNAP_rawRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public event BIH_SNAP_rawRowChangeEventHandler BIH_SNAP_rawRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public event BIH_SNAP_rawRowChangeEventHandler BIH_SNAP_rawRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public event BIH_SNAP_rawRowChangeEventHandler BIH_SNAP_rawRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void AddBIH_SNAP_rawRow(BIH_SNAP_rawRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public BIH_SNAP_rawRow AddBIH_SNAP_rawRow(
+                        System.DateTime reestr_date, 
+                        int Loan, 
+                        string Client, 
+                        string Status, 
+                        System.DateTime Loan_disbursment_date, 
+                        string Product, 
+                        int DPD, 
+                        double Matured_principle, 
+                        double Outstanding_principle, 
+                        double Principal_balance, 
+                        double Monthly_fee, 
+                        double Guarantor_fee, 
+                        double Penalty_fee, 
+                        double Penalty_interest, 
+                        double Interest_balance, 
+                        double Credit_amount, 
+                        double Available_limit) {
+                BIH_SNAP_rawRow rowBIH_SNAP_rawRow = ((BIH_SNAP_rawRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        reestr_date,
+                        Loan,
+                        Client,
+                        Status,
+                        Loan_disbursment_date,
+                        Product,
+                        DPD,
+                        Matured_principle,
+                        Outstanding_principle,
+                        Principal_balance,
+                        Monthly_fee,
+                        Guarantor_fee,
+                        Penalty_fee,
+                        Penalty_interest,
+                        Interest_balance,
+                        Credit_amount,
+                        Available_limit};
+                rowBIH_SNAP_rawRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowBIH_SNAP_rawRow);
+                return rowBIH_SNAP_rawRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                BIH_SNAP_rawDataTable cln = ((BIH_SNAP_rawDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new BIH_SNAP_rawDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            internal void InitVars() {
+                this.columnreestr_date = base.Columns["reestr_date"];
+                this.columnLoan = base.Columns["Loan"];
+                this.columnClient = base.Columns["Client"];
+                this.columnStatus = base.Columns["Status"];
+                this.columnLoan_disbursment_date = base.Columns["Loan_disbursment_date"];
+                this.columnProduct = base.Columns["Product"];
+                this.columnDPD = base.Columns["DPD"];
+                this.columnMatured_principle = base.Columns["Matured_principle"];
+                this.columnOutstanding_principle = base.Columns["Outstanding_principle"];
+                this.columnPrincipal_balance = base.Columns["Principal_balance"];
+                this.columnMonthly_fee = base.Columns["Monthly_fee"];
+                this.columnGuarantor_fee = base.Columns["Guarantor_fee"];
+                this.columnPenalty_fee = base.Columns["Penalty_fee"];
+                this.columnPenalty_interest = base.Columns["Penalty_interest"];
+                this.columnInterest_balance = base.Columns["Interest_balance"];
+                this.columnCredit_amount = base.Columns["Credit_amount"];
+                this.columnAvailable_limit = base.Columns["Available_limit"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            private void InitClass() {
+                this.columnreestr_date = new global::System.Data.DataColumn("reestr_date", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnreestr_date);
+                this.columnLoan = new global::System.Data.DataColumn("Loan", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnLoan);
+                this.columnClient = new global::System.Data.DataColumn("Client", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnClient);
+                this.columnStatus = new global::System.Data.DataColumn("Status", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnStatus);
+                this.columnLoan_disbursment_date = new global::System.Data.DataColumn("Loan_disbursment_date", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnLoan_disbursment_date);
+                this.columnProduct = new global::System.Data.DataColumn("Product", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnProduct);
+                this.columnDPD = new global::System.Data.DataColumn("DPD", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDPD);
+                this.columnMatured_principle = new global::System.Data.DataColumn("Matured_principle", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMatured_principle);
+                this.columnOutstanding_principle = new global::System.Data.DataColumn("Outstanding_principle", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOutstanding_principle);
+                this.columnPrincipal_balance = new global::System.Data.DataColumn("Principal_balance", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPrincipal_balance);
+                this.columnMonthly_fee = new global::System.Data.DataColumn("Monthly_fee", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMonthly_fee);
+                this.columnGuarantor_fee = new global::System.Data.DataColumn("Guarantor_fee", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnGuarantor_fee);
+                this.columnPenalty_fee = new global::System.Data.DataColumn("Penalty_fee", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPenalty_fee);
+                this.columnPenalty_interest = new global::System.Data.DataColumn("Penalty_interest", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPenalty_interest);
+                this.columnInterest_balance = new global::System.Data.DataColumn("Interest_balance", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnInterest_balance);
+                this.columnCredit_amount = new global::System.Data.DataColumn("Credit_amount", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCredit_amount);
+                this.columnAvailable_limit = new global::System.Data.DataColumn("Available_limit", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAvailable_limit);
+                this.columnClient.MaxLength = 255;
+                this.columnStatus.MaxLength = 255;
+                this.columnProduct.MaxLength = 255;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public BIH_SNAP_rawRow NewBIH_SNAP_rawRow() {
+                return ((BIH_SNAP_rawRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new BIH_SNAP_rawRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(BIH_SNAP_rawRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.BIH_SNAP_rawRowChanged != null)) {
+                    this.BIH_SNAP_rawRowChanged(this, new BIH_SNAP_rawRowChangeEvent(((BIH_SNAP_rawRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.BIH_SNAP_rawRowChanging != null)) {
+                    this.BIH_SNAP_rawRowChanging(this, new BIH_SNAP_rawRowChangeEvent(((BIH_SNAP_rawRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.BIH_SNAP_rawRowDeleted != null)) {
+                    this.BIH_SNAP_rawRowDeleted(this, new BIH_SNAP_rawRowChangeEvent(((BIH_SNAP_rawRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.BIH_SNAP_rawRowDeleting != null)) {
+                    this.BIH_SNAP_rawRowDeleting(this, new BIH_SNAP_rawRowChangeEvent(((BIH_SNAP_rawRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void RemoveBIH_SNAP_rawRow(BIH_SNAP_rawRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                DataSet1 ds = new DataSet1();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "BIH_SNAP_rawDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
         public partial class MKD_DCA_rawRow : global::System.Data.DataRow {
@@ -2749,6 +3275,499 @@ namespace robot {
         }
         
         /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class BIH_SNAP_rawRow : global::System.Data.DataRow {
+            
+            private BIH_SNAP_rawDataTable tableBIH_SNAP_raw;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            internal BIH_SNAP_rawRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableBIH_SNAP_raw = ((BIH_SNAP_rawDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public System.DateTime reestr_date {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tableBIH_SNAP_raw.reestr_dateColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'reestr_date\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.reestr_dateColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public int Loan {
+                get {
+                    try {
+                        return ((int)(this[this.tableBIH_SNAP_raw.LoanColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Loan\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.LoanColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Client {
+                get {
+                    try {
+                        return ((string)(this[this.tableBIH_SNAP_raw.ClientColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Client\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.ClientColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Status {
+                get {
+                    try {
+                        return ((string)(this[this.tableBIH_SNAP_raw.StatusColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Status\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.StatusColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public System.DateTime Loan_disbursment_date {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tableBIH_SNAP_raw.Loan_disbursment_dateColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Loan_disbursment_date\' в таблице \'BIH_SNAP_raw\' равно DBNul" +
+                                "l.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Loan_disbursment_dateColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Product {
+                get {
+                    try {
+                        return ((string)(this[this.tableBIH_SNAP_raw.ProductColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Product\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.ProductColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public int DPD {
+                get {
+                    try {
+                        return ((int)(this[this.tableBIH_SNAP_raw.DPDColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'DPD\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.DPDColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public double Matured_principle {
+                get {
+                    try {
+                        return ((double)(this[this.tableBIH_SNAP_raw.Matured_principleColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Matured_principle\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Matured_principleColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public double Outstanding_principle {
+                get {
+                    try {
+                        return ((double)(this[this.tableBIH_SNAP_raw.Outstanding_principleColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Outstanding_principle\' в таблице \'BIH_SNAP_raw\' равно DBNul" +
+                                "l.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Outstanding_principleColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public double Principal_balance {
+                get {
+                    try {
+                        return ((double)(this[this.tableBIH_SNAP_raw.Principal_balanceColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Principal_balance\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Principal_balanceColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public double Monthly_fee {
+                get {
+                    try {
+                        return ((double)(this[this.tableBIH_SNAP_raw.Monthly_feeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Monthly_fee\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Monthly_feeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public double Guarantor_fee {
+                get {
+                    try {
+                        return ((double)(this[this.tableBIH_SNAP_raw.Guarantor_feeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Guarantor_fee\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Guarantor_feeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public double Penalty_fee {
+                get {
+                    try {
+                        return ((double)(this[this.tableBIH_SNAP_raw.Penalty_feeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Penalty_fee\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Penalty_feeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public double Penalty_interest {
+                get {
+                    try {
+                        return ((double)(this[this.tableBIH_SNAP_raw.Penalty_interestColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Penalty_interest\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Penalty_interestColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public double Interest_balance {
+                get {
+                    try {
+                        return ((double)(this[this.tableBIH_SNAP_raw.Interest_balanceColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Interest_balance\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Interest_balanceColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public double Credit_amount {
+                get {
+                    try {
+                        return ((double)(this[this.tableBIH_SNAP_raw.Credit_amountColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Credit_amount\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Credit_amountColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public double Available_limit {
+                get {
+                    try {
+                        return ((double)(this[this.tableBIH_SNAP_raw.Available_limitColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Available_limit\' в таблице \'BIH_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBIH_SNAP_raw.Available_limitColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool Isreestr_dateNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.reestr_dateColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Setreestr_dateNull() {
+                this[this.tableBIH_SNAP_raw.reestr_dateColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsLoanNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.LoanColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetLoanNull() {
+                this[this.tableBIH_SNAP_raw.LoanColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsClientNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.ClientColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetClientNull() {
+                this[this.tableBIH_SNAP_raw.ClientColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsStatusNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.StatusColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetStatusNull() {
+                this[this.tableBIH_SNAP_raw.StatusColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsLoan_disbursment_dateNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Loan_disbursment_dateColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetLoan_disbursment_dateNull() {
+                this[this.tableBIH_SNAP_raw.Loan_disbursment_dateColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsProductNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.ProductColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetProductNull() {
+                this[this.tableBIH_SNAP_raw.ProductColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsDPDNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.DPDColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetDPDNull() {
+                this[this.tableBIH_SNAP_raw.DPDColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsMatured_principleNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Matured_principleColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetMatured_principleNull() {
+                this[this.tableBIH_SNAP_raw.Matured_principleColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsOutstanding_principleNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Outstanding_principleColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetOutstanding_principleNull() {
+                this[this.tableBIH_SNAP_raw.Outstanding_principleColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsPrincipal_balanceNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Principal_balanceColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetPrincipal_balanceNull() {
+                this[this.tableBIH_SNAP_raw.Principal_balanceColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsMonthly_feeNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Monthly_feeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetMonthly_feeNull() {
+                this[this.tableBIH_SNAP_raw.Monthly_feeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsGuarantor_feeNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Guarantor_feeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetGuarantor_feeNull() {
+                this[this.tableBIH_SNAP_raw.Guarantor_feeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsPenalty_feeNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Penalty_feeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetPenalty_feeNull() {
+                this[this.tableBIH_SNAP_raw.Penalty_feeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsPenalty_interestNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Penalty_interestColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetPenalty_interestNull() {
+                this[this.tableBIH_SNAP_raw.Penalty_interestColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsInterest_balanceNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Interest_balanceColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetInterest_balanceNull() {
+                this[this.tableBIH_SNAP_raw.Interest_balanceColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsCredit_amountNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Credit_amountColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetCredit_amountNull() {
+                this[this.tableBIH_SNAP_raw.Credit_amountColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsAvailable_limitNull() {
+                return this.IsNull(this.tableBIH_SNAP_raw.Available_limitColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetAvailable_limitNull() {
+                this[this.tableBIH_SNAP_raw.Available_limitColumn] = global::System.Convert.DBNull;
+            }
+        }
+        
+        /// <summary>
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
@@ -2870,6 +3889,40 @@ namespace robot {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public BIH_DCA_rawRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        public class BIH_SNAP_rawRowChangeEvent : global::System.EventArgs {
+            
+            private BIH_SNAP_rawRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public BIH_SNAP_rawRowChangeEvent(BIH_SNAP_rawRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public BIH_SNAP_rawRow Row {
                 get {
                     return this.eventRow;
                 }
@@ -3916,11 +4969,12 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "INSERT INTO [dbo].[COUNTRY_Log] ([Module_name], [Country], [Message_date], [Succe" +
-                "ss], [Message]) VALUES (@Module_name, @Country, @Message_date, @Success, @Messag" +
-                "e)";
+            this._commandCollection[1].CommandText = "INSERT INTO [dbo].[COUNTRY_Log] ([Module_name], [Method_name], [Country], [Messag" +
+                "e_date], [Success], [Message]) VALUES (@Module_name, @Method_name, @Country, @Me" +
+                "ssage_date, @Success, @Message)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Module_name", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Module_name", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Method_name", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "Method_name", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Country", global::System.Data.SqlDbType.NVarChar, 20, global::System.Data.ParameterDirection.Input, 0, 0, "Country", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Message_date", global::System.Data.SqlDbType.DateTime, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Message_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Success", global::System.Data.SqlDbType.Bit, 1, global::System.Data.ParameterDirection.Input, 0, 0, "Success", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -4158,7 +5212,7 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
-        public virtual int InsertRow(string Module_name, string Country, System.DateTime Message_date, global::System.Nullable<bool> Success, object Message) {
+        public virtual int InsertRow(string Module_name, string Method_name, string Country, System.DateTime Message_date, global::System.Nullable<bool> Success, object Message) {
             global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[1];
             if ((Module_name == null)) {
                 command.Parameters[0].Value = global::System.DBNull.Value;
@@ -4166,24 +5220,30 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
             else {
                 command.Parameters[0].Value = ((string)(Module_name));
             }
-            if ((Country == null)) {
+            if ((Method_name == null)) {
                 command.Parameters[1].Value = global::System.DBNull.Value;
             }
             else {
-                command.Parameters[1].Value = ((string)(Country));
+                command.Parameters[1].Value = ((string)(Method_name));
             }
-            command.Parameters[2].Value = ((System.DateTime)(Message_date));
-            if ((Success.HasValue == true)) {
-                command.Parameters[3].Value = ((bool)(Success.Value));
+            if ((Country == null)) {
+                command.Parameters[2].Value = global::System.DBNull.Value;
             }
             else {
-                command.Parameters[3].Value = global::System.DBNull.Value;
+                command.Parameters[2].Value = ((string)(Country));
             }
-            if ((Message == null)) {
+            command.Parameters[3].Value = ((System.DateTime)(Message_date));
+            if ((Success.HasValue == true)) {
+                command.Parameters[4].Value = ((bool)(Success.Value));
+            }
+            else {
                 command.Parameters[4].Value = global::System.DBNull.Value;
             }
+            if ((Message == null)) {
+                command.Parameters[5].Value = global::System.DBNull.Value;
+            }
             else {
-                command.Parameters[4].Value = ((object)(Message));
+                command.Parameters[5].Value = ((object)(Message));
             }
             global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
             if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -4640,6 +5700,576 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
     [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
         ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+    public partial class BIH_SNAP_rawTableAdapter : global::System.ComponentModel.Component {
+        
+        private global::System.Data.SqlClient.SqlDataAdapter _adapter;
+        
+        private global::System.Data.SqlClient.SqlConnection _connection;
+        
+        private global::System.Data.SqlClient.SqlTransaction _transaction;
+        
+        private global::System.Data.SqlClient.SqlCommand[] _commandCollection;
+        
+        private bool _clearBeforeFill;
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        public BIH_SNAP_rawTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        protected internal global::System.Data.SqlClient.SqlDataAdapter Adapter {
+            get {
+                if ((this._adapter == null)) {
+                    this.InitAdapter();
+                }
+                return this._adapter;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        internal global::System.Data.SqlClient.SqlConnection Connection {
+            get {
+                if ((this._connection == null)) {
+                    this.InitConnection();
+                }
+                return this._connection;
+            }
+            set {
+                this._connection = value;
+                if ((this.Adapter.InsertCommand != null)) {
+                    this.Adapter.InsertCommand.Connection = value;
+                }
+                if ((this.Adapter.DeleteCommand != null)) {
+                    this.Adapter.DeleteCommand.Connection = value;
+                }
+                if ((this.Adapter.UpdateCommand != null)) {
+                    this.Adapter.UpdateCommand.Connection = value;
+                }
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    if ((this.CommandCollection[i] != null)) {
+                        ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[i])).Connection = value;
+                    }
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        internal global::System.Data.SqlClient.SqlTransaction Transaction {
+            get {
+                return this._transaction;
+            }
+            set {
+                this._transaction = value;
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    this.CommandCollection[i].Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.DeleteCommand != null))) {
+                    this.Adapter.DeleteCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.InsertCommand != null))) {
+                    this.Adapter.InsertCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.UpdateCommand != null))) {
+                    this.Adapter.UpdateCommand.Transaction = this._transaction;
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        protected global::System.Data.SqlClient.SqlCommand[] CommandCollection {
+            get {
+                if ((this._commandCollection == null)) {
+                    this.InitCommandCollection();
+                }
+                return this._commandCollection;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        public bool ClearBeforeFill {
+            get {
+                return this._clearBeforeFill;
+            }
+            set {
+                this._clearBeforeFill = value;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        private void InitAdapter() {
+            this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
+            global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
+            tableMapping.SourceTable = "Table";
+            tableMapping.DataSetTable = "BIH_SNAP_raw";
+            tableMapping.ColumnMappings.Add("reestr_date", "reestr_date");
+            tableMapping.ColumnMappings.Add("Loan", "Loan");
+            tableMapping.ColumnMappings.Add("Client", "Client");
+            tableMapping.ColumnMappings.Add("Status", "Status");
+            tableMapping.ColumnMappings.Add("Loan_disbursment_date", "Loan_disbursment_date");
+            tableMapping.ColumnMappings.Add("Product", "Product");
+            tableMapping.ColumnMappings.Add("DPD", "DPD");
+            tableMapping.ColumnMappings.Add("Matured_principle", "Matured_principle");
+            tableMapping.ColumnMappings.Add("Outstanding_principle", "Outstanding_principle");
+            tableMapping.ColumnMappings.Add("Principal_balance", "Principal_balance");
+            tableMapping.ColumnMappings.Add("Monthly_fee", "Monthly_fee");
+            tableMapping.ColumnMappings.Add("Guarantor_fee", "Guarantor_fee");
+            tableMapping.ColumnMappings.Add("Penalty_fee", "Penalty_fee");
+            tableMapping.ColumnMappings.Add("Penalty_interest", "Penalty_interest");
+            tableMapping.ColumnMappings.Add("Interest_balance", "Interest_balance");
+            tableMapping.ColumnMappings.Add("Credit_amount", "Credit_amount");
+            tableMapping.ColumnMappings.Add("Available_limit", "Available_limit");
+            this._adapter.TableMappings.Add(tableMapping);
+            this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
+            this._adapter.InsertCommand.Connection = this.Connection;
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[BIH_SNAP_raw] ([reestr_date], [Loan], [Client], [Status], [Loan_disbursment_date], [Product], [DPD], [Matured_principle], [Outstanding_principle], [Principal_balance], [Monthly_fee], [Guarantor_fee], [Penalty_fee], [Penalty_interest], [Interest_balance], [Credit_amount], [Available_limit]) VALUES (@reestr_date, @Loan, @Client, @Status, @Loan_disbursment_date, @Product, @DPD, @Matured_principle, @Outstanding_principle, @Principal_balance, @Monthly_fee, @Guarantor_fee, @Penalty_fee, @Penalty_interest, @Interest_balance, @Credit_amount, @Available_limit)";
+            this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reestr_date", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Loan", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Loan", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Client", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Client", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Status", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Status", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Loan_disbursment_date", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Loan_disbursment_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Product", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Product", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@DPD", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "DPD", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Matured_principle", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Matured_principle", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Outstanding_principle", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Outstanding_principle", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Principal_balance", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Principal_balance", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Monthly_fee", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Monthly_fee", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Guarantor_fee", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Guarantor_fee", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Penalty_fee", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Penalty_fee", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Penalty_interest", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Penalty_interest", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Interest_balance", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Interest_balance", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Credit_amount", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Credit_amount", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Available_limit", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Available_limit", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        private void InitConnection() {
+            this._connection = new global::System.Data.SqlClient.SqlConnection();
+            this._connection.ConnectionString = global::robot.Properties.Settings.Default.DWH_RiskConnectionString;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        private void InitCommandCollection() {
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[3];
+            this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[0].Connection = this.Connection;
+            this._commandCollection[0].CommandText = "SELECT * FROM [dbo].[BIH_SNAP_raw]";
+            this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "DELETE FROM [dbo].[BIH_SNAP_raw] WHERE reestr_date = @date";
+            this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = @"INSERT INTO [dbo].[BIH_SNAP_raw] ([reestr_date], [Loan], [Client], [Status], [Loan_disbursment_date], [Product], [DPD], [Matured_principle], [Outstanding_principle], [Principal_balance], [Monthly_fee], [Guarantor_fee], [Penalty_fee], [Penalty_interest], [Interest_balance], [Credit_amount], [Available_limit]) VALUES (@reestr_date, @Loan, @Client, @Status, @Loan_disbursment_date, @Product, @DPD, @Matured_principle, @Outstanding_principle, @Principal_balance, @Monthly_fee, @Guarantor_fee, @Penalty_fee, @Penalty_interest, @Interest_balance, @Credit_amount, @Available_limit)";
+            this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reestr_date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Loan", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Loan", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Client", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "Client", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Status", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "Status", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Loan_disbursment_date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "Loan_disbursment_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Product", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "Product", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@DPD", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "DPD", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Matured_principle", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Matured_principle", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Outstanding_principle", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Outstanding_principle", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Principal_balance", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Principal_balance", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Monthly_fee", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Monthly_fee", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Guarantor_fee", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Guarantor_fee", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Penalty_fee", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Penalty_fee", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Penalty_interest", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Penalty_interest", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Interest_balance", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Interest_balance", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Credit_amount", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Credit_amount", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Available_limit", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Available_limit", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
+        public virtual int Fill(DataSet1.BIH_SNAP_rawDataTable dataTable) {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
+        public virtual DataSet1.BIH_SNAP_rawDataTable GetData() {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            DataSet1.BIH_SNAP_rawDataTable dataTable = new DataSet1.BIH_SNAP_rawDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(DataSet1.BIH_SNAP_rawDataTable dataTable) {
+            return this.Adapter.Update(dataTable);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(DataSet1 dataSet) {
+            return this.Adapter.Update(dataSet, "BIH_SNAP_raw");
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(global::System.Data.DataRow dataRow) {
+            return this.Adapter.Update(new global::System.Data.DataRow[] {
+                        dataRow});
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(global::System.Data.DataRow[] dataRows) {
+            return this.Adapter.Update(dataRows);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
+        public virtual int Insert(
+                    global::System.Nullable<global::System.DateTime> reestr_date, 
+                    global::System.Nullable<int> Loan, 
+                    string Client, 
+                    string Status, 
+                    global::System.Nullable<global::System.DateTime> Loan_disbursment_date, 
+                    string Product, 
+                    global::System.Nullable<int> DPD, 
+                    global::System.Nullable<double> Matured_principle, 
+                    global::System.Nullable<double> Outstanding_principle, 
+                    global::System.Nullable<double> Principal_balance, 
+                    global::System.Nullable<double> Monthly_fee, 
+                    global::System.Nullable<double> Guarantor_fee, 
+                    global::System.Nullable<double> Penalty_fee, 
+                    global::System.Nullable<double> Penalty_interest, 
+                    global::System.Nullable<double> Interest_balance, 
+                    global::System.Nullable<double> Credit_amount, 
+                    global::System.Nullable<double> Available_limit) {
+            if ((reestr_date.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[0].Value = ((System.DateTime)(reestr_date.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[0].Value = global::System.DBNull.Value;
+            }
+            if ((Loan.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[1].Value = ((int)(Loan.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            if ((Client == null)) {
+                this.Adapter.InsertCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Client));
+            }
+            if ((Status == null)) {
+                this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Status));
+            }
+            if ((Loan_disbursment_date.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[4].Value = ((System.DateTime)(Loan_disbursment_date.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
+            }
+            if ((Product == null)) {
+                this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(Product));
+            }
+            if ((DPD.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[6].Value = ((int)(DPD.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[6].Value = global::System.DBNull.Value;
+            }
+            if ((Matured_principle.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[7].Value = ((double)(Matured_principle.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[7].Value = global::System.DBNull.Value;
+            }
+            if ((Outstanding_principle.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[8].Value = ((double)(Outstanding_principle.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[8].Value = global::System.DBNull.Value;
+            }
+            if ((Principal_balance.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[9].Value = ((double)(Principal_balance.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[9].Value = global::System.DBNull.Value;
+            }
+            if ((Monthly_fee.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[10].Value = ((double)(Monthly_fee.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[10].Value = global::System.DBNull.Value;
+            }
+            if ((Guarantor_fee.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[11].Value = ((double)(Guarantor_fee.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[11].Value = global::System.DBNull.Value;
+            }
+            if ((Penalty_fee.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[12].Value = ((double)(Penalty_fee.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[12].Value = global::System.DBNull.Value;
+            }
+            if ((Penalty_interest.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[13].Value = ((double)(Penalty_interest.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[13].Value = global::System.DBNull.Value;
+            }
+            if ((Interest_balance.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[14].Value = ((double)(Interest_balance.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[14].Value = global::System.DBNull.Value;
+            }
+            if ((Credit_amount.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[15].Value = ((double)(Credit_amount.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[15].Value = global::System.DBNull.Value;
+            }
+            if ((Available_limit.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[16].Value = ((double)(Available_limit.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[16].Value = global::System.DBNull.Value;
+            }
+            global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
+            if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                this.Adapter.InsertCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.InsertCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    this.Adapter.InsertCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, false)]
+        public virtual int DeletePeriod(string date) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[1];
+            if ((date == null)) {
+                command.Parameters[0].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[0].Value = ((string)(date));
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
+        public virtual int InsertRow(
+                    string reestr_date, 
+                    global::System.Nullable<int> Loan, 
+                    string Client, 
+                    string Status, 
+                    string Loan_disbursment_date, 
+                    string Product, 
+                    global::System.Nullable<int> DPD, 
+                    global::System.Nullable<double> Matured_principle, 
+                    global::System.Nullable<double> Outstanding_principle, 
+                    global::System.Nullable<double> Principal_balance, 
+                    global::System.Nullable<double> Monthly_fee, 
+                    global::System.Nullable<double> Guarantor_fee, 
+                    global::System.Nullable<double> Penalty_fee, 
+                    global::System.Nullable<double> Penalty_interest, 
+                    global::System.Nullable<double> Interest_balance, 
+                    global::System.Nullable<double> Credit_amount, 
+                    global::System.Nullable<double> Available_limit) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[2];
+            if ((reestr_date == null)) {
+                command.Parameters[0].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[0].Value = ((string)(reestr_date));
+            }
+            if ((Loan.HasValue == true)) {
+                command.Parameters[1].Value = ((int)(Loan.Value));
+            }
+            else {
+                command.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            if ((Client == null)) {
+                command.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[2].Value = ((string)(Client));
+            }
+            if ((Status == null)) {
+                command.Parameters[3].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[3].Value = ((string)(Status));
+            }
+            if ((Loan_disbursment_date == null)) {
+                command.Parameters[4].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[4].Value = ((string)(Loan_disbursment_date));
+            }
+            if ((Product == null)) {
+                command.Parameters[5].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[5].Value = ((string)(Product));
+            }
+            if ((DPD.HasValue == true)) {
+                command.Parameters[6].Value = ((int)(DPD.Value));
+            }
+            else {
+                command.Parameters[6].Value = global::System.DBNull.Value;
+            }
+            if ((Matured_principle.HasValue == true)) {
+                command.Parameters[7].Value = ((double)(Matured_principle.Value));
+            }
+            else {
+                command.Parameters[7].Value = global::System.DBNull.Value;
+            }
+            if ((Outstanding_principle.HasValue == true)) {
+                command.Parameters[8].Value = ((double)(Outstanding_principle.Value));
+            }
+            else {
+                command.Parameters[8].Value = global::System.DBNull.Value;
+            }
+            if ((Principal_balance.HasValue == true)) {
+                command.Parameters[9].Value = ((double)(Principal_balance.Value));
+            }
+            else {
+                command.Parameters[9].Value = global::System.DBNull.Value;
+            }
+            if ((Monthly_fee.HasValue == true)) {
+                command.Parameters[10].Value = ((double)(Monthly_fee.Value));
+            }
+            else {
+                command.Parameters[10].Value = global::System.DBNull.Value;
+            }
+            if ((Guarantor_fee.HasValue == true)) {
+                command.Parameters[11].Value = ((double)(Guarantor_fee.Value));
+            }
+            else {
+                command.Parameters[11].Value = global::System.DBNull.Value;
+            }
+            if ((Penalty_fee.HasValue == true)) {
+                command.Parameters[12].Value = ((double)(Penalty_fee.Value));
+            }
+            else {
+                command.Parameters[12].Value = global::System.DBNull.Value;
+            }
+            if ((Penalty_interest.HasValue == true)) {
+                command.Parameters[13].Value = ((double)(Penalty_interest.Value));
+            }
+            else {
+                command.Parameters[13].Value = global::System.DBNull.Value;
+            }
+            if ((Interest_balance.HasValue == true)) {
+                command.Parameters[14].Value = ((double)(Interest_balance.Value));
+            }
+            else {
+                command.Parameters[14].Value = global::System.DBNull.Value;
+            }
+            if ((Credit_amount.HasValue == true)) {
+                command.Parameters[15].Value = ((double)(Credit_amount.Value));
+            }
+            else {
+                command.Parameters[15].Value = global::System.DBNull.Value;
+            }
+            if ((Available_limit.HasValue == true)) {
+                command.Parameters[16].Value = ((double)(Available_limit.Value));
+            }
+            else {
+                command.Parameters[16].Value = global::System.DBNull.Value;
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
+        }
+    }
+    
+    /// <summary>
+    ///Represents the connection and commands used to retrieve and save data.
+    ///</summary>
+    [global::System.ComponentModel.DesignerCategoryAttribute("code")]
+    [global::System.ComponentModel.ToolboxItem(true)]
+    [global::System.ComponentModel.DataObjectAttribute(true)]
+    [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
+        ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
     public partial class SP : global::System.ComponentModel.Component {
         
         private global::System.Data.IDbCommand[] _commandCollection;
@@ -4658,7 +6288,7 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.IDbCommand[5];
+            this._commandCollection = new global::System.Data.IDbCommand[7];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[0])).Connection = new global::System.Data.SqlClient.SqlConnection(global::robot.Properties.Settings.Default.DWH_RiskConnectionString);
             ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[0])).CommandText = "dbo.sp_MKD_TOTAL_DCA";
@@ -4687,6 +6317,18 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
             ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[4])).CommandType = global::System.Data.CommandType.StoredProcedure;
             ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[4])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[4])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[5] = new global::System.Data.SqlClient.SqlCommand();
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[5])).Connection = new global::System.Data.SqlClient.SqlConnection(global::robot.Properties.Settings.Default.DWH_RiskConnectionString);
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[5])).CommandText = "dbo.sp_BIH2_portfolio_snapshot";
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[5])).CommandType = global::System.Data.CommandType.StoredProcedure;
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[5])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[5])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[6] = new global::System.Data.SqlClient.SqlCommand();
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[6])).Connection = new global::System.Data.SqlClient.SqlConnection(global::robot.Properties.Settings.Default.DWH_RiskConnectionString);
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[6])).CommandText = "dbo.sp_BIH_TOTAL_SNAP";
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[6])).CommandType = global::System.Data.CommandType.StoredProcedure;
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[6])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[6])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@snapdate", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4846,6 +6488,74 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
                 return ((object)(returnValue));
             }
         }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual object sp_BIH2_portfolio_snapshot(global::System.Nullable<global::System.DateTime> date) {
+            global::System.Data.SqlClient.SqlCommand command = ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[5]));
+            if ((date.HasValue == true)) {
+                command.Parameters[1].Value = ((System.DateTime)(date.Value));
+            }
+            else {
+                command.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            object returnValue;
+            try {
+                returnValue = command.ExecuteScalar();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            if (((returnValue == null) 
+                        || (returnValue.GetType() == typeof(global::System.DBNull)))) {
+                return null;
+            }
+            else {
+                return ((object)(returnValue));
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual object sp_BIH_TOTAL_SNAP(global::System.Nullable<global::System.DateTime> snapdate) {
+            global::System.Data.SqlClient.SqlCommand command = ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[6]));
+            if ((snapdate.HasValue == true)) {
+                command.Parameters[1].Value = ((System.DateTime)(snapdate.Value));
+            }
+            else {
+                command.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            object returnValue;
+            try {
+                returnValue = command.ExecuteScalar();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            if (((returnValue == null) 
+                        || (returnValue.GetType() == typeof(global::System.DBNull)))) {
+                return null;
+            }
+            else {
+                return ((object)(returnValue));
+            }
+        }
     }
     
     /// <summary>
@@ -4867,6 +6577,8 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
         private COUNTRY_LogTableAdapter _cOUNTRY_LogTableAdapter;
         
         private BIH_DCA_rawTableAdapter _bIH_DCA_rawTableAdapter;
+        
+        private BIH_SNAP_rawTableAdapter _bIH_SNAP_rawTableAdapter;
         
         private bool _backupDataSetBeforeUpdate;
         
@@ -4941,6 +6653,20 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.EditorAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterManagerPropertyEditor, Microso" +
+            "ft.VSDesigner, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3" +
+            "a", "System.Drawing.Design.UITypeEditor")]
+        public BIH_SNAP_rawTableAdapter BIH_SNAP_rawTableAdapter {
+            get {
+                return this._bIH_SNAP_rawTableAdapter;
+            }
+            set {
+                this._bIH_SNAP_rawTableAdapter = value;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public bool BackupDataSetBeforeUpdate {
             get {
                 return this._backupDataSetBeforeUpdate;
@@ -4974,6 +6700,10 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
                             && (this._bIH_DCA_rawTableAdapter.Connection != null))) {
                     return this._bIH_DCA_rawTableAdapter.Connection;
                 }
+                if (((this._bIH_SNAP_rawTableAdapter != null) 
+                            && (this._bIH_SNAP_rawTableAdapter.Connection != null))) {
+                    return this._bIH_SNAP_rawTableAdapter.Connection;
+                }
                 return null;
             }
             set {
@@ -4997,6 +6727,9 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
                     count = (count + 1);
                 }
                 if ((this._bIH_DCA_rawTableAdapter != null)) {
+                    count = (count + 1);
+                }
+                if ((this._bIH_SNAP_rawTableAdapter != null)) {
                     count = (count + 1);
                 }
                 return count;
@@ -5046,6 +6779,15 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
                     allChangedRows.AddRange(updatedRows);
                 }
             }
+            if ((this._bIH_SNAP_rawTableAdapter != null)) {
+                global::System.Data.DataRow[] updatedRows = dataSet.BIH_SNAP_raw.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
+                updatedRows = this.GetRealUpdatedRows(updatedRows, allAddedRows);
+                if (((updatedRows != null) 
+                            && (0 < updatedRows.Length))) {
+                    result = (result + this._bIH_SNAP_rawTableAdapter.Update(updatedRows));
+                    allChangedRows.AddRange(updatedRows);
+                }
+            }
             return result;
         }
         
@@ -5088,6 +6830,14 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
                     allAddedRows.AddRange(addedRows);
                 }
             }
+            if ((this._bIH_SNAP_rawTableAdapter != null)) {
+                global::System.Data.DataRow[] addedRows = dataSet.BIH_SNAP_raw.Select(null, null, global::System.Data.DataViewRowState.Added);
+                if (((addedRows != null) 
+                            && (0 < addedRows.Length))) {
+                    result = (result + this._bIH_SNAP_rawTableAdapter.Update(addedRows));
+                    allAddedRows.AddRange(addedRows);
+                }
+            }
             return result;
         }
         
@@ -5098,6 +6848,14 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private int UpdateDeletedRows(DataSet1 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
             int result = 0;
+            if ((this._bIH_SNAP_rawTableAdapter != null)) {
+                global::System.Data.DataRow[] deletedRows = dataSet.BIH_SNAP_raw.Select(null, null, global::System.Data.DataViewRowState.Deleted);
+                if (((deletedRows != null) 
+                            && (0 < deletedRows.Length))) {
+                    result = (result + this._bIH_SNAP_rawTableAdapter.Update(deletedRows));
+                    allChangedRows.AddRange(deletedRows);
+                }
+            }
             if ((this._bIH_DCA_rawTableAdapter != null)) {
                 global::System.Data.DataRow[] deletedRows = dataSet.BIH_DCA_raw.Select(null, null, global::System.Data.DataViewRowState.Deleted);
                 if (((deletedRows != null) 
@@ -5189,6 +6947,11 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
                 throw new global::System.ArgumentException("Все адаптеры таблицы, управляемые диспетчером адаптера таблицы TableAdapterManage" +
                         "r, должны использовать одинаковую строку подключения.");
             }
+            if (((this._bIH_SNAP_rawTableAdapter != null) 
+                        && (this.MatchTableAdapterConnection(this._bIH_SNAP_rawTableAdapter.Connection) == false))) {
+                throw new global::System.ArgumentException("Все адаптеры таблицы, управляемые диспетчером адаптера таблицы TableAdapterManage" +
+                        "r, должны использовать одинаковую строку подключения.");
+            }
             global::System.Data.IDbConnection workConnection = this.Connection;
             if ((workConnection == null)) {
                 throw new global::System.ApplicationException("TableAdapterManager не содержит сведений о подключении. Укажите для каждого адапт" +
@@ -5255,6 +7018,15 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
                     if (this._bIH_DCA_rawTableAdapter.Adapter.AcceptChangesDuringUpdate) {
                         this._bIH_DCA_rawTableAdapter.Adapter.AcceptChangesDuringUpdate = false;
                         adaptersWithAcceptChangesDuringUpdate.Add(this._bIH_DCA_rawTableAdapter.Adapter);
+                    }
+                }
+                if ((this._bIH_SNAP_rawTableAdapter != null)) {
+                    revertConnections.Add(this._bIH_SNAP_rawTableAdapter, this._bIH_SNAP_rawTableAdapter.Connection);
+                    this._bIH_SNAP_rawTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(workConnection));
+                    this._bIH_SNAP_rawTableAdapter.Transaction = ((global::System.Data.SqlClient.SqlTransaction)(workTransaction));
+                    if (this._bIH_SNAP_rawTableAdapter.Adapter.AcceptChangesDuringUpdate) {
+                        this._bIH_SNAP_rawTableAdapter.Adapter.AcceptChangesDuringUpdate = false;
+                        adaptersWithAcceptChangesDuringUpdate.Add(this._bIH_SNAP_rawTableAdapter.Adapter);
                     }
                 }
                 // 
@@ -5330,6 +7102,10 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
                 if ((this._bIH_DCA_rawTableAdapter != null)) {
                     this._bIH_DCA_rawTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(revertConnections[this._bIH_DCA_rawTableAdapter]));
                     this._bIH_DCA_rawTableAdapter.Transaction = null;
+                }
+                if ((this._bIH_SNAP_rawTableAdapter != null)) {
+                    this._bIH_SNAP_rawTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(revertConnections[this._bIH_SNAP_rawTableAdapter]));
+                    this._bIH_SNAP_rawTableAdapter.Transaction = null;
                 }
                 if ((0 < adaptersWithAcceptChangesDuringUpdate.Count)) {
                     global::System.Data.Common.DataAdapter[] adapters = new System.Data.Common.DataAdapter[adaptersWithAcceptChangesDuringUpdate.Count];

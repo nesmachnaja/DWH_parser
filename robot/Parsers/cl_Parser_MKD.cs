@@ -58,7 +58,7 @@ namespace robot
                     catch (Exception exc)
                     {
                         COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                        logAdapter.InsertRow("cl_Parser_MKD", "MKD", DateTime.Now, false, exc.Message);
+                        logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
                     }
 
@@ -72,7 +72,7 @@ namespace robot
             catch (Exception exc)
             {
                 COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                logAdapter.InsertRow("cl_Parser_MKD", "MKD", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
             }
 
@@ -135,7 +135,7 @@ namespace robot
                     catch (Exception exc)
                     {
                         COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                        logAdapter.InsertRow("cl_Parser_MKD","MKD",DateTime.Now,false,exc.Message);
+                        logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now,false,exc.Message);
                         Console.WriteLine("Error");
                     }
 
@@ -151,7 +151,7 @@ namespace robot
             catch (Exception exc)
             {
                 COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                logAdapter.InsertRow("cl_Parser_MKD", "MKD", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
             }
 
