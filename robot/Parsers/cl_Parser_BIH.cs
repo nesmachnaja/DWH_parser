@@ -102,7 +102,7 @@ namespace robot
 
                 while (i < firstNull)
                 {
-                    BIH_DCA.Loan = (int)(sheet.Cells[i, 1] as Range).Value;
+                    BIH_DCA.Loan = (sheet.Cells[i, 1] as Range).Value;
                     BIH_DCA.Client = (sheet.Cells[i, 2] as Range).Value;
                     BIH_DCA.DPD = (int)(sheet.Cells[i, 3] as Range).Value;
                     BIH_DCA.Bucket = (sheet.Cells[i, 4] as Range).Value;

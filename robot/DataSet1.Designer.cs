@@ -1724,7 +1724,7 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public BIH_DCA_rawRow AddBIH_DCA_rawRow(System.DateTime reestr_date, int Loan, string Client, int DPD, string Bucket, string Debt_collector, double Amount, double Percent, double Fee_amount) {
+            public BIH_DCA_rawRow AddBIH_DCA_rawRow(System.DateTime reestr_date, string Loan, string Client, int DPD, string Bucket, string Debt_collector, double Amount, double Percent, double Fee_amount) {
                 BIH_DCA_rawRow rowBIH_DCA_rawRow = ((BIH_DCA_rawRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         reestr_date,
@@ -1774,7 +1774,7 @@ namespace robot {
             private void InitClass() {
                 this.columnreestr_date = new global::System.Data.DataColumn("reestr_date", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnreestr_date);
-                this.columnLoan = new global::System.Data.DataColumn("Loan", typeof(int), null, global::System.Data.MappingType.Element);
+                this.columnLoan = new global::System.Data.DataColumn("Loan", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnLoan);
                 this.columnClient = new global::System.Data.DataColumn("Client", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnClient);
@@ -3974,10 +3974,10 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public int Loan {
+            public string Loan {
                 get {
                     try {
-                        return ((int)(this[this.tableBIH_DCA_raw.LoanColumn]));
+                        return ((string)(this[this.tableBIH_DCA_raw.LoanColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("Значение для столбца \'Loan\' в таблице \'BIH_DCA_raw\' равно DBNull.", e);
@@ -7229,7 +7229,7 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
                 "an, @Client, @DPD, @Bucket, @Debt_collector, @Amount, @Percent, @Fee_amount)";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reestr_date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Loan", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Loan", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Loan", global::System.Data.SqlDbType.NVarChar, 100, global::System.Data.ParameterDirection.Input, 0, 0, "Loan", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Client", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "Client", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@DPD", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "DPD", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Bucket", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "Bucket", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -7406,7 +7406,7 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
-        public virtual int InsertRow(string reestr_date, global::System.Nullable<int> Loan, string Client, global::System.Nullable<int> DPD, string Bucket, string Debt_collector, global::System.Nullable<double> Amount, global::System.Nullable<double> Percent, global::System.Nullable<double> Fee_amount) {
+        public virtual int InsertRow(string reestr_date, string Loan, string Client, global::System.Nullable<int> DPD, string Bucket, string Debt_collector, global::System.Nullable<double> Amount, global::System.Nullable<double> Percent, global::System.Nullable<double> Fee_amount) {
             global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[2];
             if ((reestr_date == null)) {
                 command.Parameters[0].Value = global::System.DBNull.Value;
@@ -7414,11 +7414,11 @@ SELECT ID, Module_name, Country, Message_date, Success, Message FROM COUNTRY_Log
             else {
                 command.Parameters[0].Value = ((string)(reestr_date));
             }
-            if ((Loan.HasValue == true)) {
-                command.Parameters[1].Value = ((int)(Loan.Value));
+            if ((Loan == null)) {
+                command.Parameters[1].Value = global::System.DBNull.Value;
             }
             else {
-                command.Parameters[1].Value = global::System.DBNull.Value;
+                command.Parameters[1].Value = ((string)(Loan));
             }
             if ((Client == null)) {
                 command.Parameters[2].Value = global::System.DBNull.Value;
