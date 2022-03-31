@@ -9,7 +9,7 @@ namespace robot
     class cl_BIH_SNAP
     {
         public DateTime Reestr_date;
-        public int Loan;
+        public string Loan;
         public string Client;
         public string Status;
         public DateTime Loan_disbursment_date;

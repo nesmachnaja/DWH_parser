@@ -49,8 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parsers\cl_Parser_MD.cs" />
+    <Compile Include="Parsers\cl_Parser_SMS.cs" />
     <Compile Include="Structures\cl_BIH_DCA.cs" />
     <Compile Include="Structures\cl_BIH_SNAP.cs" />
+    <Compile Include="Structures\cl_MD_DCA.cs" />
     <Compile Include="Structures\cl_MKD_DCA.cs" />
     <Compile Include="Structures\cl_MKD_SNAP.cs" />
     <Compile Include="Parsers\cl_Parser_BIH.cs" />
@@ -70,6 +73,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Structures\cl_SMS_CESS.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

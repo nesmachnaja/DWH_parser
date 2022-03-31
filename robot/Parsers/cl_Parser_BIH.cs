@@ -16,11 +16,11 @@ namespace robot
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\external_collection_02.2022.xlsx"; // Путь к файлу отчета
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_27.03.2022+00_00_00.xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
-            Excel.Application ex = new Excel.Application();
-            Excel.Workbook workBook = ex.Workbooks.Open(fullPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+            Application ex = new Application();
+            Workbook workBook = ex.Workbooks.Open(fullPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing); //открываем файл
@@ -29,7 +29,7 @@ namespace robot
             if (pathFile.Contains("snapshot")) parse_BIH_SNAP(ex);
         }
 
-        public void parse_BIH_DCA(Excel.Application ex)
+        public void parse_BIH_DCA(Application ex)
         {
             string report = "Loading started.";
             logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, true, report);
@@ -43,7 +43,7 @@ namespace robot
 
             for (int j = 1; j <= 2; j++)
             {
-                Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(j); // берем первый лист;
+                Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(j); // берем первый лист;
                 Console.WriteLine("Sheet #" + j.ToString());
                 parse_BIH_DCA_current_sheet(sheet);
             }
@@ -60,8 +60,9 @@ namespace robot
                 //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                ex.Quit();
             }
-            
+
             ex.Quit();
 
             report = "Loading is ready. " + lastUsedRow.ToString() + " rows were processed.";
@@ -71,10 +72,10 @@ namespace robot
 
         }
 
-        private void parse_BIH_DCA_current_sheet(Excel.Worksheet sheet)
+        private void parse_BIH_DCA_current_sheet(Worksheet sheet)
         {
-            Excel.Range last = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
-            Excel.Range range = sheet.get_Range("A1", last);
+            Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
+            Range range = sheet.get_Range("A1", last);
             int lastUsedColumn = last.Column;
 
             int firstNull = 0;
@@ -94,20 +95,20 @@ namespace robot
 
             try
             {
-                BIH_DCA.Debt_collector = (sheet.Cells[i, 5] as Excel.Range).Value;
+                BIH_DCA.Debt_collector = (sheet.Cells[i, 5] as Range).Value;
 
                 BIH_DCA_rawTableAdapter ad_BIH_DCA_raw = new BIH_DCA_rawTableAdapter();
                 ad_BIH_DCA_raw.DeletePeriod(BIH_DCA.Reestr_date.ToString("yyyy-MM-dd"), BIH_DCA.Debt_collector);
 
                 while (i < firstNull)
                 {
-                    BIH_DCA.Loan = (int)(sheet.Cells[i, 1] as Excel.Range).Value;
-                    BIH_DCA.Client = (sheet.Cells[i, 2] as Excel.Range).Value;
-                    BIH_DCA.DPD = (int)(sheet.Cells[i, 3] as Excel.Range).Value;
-                    BIH_DCA.Bucket = (sheet.Cells[i, 4] as Excel.Range).Value;
-                    BIH_DCA.Amount = (double)(sheet.Cells[i, 6] as Excel.Range).Value;
-                    BIH_DCA.Percent = (double)(sheet.Cells[i, 7] as Excel.Range).Value;
-                    BIH_DCA.Fee_amount = (double)(sheet.Cells[i, 8] as Excel.Range).Value;
+                    BIH_DCA.Loan = (int)(sheet.Cells[i, 1] as Range).Value;
+                    BIH_DCA.Client = (sheet.Cells[i, 2] as Range).Value;
+                    BIH_DCA.DPD = (int)(sheet.Cells[i, 3] as Range).Value;
+                    BIH_DCA.Bucket = (sheet.Cells[i, 4] as Range).Value;
+                    BIH_DCA.Amount = (double)(sheet.Cells[i, 6] as Range).Value;
+                    BIH_DCA.Percent = (double)(sheet.Cells[i, 7] as Range).Value;
+                    BIH_DCA.Fee_amount = (double)(sheet.Cells[i, 8] as Range).Value;
 
                     try
                     {
@@ -119,6 +120,7 @@ namespace robot
                         //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                         logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
+                        sheet.Application.Quit();
                     }
 
                     i++;
@@ -131,6 +133,7 @@ namespace robot
                 //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                sheet.Application.Quit();
             }
 
 
@@ -139,14 +142,14 @@ namespace robot
         }
 
 
-        public void parse_BIH_SNAP(Excel.Application ex)
+        public void parse_BIH_SNAP(Application ex)
         {
             string report = "Loading started.";
             logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
             
-            Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
-            Excel.Range last = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
-            Excel.Range range = sheet.get_Range("A1", last);
+            Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
+            Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
+            Range range = sheet.get_Range("A1", last);
             lastUsedRow = last.Row; // Последняя строка в документе
             int lastUsedColumn = last.Column;
 
@@ -160,30 +163,31 @@ namespace robot
                 string fileName = ex.Workbooks.Item[1].Name;
                 fileName = fileName.Substring(fileName.IndexOf("_") + 1, 10); //.ToString("yyyy-MM-dd");
 
-                DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Excel.Range).Value;
-                BIH_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
+                DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
+                //BIH_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
+                BIH_SNAP.Reestr_date = reestr_date;       //current date
 
                 BIH_SNAP_rawTableAdapter ad_BIH_SNAP_raw = new BIH_SNAP_rawTableAdapter();
                 ad_BIH_SNAP_raw.DeletePeriod(BIH_SNAP.Reestr_date.ToString("yyyy-MM-dd"));
 
-                while (i < lastUsedRow)
+                while (i <= lastUsedRow)
                 {
-                    BIH_SNAP.Loan = int.Parse((sheet.Cells[i, 1] as Excel.Range).Value);
-                    BIH_SNAP.Client = (sheet.Cells[i, 2] as Excel.Range).Value;
-                    BIH_SNAP.Status = (sheet.Cells[i, 3] as Excel.Range).Value;
-                    BIH_SNAP.Loan_disbursment_date = DateTime.Parse((sheet.Cells[i, 4] as Excel.Range).Value);
-                    BIH_SNAP.Product = (sheet.Cells[i, 5] as Excel.Range).Value;
-                    BIH_SNAP.DPD = (int)(sheet.Cells[i, 6] as Excel.Range).Value;
-                    BIH_SNAP.Matured_principle = (double)(sheet.Cells[i, 7] as Excel.Range).Value;
-                    BIH_SNAP.Outstanding_principle = (double)(sheet.Cells[i, 8] as Excel.Range).Value;
-                    BIH_SNAP.Principal_balance = (double)(sheet.Cells[i, 9] as Excel.Range).Value;
-                    BIH_SNAP.Monthly_fee = (double)(sheet.Cells[i, 10] as Excel.Range).Value;
-                    BIH_SNAP.Guarantor_fee = (double)(sheet.Cells[i, 11] as Excel.Range).Value;
-                    BIH_SNAP.Penalty_fee = (double)(sheet.Cells[i, 12] as Excel.Range).Value;
-                    BIH_SNAP.Penalty_interest = (double)(sheet.Cells[i, 13] as Excel.Range).Value;
-                    BIH_SNAP.Interest_balance = (double)(sheet.Cells[i, 14] as Excel.Range).Value;
-                    BIH_SNAP.Credit_amount = (double)(sheet.Cells[i, 15] as Excel.Range).Value;
-                    BIH_SNAP.Available_limit = (double)(sheet.Cells[i, 16] as Excel.Range).Value;
+                    BIH_SNAP.Loan = (sheet.Cells[i, 1] as Range).Value;
+                    BIH_SNAP.Client = (sheet.Cells[i, 2] as Range).Value;
+                    BIH_SNAP.Status = (sheet.Cells[i, 3] as Range).Value;
+                    BIH_SNAP.Loan_disbursment_date = DateTime.Parse((sheet.Cells[i, 4] as Range).Value);
+                    BIH_SNAP.Product = (sheet.Cells[i, 5] as Range).Value;
+                    BIH_SNAP.DPD = (int)(sheet.Cells[i, 6] as Range).Value;
+                    BIH_SNAP.Matured_principle = (double)(sheet.Cells[i, 7] as Range).Value;
+                    BIH_SNAP.Outstanding_principle = (double)(sheet.Cells[i, 8] as Range).Value;
+                    BIH_SNAP.Principal_balance = (double)(sheet.Cells[i, 9] as Range).Value;
+                    BIH_SNAP.Monthly_fee = (double)(sheet.Cells[i, 10] as Range).Value;
+                    BIH_SNAP.Guarantor_fee = (double)(sheet.Cells[i, 11] as Range).Value;
+                    BIH_SNAP.Penalty_fee = (double)(sheet.Cells[i, 12] as Range).Value;
+                    BIH_SNAP.Penalty_interest = (double)(sheet.Cells[i, 13] as Range).Value;
+                    BIH_SNAP.Interest_balance = (double)(sheet.Cells[i, 14] as Range).Value;
+                    BIH_SNAP.Credit_amount = (double)(sheet.Cells[i, 15] as Range).Value;
+                    BIH_SNAP.Available_limit = (double)(sheet.Cells[i, 16] as Range).Value;
 
                     try
                     {
@@ -196,6 +200,7 @@ namespace robot
                     {
                         logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
+                        ex.Quit();
                     }
 
                     i++;
@@ -212,6 +217,7 @@ namespace robot
                 //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                ex.Quit();
             }
 
 
