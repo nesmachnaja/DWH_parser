@@ -16,7 +16,7 @@ namespace robot
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_27.03.2022+00_00_00.xlsx"; // Путь к файлу отчета
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_28.02.2022_corrected.xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
@@ -102,7 +102,7 @@ namespace robot
 
                 while (i < firstNull)
                 {
-                    BIH_DCA.Loan = (int)(sheet.Cells[i, 1] as Range).Value;
+                    BIH_DCA.Loan = (sheet.Cells[i, 1] as Range).Value;
                     BIH_DCA.Client = (sheet.Cells[i, 2] as Range).Value;
                     BIH_DCA.DPD = (int)(sheet.Cells[i, 3] as Range).Value;
                     BIH_DCA.Bucket = (sheet.Cells[i, 4] as Range).Value;

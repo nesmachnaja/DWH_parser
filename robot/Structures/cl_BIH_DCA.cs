@@ -9,7 +9,7 @@ namespace robot
     class cl_BIH_DCA
     {
         public DateTime Reestr_date;
-        public int Loan;
+        public string Loan;
         public string Client;
         public int DPD;
         public string Bucket;
