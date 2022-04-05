@@ -16,7 +16,7 @@ namespace robot
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_28.02.2022_corrected.xlsx"; // Путь к файлу отчета
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\external_collection_03_2022.xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
@@ -37,8 +37,8 @@ namespace robot
             lastUsedRow = 0;
             string fileName = ex.Workbooks.Item[1].Name;
             
-            int startIndex = fileName.LastIndexOf("_") + 1;
-            fileName = "01." + fileName.Substring(startIndex, fileName.Length - startIndex).Replace(".xlsx","");
+            //int startIndex = fileName.LastIndexOf("_") + 1;
+            fileName = "01." + fileName.Replace(".xlsx","").Replace("external_collection_","").Replace("_",".");
             BIH_DCA.Reestr_date = DateTime.Parse(fileName).AddMonths(1).AddDays(-1);
 
             for (int j = 1; j <= 2; j++)
@@ -102,7 +102,7 @@ namespace robot
 
                 while (i < firstNull)
                 {
-                    BIH_DCA.Loan = (sheet.Cells[i, 1] as Range).Value;
+                    BIH_DCA.Loan = (sheet.Cells[i, 1] as Range).Value.ToString();
                     BIH_DCA.Client = (sheet.Cells[i, 2] as Range).Value;
                     BIH_DCA.DPD = (int)(sheet.Cells[i, 3] as Range).Value;
                     BIH_DCA.Bucket = (sheet.Cells[i, 4] as Range).Value;
