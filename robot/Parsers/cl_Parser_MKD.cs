@@ -7,10 +7,13 @@ namespace robot
 {
     class cl_Parser_MKD
     {
+        COUNTRY_LogTableAdapter logAdapter;
 
         public void OpenFile() 
         {
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\SNAP_28.02.2022_00.xlsx"; // Путь к файлу отчета
+            logAdapter = new COUNTRY_LogTableAdapter();
+            
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_31.03.2022+00_00_00.xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Excel.Application ex = new Excel.Application();
@@ -19,12 +22,15 @@ namespace robot
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing); //открываем файл
             
-            if (pathFile.Contains("DCA.xlsx")) parse_MKD_DCA(ex);
-            if (pathFile.Contains("SNAP_")) parse_MKD_SNAP(ex);
+            if (pathFile.Contains("DCA")) parse_MKD_DCA(ex);
+            if (pathFile.Contains("snapshot")) parse_MKD_SNAP(ex);
         }
 
         public void parse_MKD_DCA(Excel.Application ex)
         {
+            string report = "Loading started.";
+            logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, true, report);
+
             Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
             Excel.Range last = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
             Excel.Range range = sheet.get_Range("A1", last);
@@ -54,12 +60,13 @@ namespace robot
                     try
                     {
                         ad_MKD_DCA_raw.InsertRow(MKD_DCA.LN, MKD_DCA.Payment_date.ToString("yyyy-MM-dd"), MKD_DCA.DCA_name, MKD_DCA.Payment_amount, MKD_DCA.DCA_comission_amount, MKD_DCA.Reestr_date.ToString("yyyy-MM-dd"));
+                        Console.WriteLine((i - 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
                     }
                     catch (Exception exc)
                     {
-                        COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                         logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
+                        ex.Quit();
                     }
 
                     i++;
@@ -71,15 +78,20 @@ namespace robot
             }
             catch (Exception exc)
             {
-                COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
+                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                ex.Quit();
+                return;
             }
 
             ex.Quit();
 
             //SP sp = new SP();
             //sp.sp_MKD_TOTAL_DCA(MKD_DCA.Reestr_date);
+
+            report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
+            logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, true, report);
 
             Console.ReadKey();
 
@@ -89,6 +101,9 @@ namespace robot
 
         public void parse_MKD_SNAP(Excel.Application ex)
         {
+            string report = "Loading started.";
+            logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
+
             Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
             Excel.Range last = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
             Excel.Range range = sheet.get_Range("A1", last);
@@ -113,7 +128,7 @@ namespace robot
 
                 while (i <= lastUsedRow)
                 {
-                    MKD_SNAP.Loan = (int)(sheet.Cells[i, 1] as Excel.Range).Value;
+                    MKD_SNAP.Loan = (sheet.Cells[i, 1] as Excel.Range).Value.ToString();
                     MKD_SNAP.Current_status = (sheet.Cells[i, 2] as Excel.Range).Value;
                     MKD_SNAP.Loan_disbursement_date = DateTime.Parse((sheet.Cells[i, 3] as Excel.Range).Value);
                     MKD_SNAP.Product = (sheet.Cells[i, 4] as Excel.Range).Value;
@@ -131,12 +146,14 @@ namespace robot
                         ad_MKD_SNAP_raw.InsertRow(MKD_SNAP.Reestr_date.ToString("yyyy-MM-dd"), MKD_SNAP.Loan, MKD_SNAP.Current_status, MKD_SNAP.Loan_disbursement_date.ToString("yyyy-MM-dd"),
                             MKD_SNAP.Product, MKD_SNAP.DPD, MKD_SNAP.Historical_loan_status, MKD_SNAP.Principal_balance, MKD_SNAP.Monthly_fee_balance, MKD_SNAP.Guarantor_fee_balance, MKD_SNAP.Penalty_fee_balance,
                             MKD_SNAP.Penalty_interest_balance, MKD_SNAP.Interest_balance);
+                        Console.WriteLine((i - 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
                     }
                     catch (Exception exc)
                     {
                         COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                         logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now,false,exc.Message);
                         Console.WriteLine("Error");
+                        ex.Quit();
                     }
 
                     i++;
@@ -153,10 +170,15 @@ namespace robot
                 COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                ex.Quit();
+                return;
             }
 
 
             ex.Quit();
+
+            report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
+            logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
 
             Console.ReadKey();
 

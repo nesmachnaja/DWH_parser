@@ -1010,7 +1010,7 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MKD_SNAP_rawRow AddMKD_SNAP_rawRow(System.DateTime reestr_date, int Loan, string Current_Status, System.DateTime Loan_disbursement_date, string Product, int DPD, string Historical_Loan_Status, double Principal_balance, double Monthly_Fee_balance, double Guarantor_Fee_balance, double Penalty_Fee_balance, double Penalty_Interest_balance, double Interest_balance) {
+            public MKD_SNAP_rawRow AddMKD_SNAP_rawRow(System.DateTime reestr_date, string Loan, string Current_Status, System.DateTime Loan_disbursement_date, string Product, int DPD, string Historical_Loan_Status, double Principal_balance, double Monthly_Fee_balance, double Guarantor_Fee_balance, double Penalty_Fee_balance, double Penalty_Interest_balance, double Interest_balance) {
                 MKD_SNAP_rawRow rowMKD_SNAP_rawRow = ((MKD_SNAP_rawRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         reestr_date,
@@ -1068,7 +1068,7 @@ namespace robot {
             private void InitClass() {
                 this.columnreestr_date = new global::System.Data.DataColumn("reestr_date", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnreestr_date);
-                this.columnLoan = new global::System.Data.DataColumn("Loan", typeof(int), null, global::System.Data.MappingType.Element);
+                this.columnLoan = new global::System.Data.DataColumn("Loan", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnLoan);
                 this.columnCurrent_Status = new global::System.Data.DataColumn("Current_Status", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCurrent_Status);
@@ -3440,10 +3440,10 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public int Loan {
+            public string Loan {
                 get {
                     try {
-                        return ((int)(this[this.tableMKD_SNAP_raw.LoanColumn]));
+                        return ((string)(this[this.tableMKD_SNAP_raw.LoanColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("Значение для столбца \'Loan\' в таблице \'MKD_SNAP_raw\' равно DBNull.", e);
@@ -6273,7 +6273,7 @@ namespace robot.DataSet1TableAdapters {
             this._commandCollection[2].CommandText = @"INSERT INTO [MKD_SNAP_raw] ([reestr_date], [Loan], [Current_Status], [Loan_disbursement_date], [Product], [DPD], [Historical_Loan_Status], [Principal_balance], [Monthly_Fee_balance], [Guarantor_Fee_balance], [Penalty_Fee_balance], [Penalty_Interest_balance], [Interest_balance]) VALUES (@reestr_date, @Loan, @Current_Status, @Loan_disbursement_date, @Product, @DPD, @Historical_Loan_Status, @Principal_balance, @Monthly_Fee_balance, @Guarantor_Fee_balance, @Penalty_Fee_balance, @Penalty_Interest_balance, @Interest_balance)";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reestr_date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Loan", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Loan", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Loan", global::System.Data.SqlDbType.NVarChar, 100, global::System.Data.ParameterDirection.Input, 0, 0, "Loan", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Current_Status", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "Current_Status", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Loan_disbursement_date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "Loan_disbursement_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Product", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "Product", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -6472,7 +6472,7 @@ namespace robot.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
-        public virtual int InsertRow(string reestr_date, global::System.Nullable<int> Loan, string Current_Status, string Loan_disbursement_date, string Product, global::System.Nullable<int> DPD, string Historical_Loan_Status, global::System.Nullable<double> Principal_balance, global::System.Nullable<double> Monthly_Fee_balance, global::System.Nullable<double> Guarantor_Fee_balance, global::System.Nullable<double> Penalty_Fee_balance, global::System.Nullable<double> Penalty_Interest_balance, global::System.Nullable<double> Interest_balance) {
+        public virtual int InsertRow(string reestr_date, string Loan, string Current_Status, string Loan_disbursement_date, string Product, global::System.Nullable<int> DPD, string Historical_Loan_Status, global::System.Nullable<double> Principal_balance, global::System.Nullable<double> Monthly_Fee_balance, global::System.Nullable<double> Guarantor_Fee_balance, global::System.Nullable<double> Penalty_Fee_balance, global::System.Nullable<double> Penalty_Interest_balance, global::System.Nullable<double> Interest_balance) {
             global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[2];
             if ((reestr_date == null)) {
                 command.Parameters[0].Value = global::System.DBNull.Value;
@@ -6480,11 +6480,11 @@ namespace robot.DataSet1TableAdapters {
             else {
                 command.Parameters[0].Value = ((string)(reestr_date));
             }
-            if ((Loan.HasValue == true)) {
-                command.Parameters[1].Value = ((int)(Loan.Value));
+            if ((Loan == null)) {
+                command.Parameters[1].Value = global::System.DBNull.Value;
             }
             else {
-                command.Parameters[1].Value = global::System.DBNull.Value;
+                command.Parameters[1].Value = ((string)(Loan));
             }
             if ((Current_Status == null)) {
                 command.Parameters[2].Value = global::System.DBNull.Value;

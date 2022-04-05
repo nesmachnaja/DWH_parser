@@ -17,10 +17,10 @@ namespace robot
             //Parser.OpenFile();
             //cl_Parser_BIH Parser = new cl_Parser_BIH();
             //Parser.OpenFile();
-            cl_Parser_SMS Parser = new cl_Parser_SMS();
-            Parser.OpenFile();
-            //cl_Parser_MKD Parser = new cl_Parser_MKD();
+            //cl_Parser_SMS Parser = new cl_Parser_SMS();
             //Parser.OpenFile();
+            cl_Parser_MKD Parser = new cl_Parser_MKD();
+            Parser.OpenFile();
         }
 
     }

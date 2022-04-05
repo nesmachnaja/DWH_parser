@@ -11,7 +11,7 @@ namespace robot
         //private DateTime _reestr_date;
 
         public DateTime Reestr_date;
-        public int Loan;
+        public string Loan;
         public string Current_status;
         public DateTime Loan_disbursement_date;
         public string Product;
