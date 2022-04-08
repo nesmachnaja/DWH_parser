@@ -51,20 +51,29 @@
   <ItemGroup>
     <Compile Include="Parsers\cl_Parser_MD.cs" />
     <Compile Include="Parsers\cl_Parser_SMS.cs" />
+    <Compile Include="Risk.cs">
+      <DependentUpon>Risk.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Risk.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Risk.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Structures\cl_BIH_DCA.cs" />
     <Compile Include="Structures\cl_BIH_SNAP.cs" />
     <Compile Include="Structures\cl_MD_DCA.cs" />
+    <Compile Include="Structures\cl_MD_SNAP.cs" />
     <Compile Include="Structures\cl_MKD_DCA.cs" />
     <Compile Include="Structures\cl_MKD_SNAP.cs" />
     <Compile Include="Parsers\cl_Parser_BIH.cs" />
     <Compile Include="Parsers\cl_Parser_MKD.cs" />
-    <Compile Include="DataSet1.cs">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+    <Compile Include="DWH.cs">
+      <DependentUpon>DWH.xsd</DependentUpon>
     </Compile>
-    <Compile Include="DataSet1.Designer.cs">
+    <Compile Include="DWH.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+      <DependentUpon>DWH.xsd</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,21 +86,32 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="DataSet1.xsc">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+    <None Include="DWH.xsc">
+      <DependentUpon>DWH.xsd</DependentUpon>
     </None>
-    <None Include="DataSet1.xsd">
+    <None Include="DWH.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+      <LastGenOutput>DWH.Designer.cs</LastGenOutput>
     </None>
-    <None Include="DataSet1.xss">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+    <None Include="DWH.xss">
+      <DependentUpon>DWH.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Risk.xsc">
+      <DependentUpon>Risk.xsd</DependentUpon>
+    </None>
+    <None Include="Risk.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Risk.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Risk.xss">
+      <DependentUpon>Risk.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup />

@@ -33,5 +33,16 @@ namespace robot.Properties {
                 return ((string)(this["DWH_RiskConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=10.50.50.20;Initial Catalog=Risk;Persist Security Info=True;User ID=L" +
+            "yudmilaNesmachnaya")]
+        public string RiskConnectionString {
+            get {
+                return ((string)(this["RiskConnectionString"]));
+            }
+        }
     }
 }

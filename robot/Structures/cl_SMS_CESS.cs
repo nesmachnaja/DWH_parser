@@ -24,5 +24,6 @@ namespace robot.Structures
         public double Value;
         public double CC;
         public DateTime? Retdate;
+        public string Brand;
     }
 }
