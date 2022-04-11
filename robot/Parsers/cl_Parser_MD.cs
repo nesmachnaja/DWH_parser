@@ -122,7 +122,7 @@ namespace robot.Parsers
             report = "Loading is ready. " + (lastUsedRow - i).ToString() + " rows were processed.";
             logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, true, report);
 
-            Console.WriteLine("Do you want to transport snap to Risk? Y - Yes, N - No");
+            Console.WriteLine("Do you want to transport DCA to Risk? Y - Yes, N - No");
             string reply = Console.ReadKey().Key.ToString();
 
 
@@ -256,6 +256,12 @@ namespace robot.Parsers
                 Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP] was formed.");
                 report = "[Risk].[dbo].[TOTAL_SNAP] was formed.";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportSnapToRisk", "MD", DateTime.Now, true, report);
+                
+                //report
+                sprisk.sp_MD_TOTAL_SNAP_CFIELD();
+                Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
+                report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                logAdapter.InsertRow("cl_Parser_MD", "TransportSnapToRisk", "MD", DateTime.Now, true, report);
 
                 //report into log
             }
@@ -270,12 +276,12 @@ namespace robot.Parsers
 
         }
 
-        private void TransportDCAToRisk(DateTime snapdate)
+        private void TransportDCAToRisk(DateTime t_date)
         {
             try
             {
                 SPRisk sprisk = new SPRisk();
-                sprisk.sp_MD_TOTAL_DCA(snapdate);
+                sprisk.sp_MD_TOTAL_DCA(t_date);
                 Console.WriteLine("DCA was transported to [Risk].[dbo].[MD2_DCA], [Risk].[dbo].[TOTAL_DCA]");
                 report = "DCA was transported to [Risk].[dbo].[MD2_DCA], [Risk].[dbo].[TOTAL_DCA]";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportDCAToRisk", "MD", DateTime.Now, true, report);
