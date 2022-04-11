@@ -2,12 +2,14 @@
 using Excel = Microsoft.Office.Interop.Excel;
 using System.IO;
 using robot.DataSet1TableAdapters;
+using robot.RiskTableAdapters;
 
 namespace robot
 {
     class cl_Parser_MKD
     {
         COUNTRY_LogTableAdapter logAdapter;
+        string report;
 
         public void OpenFile() 
         {
@@ -28,7 +30,7 @@ namespace robot
 
         public void parse_MKD_DCA(Excel.Application ex)
         {
-            string report = "Loading started.";
+            report = "Loading started.";
             logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, true, report);
 
             Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
@@ -36,13 +38,13 @@ namespace robot
             Excel.Range range = sheet.get_Range("A1", last);
             int lastUsedRow = last.Row; // Последняя строка в документе
             int lastUsedColumn = last.Column;
+            cl_MKD_DCA MKD_DCA = new cl_MKD_DCA();
 
 
             int i = 2; // Строка начала периода
 
             try
             {
-                cl_MKD_DCA MKD_DCA = new cl_MKD_DCA();
                 DateTime reestr_date = (DateTime)(sheet.Cells[i, 2] as Excel.Range).Value;
                 MKD_DCA.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
 
@@ -93,15 +95,46 @@ namespace robot
             report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
             logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, true, report);
 
-            Console.ReadKey();
+            Console.WriteLine("Do you want to transport DCA to Risk? Y - Yes, N - No");
+            string reply = Console.ReadKey().Key.ToString();
+
+
+            if (reply.Equals("Y"))
+            {
+                TransportDCAToRisk(MKD_DCA.Reestr_date);
+            }
+
+            //Console.ReadKey();
 
             //Xml                                                           ----TO_DO
 
         }
 
+        private void TransportDCAToRisk(DateTime t_date)
+        {
+            try
+            {
+                SPRisk sprisk = new SPRisk();
+                sprisk.sp_MKD_TOTAL_DCA(t_date);
+                Console.WriteLine("DCA was transported to [Risk].[dbo].[TOTAL_DCA]");
+                report = "DCA was transported to [Risk].[dbo].[TOTAL_DCA]";
+                logAdapter.InsertRow("cl_Parser_MKD", "TransportDCAToRisk", "MKD", DateTime.Now, true, report);
+                //report into log
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_MKD", "TransportDCAToRisk", "MKD", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+            }
+
+            Console.ReadKey();
+
+        }
+
         public void parse_MKD_SNAP(Excel.Application ex)
         {
-            string report = "Loading started.";
+            report = "Loading started.";
             logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
 
             Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
@@ -109,14 +142,12 @@ namespace robot
             Excel.Range range = sheet.get_Range("A1", last);
             int lastUsedRow = last.Row; // Последняя строка в документе
             int lastUsedColumn = last.Column;
+            cl_MKD_SNAP MKD_SNAP = new cl_MKD_SNAP();
 
             int i = 2; // Строка начала периода
 
             try
             {
-
-                cl_MKD_SNAP MKD_SNAP = new cl_MKD_SNAP();
-
                 string fileName = ex.Workbooks.Item[1].Name;
                 fileName = fileName.Substring(fileName.IndexOf("_") + 1, 10); //.ToString("yyyy-MM-dd");
 
@@ -180,9 +211,47 @@ namespace robot
             report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
             logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
 
-            Console.ReadKey();
+            Console.WriteLine("Do you want to transport Snap to Risk? Y - Yes, N - No");
+            string reply = Console.ReadKey().Key.ToString();
+
+
+            if (reply.Equals("Y"))
+            {
+                TransportSnapToRisk(MKD_SNAP.Reestr_date);
+            }
+
+            //Console.ReadKey();
 
             //Xml                                                           ----TO_DO
+
+        }
+
+        private void TransportSnapToRisk(DateTime snapdate)
+        {
+            try
+            {
+                SPRisk sprisk = new SPRisk();
+                sprisk.sp_MKD_TOTAL_SNAP(snapdate);
+                Console.WriteLine("Snap was transported to [Risk].[dbo].[MKD2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].");
+                report = "Snap was transported to [Risk].[dbo].[MKD2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
+                logAdapter.InsertRow("cl_Parser_MKD", "TransportSnapToRisk", "MKD", DateTime.Now, true, report);
+
+                //report
+                sprisk.sp_MKD_TOTAL_SNAP_CFIELD();
+                Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
+                report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                logAdapter.InsertRow("cl_Parser_MKD", "TransportSnapToRisk", "MKD", DateTime.Now, true, report);
+
+                //report into log
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_MKD", "TransportSnapToRisk", "MKD", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+            }
+
+            Console.ReadKey();
 
         }
 
