@@ -13,7 +13,7 @@ namespace robot.Structures
         public DateTime Payment_month;
         public string Debtor;
         public string IDNP_debitorului;
-        public int Contract;
+        public string Contract;
         public double Total_paid;
         public double Fee;
         public double Fee_including_VAT;

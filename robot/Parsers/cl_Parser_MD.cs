@@ -22,7 +22,7 @@ namespace robot.Parsers
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\Moldova_WOFF_February_2022.xlsx"; // Путь к файлу отчета
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\Plati colectate totalizator generalizat INCASO PFBC si Agerlex_08.02.22_v2.xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
@@ -31,108 +31,111 @@ namespace robot.Parsers
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing); //открываем файл
 
-            //if (pathFile.Contains("Plati")) parse_MD_DCA(ex);
-            if (pathFile.Contains("SNAP") || pathFile.Contains("WOFF")) parse_MD_SNAP(ex);
+            if (pathFile.Contains("Plati")) parse_MD_DCA(ex);
+            if (pathFile.Contains("SNAP") || pathFile.Contains("WO")) parse_MD_SNAP(ex);
         }
 
 
-        //public void parse_MD_DCA(Application ex)
-        //{
-        //    string report = "Loading started.";
-        //    logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, true, report);
+        public void parse_MD_DCA(Application ex)
+        {
+            string report = "Loading started.";
+            logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, true, report);
 
-        //    int lastUsedRow = 0;
-        //    string fileName = ex.Workbooks.Item[1].Name;
-
-        //    int startIndex = fileName.LastIndexOf("_") + 1;
-        //    fileName = "01." + fileName.Substring(startIndex, fileName.Length - startIndex).Replace(".xlsx", "");
-        //    MD_DCA.Reestr_date = DateTime.Parse(fileName).AddMonths(1).AddDays(-1);
-
-
-        //    Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(2); // берем первый лист;
-        //    //Console.WriteLine("Sheet #2");
-        //    parse_MD_DCA_current_sheet(sheet);
+            Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(2); // берем первый лист;
+            Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
+            Range range = sheet.get_Range("A1", last);
+            int lastUsedRow = last.Row; // Последняя строка в документе
+            int lastUsedColumn = last.Column;
 
 
-        //    try
-        //    {
-        //        SP sp = new SP();
-        //        sp.sp_MD2_DCA(MD_DCA.Reestr_date);
-        //        sp.sp_MD_TOTAL_DCA(MD_DCA.Reestr_date);
-        //        Console.WriteLine("Loading is ready. " + lastUsedRow.ToString() + " rows were processed.");
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-        //        logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, false, exc.Message);
-        //        Console.WriteLine("Error");
-        //    }
+            int i = lastUsedRow; // Строка начала периода
 
-        //    ex.Quit();
+            try
+            {
+                cl_MD_DCA MD_DCA = new cl_MD_DCA();
+                DateTime reestr_date = (DateTime)(sheet.Cells[i, 2] as Range).Value;
+                MD_DCA.Reestr_date = reestr_date;
+                //MD_DCA.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
 
-        //    report = "Loading is ready. " + lastUsedRow.ToString() + " rows were processed.";
-        //    logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, true, report);
+                MD_DCA_rawTableAdapter ad_MD_DCA_raw = new MD_DCA_rawTableAdapter();
+                ad_MD_DCA_raw.DeletePeriod(MD_DCA.Reestr_date.ToString("yyyy-MM-dd"));
 
-        //    Console.ReadKey();
+                while (i > 0)
+                {
+                    MD_DCA.Collection_company = (sheet.Cells[i, 1] as Range).Value;
+                    MD_DCA.Payment_month = (DateTime)(sheet.Cells[i, 2] as Range).Value;
+                    MD_DCA.Debtor = (sheet.Cells[i, 3] as Range).Value;
+                    MD_DCA.IDNP_debitorului = (sheet.Cells[i, 4] as Range).Value;
+                    MD_DCA.Contract = (sheet.Cells[i, 5] as Range).Value;
+                    MD_DCA.Total_paid = (double)(sheet.Cells[i, 6] as Range).Value;
+                    MD_DCA.Fee = (double)(sheet.Cells[i, 7] as Range).Value;
+                    MD_DCA.Fee_including_VAT = (double)(sheet.Cells[i, 8] as Range).Value;
+                    MD_DCA.Types = (sheet.Cells[i, 9] as Range).Value;
+                    MD_DCA.Payment_date = DateTime.Parse((sheet.Cells[i, 10] as Range).Value.ToString().Replace("0:00:00",""));
 
-        //}
+                    if (MD_DCA.Payment_month == MD_DCA.Reestr_date)
+                    {
+                        try
+                        {
+                            ad_MD_DCA_raw.InsertRow(MD_DCA.Reestr_date.ToString("yyyy-MM-dd"), MD_DCA.Collection_company, MD_DCA.Payment_month.ToString("yyyy-MM-dd"), MD_DCA.Debtor, MD_DCA.IDNP_debitorului, MD_DCA.Contract, MD_DCA.Total_paid, MD_DCA.Fee,
+                            MD_DCA.Fee_including_VAT, MD_DCA.Types, MD_DCA.Payment_date.ToString("yyyy-MM-dd"));
+                            Console.WriteLine((lastUsedRow - i + 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
+                        }
+                        catch (Exception exc)
+                        {
+                            logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, false, exc.Message);
+                            Console.WriteLine("Error");
+                            ex.Quit();
+                        }
 
-        //private void parse_MD_DCA_current_sheet(Worksheet sheet)
-        //{
-        //    Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
-        //    Range range = sheet.get_Range("A1", last);
-        //    int lastUsedRow = last.Row;
-        //    int lastUsedColumn = last.Column;
+                        i--;
+                    }
+                    else 
+                    {
+                        Console.WriteLine("The other rows are marked by another Payment_month");
+                        ex.Quit();
+                        Console.ReadKey();
+                        break;
+                    }
+                }
 
-        //    int i = 2; // Строка начала периода
+                SP sp = new SP();
+                sp.sp_MD2_DCA(MD_DCA.Reestr_date);
+                sp.sp_MD_TOTAL_DCA();
+                Console.WriteLine("Loading is ready. " + (lastUsedRow - i).ToString() + " rows were processed.");
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_descr: " + exc.Message);
+                ex.Quit();
+                Console.ReadKey();
+                return;
+            }
 
-        //    try
-        //    {
-        //        MD_DCA_rawTableAdapter ad_MD_DCA_raw = new MD_DCA_rawTableAdapter();
-        //        ad_MD_DCA_raw.DeletePeriod(MD_DCA.Reestr_date.ToString("yyyy-MM-dd"));
+            //ex.Quit();
 
-        //        while (i < lastUsedRow)
-        //        {
-        //            MD_DCA.Collection_company = (sheet.Cells[i, 1] as Range).Value;
-        //            MD_DCA.Payment_month = DateTime.Parse((sheet.Cells[i, 2] as Range).Value);
-        //            MD_DCA.Debtor = (sheet.Cells[i, 3] as Range).Value;
-        //            MD_DCA.IDNP_debitorului = (sheet.Cells[i, 4] as Range).Value;
-        //            MD_DCA.Contract = (int)(sheet.Cells[i, 5] as Range).Value;
-        //            MD_DCA.Total_paid = (double)(sheet.Cells[i, 6] as Range).Value;
-        //            MD_DCA.Fee = (double)(sheet.Cells[i, 7] as Range).Value;
-        //            MD_DCA.Fee_including_VAT = (double)(sheet.Cells[i, 7] as Range).Value;
-        //            MD_DCA.Types = (sheet.Cells[i, 7] as Range).Value;
-        //            MD_DCA.Payment_date = DateTime.Parse((sheet.Cells[i, 7] as Range).Value);
+            //SP sp = new SP();
+            //sp.sp_MD_TOTAL_DCA(MD_DCA.Reestr_date);
 
-        //            try
-        //            {
-        //                ad_MD_DCA_raw.InsertRow(MD_DCA.Reestr_date.ToString("yyyy-MM-dd"), MD_DCA.Collection_company, MD_DCA.Payment_month.ToString("yyyy-MM-dd"), MD_DCA.Debtor, MD_DCA.IDNP_debitorului, MD_DCA.Contract, MD_DCA.Total_paid, MD_DCA.Fee, MD_DCA.Fee_including_VAT,
-        //                    MD_DCA.Types, MD_DCA.Payment_date.ToString("yyyy-MM-dd"));
-        //                Console.WriteLine((i - 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
-        //            }
-        //            catch (Exception exc)
-        //            {
-        //                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-        //                logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA_current_sheet", "MD", DateTime.Now, false, exc.Message);
-        //                Console.WriteLine("Error");
-        //            }
+            report = "Loading is ready. " + (lastUsedRow - i).ToString() + " rows were processed.";
+            logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, true, report);
 
-        //            i++;
-        //        }
-
-
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-        //        logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA_current_sheet", "MD", DateTime.Now, false, exc.Message);
-        //        Console.WriteLine("Error");
-        //    }
+            Console.WriteLine("Do you want to transport snap to Risk? Y - Yes, N - No");
+            string reply = Console.ReadKey().Key.ToString();
 
 
+            if (reply.Equals("Y"))
+            {
+                TransportDCAToRisk(MD_DCA.Reestr_date);
+            }
 
-        //    //report                                                           ----TO_DO
-        //}
+            //Console.ReadKey();
+
+            //Xml                                                           ----TO_DO
+
+        }
 
 
         public void parse_MD_SNAP(Application ex)
@@ -147,18 +150,21 @@ namespace robot.Parsers
             int lastUsedColumn = last.Column;
             cl_MD_SNAP MD_SNAP = new cl_MD_SNAP();
 
+            int firstNull = SearchFirstNullRow(sheet, lastUsedRow);
+
             int i = 3; // Строка начала периода
+            int startPosition = i - 1; // Строка начала периода
 
             try
             {
                 string fileName = ex.Workbooks.Item[1].Name;
-                fileName = "01 " + fileName.Replace("Moldova_SNAP_","").Replace("Moldova_WOFF_","").Replace(".xlsx","").Replace("_"," "); //.ToString("yyyy-MM-dd");
+                fileName = fileName.Replace("Moldova_SNAP ","").Replace("Moldova_WO ","").Replace("Moldova_WO_accumulated_","").Replace(".xlsx","").Replace("_"," "); //.ToString("yyyy-MM-dd");
 
                 //ex.Quit();
 
                 DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
-                MD_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
-                //MD_SNAP.Reestr_date = reestr_date;       //current date
+                //MD_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
+                MD_SNAP.Reestr_date = reestr_date;       //current date
                 MD_SNAP.Snapdate = MD_SNAP.Reestr_date;       //current date
 
                 MD_SNAP.Source_type = ex.Workbooks.Item[1].Name.Replace(".xlsx", "");
@@ -166,7 +172,7 @@ namespace robot.Parsers
                 MD_SNAP_rawTableAdapter ad_MD_SNAP_raw = new MD_SNAP_rawTableAdapter();
                 ad_MD_SNAP_raw.DeletePeriod(MD_SNAP.Reestr_date.ToString("yyyy-MM-dd"), MD_SNAP.Source_type);
 
-                while (i <= lastUsedRow)
+                while (i < firstNull)
                 {
                     MD_SNAP.Account_ID = (sheet.Cells[i, 1] as Range).Value.ToString();
                     MD_SNAP.Loan_amount = (double)(sheet.Cells[i, 4] as Range).Value;
@@ -181,12 +187,13 @@ namespace robot.Parsers
                     {
                         ad_MD_SNAP_raw.InsertRow(MD_SNAP.Reestr_date.ToString("yyyy-MM-dd"), MD_SNAP.Snapdate.ToString("yyyy-MM-dd"), MD_SNAP.Account_ID, MD_SNAP.Loan_amount, MD_SNAP.DPD,
                             MD_SNAP.Principal_balance, MD_SNAP.Principal, MD_SNAP.Origination_fee, MD_SNAP.Origination_fee_IL, MD_SNAP.Interest_balance_for_provisions, MD_SNAP.Source_type);
-                        Console.WriteLine((i - 2).ToString() + "/" + (lastUsedRow - 2).ToString() + " row uploaded");
+                        Console.WriteLine((i - startPosition).ToString() + "/" + (firstNull - startPosition - 1).ToString() + " row uploaded");
                     }
                     catch (Exception exc)
                     {
                         logAdapter.InsertRow("cl_Parser_MD", "parse_MD_SNAP", "MD", DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
+                        Console.WriteLine("Error_descr: " + exc.Message.ToString());
                         ex.Quit();
                     }
 
@@ -199,9 +206,9 @@ namespace robot.Parsers
                 //sp.sp_MD2_portfolio_snapshot(MD_SNAP.Reestr_date);
                 //sp.sp_MD_TOTAL_SNAP(MD_SNAP.Reestr_date);
 
-                Console.WriteLine("Loading is ready. " + (lastUsedRow - 2).ToString() + " rows were processed.");
+                Console.WriteLine("Loading is ready. " + (firstNull - startPosition - 1).ToString() + " rows were processed.");
 
-                report = "Loading is ready. " + (lastUsedRow - 2).ToString() + " rows were processed.";
+                report = "Loading is ready. " + (firstNull - startPosition - 1).ToString() + " rows were processed.";
                 logAdapter.InsertRow("cl_Parser_MD", "parse_MD_SNAP", "MD", DateTime.Now, true, report);
 
             }
@@ -209,6 +216,7 @@ namespace robot.Parsers
             {
                 logAdapter.InsertRow("cl_Parser_MD", "parse_MD_SNAP", "MD", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_descr: " + exc.Message.ToString());
                 ex.Quit();
             }
 
@@ -221,38 +229,83 @@ namespace robot.Parsers
 
             if (reply.Equals("Y"))
             {
-                TransportToRisk(MD_SNAP.Snapdate);
+                TransportSnapToRisk(MD_SNAP.Snapdate);
             }
             //report                                                           ----TO_DO
 
         }
 
-        private void TransportToRisk(DateTime snapdate)
+        private void TransportSnapToRisk(DateTime snapdate)
         {
             try
             {
                 SPRisk sprisk = new SPRisk();
                 sprisk.sp_MD2_portfolio_snapshot(snapdate);
-                Console.WriteLine("Snap was transported to [Risk].[dbo].[MD2_portfolio_snapshot_220116]");
-                report = "Snap was transported to [Risk].[dbo].[MD2_portfolio_snapshot_220116]";
-                logAdapter.InsertRow("cl_Parser_MD", "TransportToRisk", "MD", DateTime.Now, true, report);
+                Console.WriteLine("Snap was transported to [Risk].[dbo].[MD2_portfolio_snapshot]");
+                report = "Snap was transported to [Risk].[dbo].[MD2_portfolio_snapshot]";
+                logAdapter.InsertRow("cl_Parser_MD", "TransportSnapToRisk", "MD", DateTime.Now, true, report);
 
                 //report
                 sprisk.sp_MD3_portfolio_snapshot(snapdate);
-                Console.WriteLine("IL-block was calculated in [Risk].[dbo].[MD3_portfolio_test]");
-                report = "IL-block was calculated in [Risk].[dbo].[MD3_portfolio_test]";
-                logAdapter.InsertRow("cl_Parser_MD", "TransportToRisk", "MD", DateTime.Now, true, report);
+                Console.WriteLine("IL-block was calculated in [Risk].[dbo].[MD3_portfolio_snapshot]");
+                report = "IL-block was calculated in [Risk].[dbo].[MD3_portfolio_snapshot]";
+                logAdapter.InsertRow("cl_Parser_MD", "TransportSnapToRisk", "MD", DateTime.Now, true, report);
+                
+                //report
+                sprisk.sp_MD_TOTAL_SNAP();
+                Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP] was formed.");
+                report = "[Risk].[dbo].[TOTAL_SNAP] was formed.";
+                logAdapter.InsertRow("cl_Parser_MD", "TransportSnapToRisk", "MD", DateTime.Now, true, report);
 
                 //report into log
             }
             catch (Exception exc)
             {
-                logAdapter.InsertRow("cl_Parser_MD", "TransportToRisk", "MD", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_MD", "TransportSnapToRisk", "MD", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
             }
 
             Console.ReadKey();
 
         }
+
+        private void TransportDCAToRisk(DateTime snapdate)
+        {
+            try
+            {
+                SPRisk sprisk = new SPRisk();
+                sprisk.sp_MD_TOTAL_DCA(snapdate);
+                Console.WriteLine("DCA was transported to [Risk].[dbo].[MD2_DCA], [Risk].[dbo].[TOTAL_DCA]");
+                report = "DCA was transported to [Risk].[dbo].[MD2_DCA], [Risk].[dbo].[TOTAL_DCA]";
+                logAdapter.InsertRow("cl_Parser_MD", "TransportDCAToRisk", "MD", DateTime.Now, true, report);
+                //report into log
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_MD", "TransportDCAToRisk", "MD", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+            }
+
+            Console.ReadKey();
+
+        }
+
+        private static int SearchFirstNullRow(Worksheet sheet, int lastUsedRow)
+        {
+            int firstNull = 0;
+            for (int firstEmpty = lastUsedRow; firstEmpty > 0; firstEmpty--)
+            {
+                if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) != 0)
+                {
+                    firstNull = firstEmpty + 1;
+                    break;
+                }
+            }
+
+            return firstNull;
+        }
+
     }
 }

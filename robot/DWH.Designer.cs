@@ -2632,7 +2632,7 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MD_DCA_rawRow AddMD_DCA_rawRow(System.DateTime reestr_date, string Collection_company, System.DateTime Payment_month, string Debtor, string IDNP_debitorului, int Contract, double Total_paid, double Fee, double Fee_including_VAT, string Type, System.DateTime Payment_date) {
+            public MD_DCA_rawRow AddMD_DCA_rawRow(System.DateTime reestr_date, string Collection_company, System.DateTime Payment_month, string Debtor, string IDNP_debitorului, string Contract, double Total_paid, double Fee, double Fee_including_VAT, string Type, System.DateTime Payment_date) {
                 MD_DCA_rawRow rowMD_DCA_rawRow = ((MD_DCA_rawRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         reestr_date,
@@ -2694,7 +2694,7 @@ namespace robot {
                 base.Columns.Add(this.columnDebtor);
                 this.columnIDNP_debitorului = new global::System.Data.DataColumn("IDNP_debitorului", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIDNP_debitorului);
-                this.columnContract = new global::System.Data.DataColumn("Contract", typeof(int), null, global::System.Data.MappingType.Element);
+                this.columnContract = new global::System.Data.DataColumn("Contract", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnContract);
                 this.columnTotal_paid = new global::System.Data.DataColumn("Total_paid", typeof(double), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTotal_paid);
@@ -5269,10 +5269,10 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public int Contract {
+            public string Contract {
                 get {
                     try {
-                        return ((int)(this[this.tableMD_DCA_raw.ContractColumn]));
+                        return ((string)(this[this.tableMD_DCA_raw.ContractColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("Значение для столбца \'Contract\' в таблице \'MD_DCA_raw\' равно DBNull.", e);
@@ -9091,7 +9091,6 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
             tableMapping.ColumnMappings.Add("Payment_month", "Payment_month");
             tableMapping.ColumnMappings.Add("Debtor", "Debtor");
             tableMapping.ColumnMappings.Add("IDNP_debitorului", "IDNP_debitorului");
-            tableMapping.ColumnMappings.Add("Contract", "Contract");
             tableMapping.ColumnMappings.Add("Total_paid", "Total_paid");
             tableMapping.ColumnMappings.Add("Fee", "Fee");
             tableMapping.ColumnMappings.Add("Fee_including_VAT", "Fee_including_VAT");
@@ -9100,14 +9099,13 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[MD_DCA_raw] ([reestr_date], [Collection_company], [Payment_month], [Debtor], [IDNP_debitorului], [Contract], [Total_paid], [Fee], [Fee_including_VAT], [Type], [Payment_date]) VALUES (@reestr_date, @Collection_company, @Payment_month, @Debtor, @IDNP_debitorului, @Contract, @Total_paid, @Fee, @Fee_including_VAT, @Type, @Payment_date)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [MD_DCA_raw] ([reestr_date], [Collection_company], [Payment_month], [Debtor], [IDNP_debitorului], [Total_paid], [Fee], [Fee_including_VAT], [Type], [Payment_date]) VALUES (@reestr_date, @Collection_company, @Payment_month, @Debtor, @IDNP_debitorului, @Total_paid, @Fee, @Fee_including_VAT, @Type, @Payment_date)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reestr_date", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Collection_company", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Collection_company", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Payment_month", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Payment_month", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Debtor", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Debtor", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IDNP_debitorului", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IDNP_debitorului", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Contract", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Contract", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Total_paid", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Total_paid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Fee", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Fee", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Fee_including_VAT", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Fee_including_VAT", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -9128,7 +9126,8 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[3];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "select * from [dbo].[MD_DCA_raw]";
+            this._commandCollection[0].CommandText = "SELECT reestr_date, Collection_company, Payment_month, Debtor, IDNP_debitorului, " +
+                "Total_paid, Fee, Fee_including_VAT, Type, Payment_date FROM MD_DCA_raw";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
@@ -9144,7 +9143,7 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Payment_month", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "Payment_month", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Debtor", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "Debtor", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IDNP_debitorului", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "IDNP_debitorului", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Contract", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Contract", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Contract", global::System.Data.SqlDbType.NVarChar, 255, global::System.Data.ParameterDirection.Input, 0, 0, "Contract", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Total_paid", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Total_paid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Fee", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Fee", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Fee_including_VAT", global::System.Data.SqlDbType.Float, 8, global::System.Data.ParameterDirection.Input, 0, 0, "Fee_including_VAT", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -9209,7 +9208,7 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(global::System.Nullable<global::System.DateTime> reestr_date, string Collection_company, global::System.Nullable<global::System.DateTime> Payment_month, string Debtor, string IDNP_debitorului, global::System.Nullable<int> Contract, global::System.Nullable<double> Total_paid, global::System.Nullable<double> Fee, global::System.Nullable<double> Fee_including_VAT, string Type, global::System.Nullable<global::System.DateTime> Payment_date) {
+        public virtual int Insert(global::System.Nullable<global::System.DateTime> reestr_date, string Collection_company, global::System.Nullable<global::System.DateTime> Payment_month, string Debtor, string IDNP_debitorului, global::System.Nullable<double> Total_paid, global::System.Nullable<double> Fee, global::System.Nullable<double> Fee_including_VAT, string Type, global::System.Nullable<global::System.DateTime> Payment_date) {
             if ((reestr_date.HasValue == true)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((System.DateTime)(reestr_date.Value));
             }
@@ -9240,41 +9239,35 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
             else {
                 this.Adapter.InsertCommand.Parameters[4].Value = ((string)(IDNP_debitorului));
             }
-            if ((Contract.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((int)(Contract.Value));
+            if ((Total_paid.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[5].Value = ((double)(Total_paid.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
-            if ((Total_paid.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[6].Value = ((double)(Total_paid.Value));
+            if ((Fee.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[6].Value = ((double)(Fee.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[6].Value = global::System.DBNull.Value;
             }
-            if ((Fee.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[7].Value = ((double)(Fee.Value));
+            if ((Fee_including_VAT.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[7].Value = ((double)(Fee_including_VAT.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[7].Value = global::System.DBNull.Value;
             }
-            if ((Fee_including_VAT.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[8].Value = ((double)(Fee_including_VAT.Value));
-            }
-            else {
+            if ((Type == null)) {
                 this.Adapter.InsertCommand.Parameters[8].Value = global::System.DBNull.Value;
             }
-            if ((Type == null)) {
-                this.Adapter.InsertCommand.Parameters[9].Value = global::System.DBNull.Value;
-            }
             else {
-                this.Adapter.InsertCommand.Parameters[9].Value = ((string)(Type));
+                this.Adapter.InsertCommand.Parameters[8].Value = ((string)(Type));
             }
             if ((Payment_date.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[10].Value = ((System.DateTime)(Payment_date.Value));
+                this.Adapter.InsertCommand.Parameters[9].Value = ((System.DateTime)(Payment_date.Value));
             }
             else {
-                this.Adapter.InsertCommand.Parameters[10].Value = global::System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[9].Value = global::System.DBNull.Value;
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -9325,7 +9318,7 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
-        public virtual int InsertRow(string reestr_date, string Collection_company, string Payment_month, string Debtor, string IDNP_debitorului, global::System.Nullable<int> Contract, global::System.Nullable<double> Total_paid, global::System.Nullable<double> Fee, global::System.Nullable<double> Fee_including_VAT, string Type, string Payment_date) {
+        public virtual int InsertRow(string reestr_date, string Collection_company, string Payment_month, string Debtor, string IDNP_debitorului, string Contract, global::System.Nullable<double> Total_paid, global::System.Nullable<double> Fee, global::System.Nullable<double> Fee_including_VAT, string Type, string Payment_date) {
             global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[2];
             if ((reestr_date == null)) {
                 command.Parameters[0].Value = global::System.DBNull.Value;
@@ -9357,11 +9350,11 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
             else {
                 command.Parameters[4].Value = ((string)(IDNP_debitorului));
             }
-            if ((Contract.HasValue == true)) {
-                command.Parameters[5].Value = ((int)(Contract.Value));
+            if ((Contract == null)) {
+                command.Parameters[5].Value = global::System.DBNull.Value;
             }
             else {
-                command.Parameters[5].Value = global::System.DBNull.Value;
+                command.Parameters[5].Value = ((string)(Contract));
             }
             if ((Total_paid.HasValue == true)) {
                 command.Parameters[6].Value = ((double)(Total_paid.Value));
@@ -10321,7 +10314,7 @@ where sn.b_id is null or sn.initial_id is null";
                 this.Adapter.InsertCommand.Parameters[11].Value = global::System.DBNull.Value;
             }
             if ((source_type == null)) {
-                throw new global::System.ArgumentNullException("source_type");
+                this.Adapter.InsertCommand.Parameters[12].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.InsertCommand.Parameters[12].Value = ((string)(source_type));
@@ -10517,7 +10510,7 @@ where sn.b_id is null or sn.initial_id is null";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.IDbCommand[9];
+            this._commandCollection = new global::System.Data.IDbCommand[11];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[0])).Connection = new global::System.Data.SqlClient.SqlConnection(global::robot.Properties.Settings.Default.DWH_RiskConnectionString);
             ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[0])).CommandText = "dbo.sp_MKD_TOTAL_DCA";
@@ -10570,6 +10563,17 @@ where sn.b_id is null or sn.initial_id is null";
             ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[8])).CommandType = global::System.Data.CommandType.StoredProcedure;
             ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[8])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[8])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[9] = new global::System.Data.SqlClient.SqlCommand();
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[9])).Connection = new global::System.Data.SqlClient.SqlConnection(global::robot.Properties.Settings.Default.DWH_RiskConnectionString);
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[9])).CommandText = "dbo.sp_MD2_DCA";
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[9])).CommandType = global::System.Data.CommandType.StoredProcedure;
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[9])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[9])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[10] = new global::System.Data.SqlClient.SqlCommand();
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[10])).Connection = new global::System.Data.SqlClient.SqlConnection(global::robot.Properties.Settings.Default.DWH_RiskConnectionString);
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[10])).CommandText = "dbo.sp_MD_TOTAL_DCA";
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[10])).CommandType = global::System.Data.CommandType.StoredProcedure;
+            ((global::System.Data.SqlClient.SqlCommand)(this._commandCollection[10])).Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -10843,6 +10847,68 @@ where sn.b_id is null or sn.initial_id is null";
             else {
                 command.Parameters[1].Value = global::System.DBNull.Value;
             }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            object returnValue;
+            try {
+                returnValue = command.ExecuteScalar();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            if (((returnValue == null) 
+                        || (returnValue.GetType() == typeof(global::System.DBNull)))) {
+                return null;
+            }
+            else {
+                return ((object)(returnValue));
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual object sp_MD2_DCA(global::System.Nullable<global::System.DateTime> date) {
+            global::System.Data.SqlClient.SqlCommand command = ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[9]));
+            if ((date.HasValue == true)) {
+                command.Parameters[1].Value = ((System.DateTime)(date.Value));
+            }
+            else {
+                command.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            object returnValue;
+            try {
+                returnValue = command.ExecuteScalar();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            if (((returnValue == null) 
+                        || (returnValue.GetType() == typeof(global::System.DBNull)))) {
+                return null;
+            }
+            else {
+                return ((object)(returnValue));
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual object sp_MD_TOTAL_DCA() {
+            global::System.Data.SqlClient.SqlCommand command = ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[10]));
             global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
             if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
