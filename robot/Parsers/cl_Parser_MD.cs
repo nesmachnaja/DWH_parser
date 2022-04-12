@@ -14,7 +14,6 @@ namespace robot.Parsers
     class cl_Parser_MD
     {
         COUNTRY_LogTableAdapter logAdapter;
-        cl_MD_DCA MD_DCA = new cl_MD_DCA();
         int lastUsedRow;
         string report;
 
@@ -46,13 +45,13 @@ namespace robot.Parsers
             Range range = sheet.get_Range("A1", last);
             int lastUsedRow = last.Row; // Последняя строка в документе
             int lastUsedColumn = last.Column;
+            cl_MD_DCA MD_DCA = new cl_MD_DCA();
 
 
             int i = lastUsedRow; // Строка начала периода
 
             try
             {
-                cl_MD_DCA MD_DCA = new cl_MD_DCA();
                 DateTime reestr_date = (DateTime)(sheet.Cells[i, 2] as Range).Value;
                 MD_DCA.Reestr_date = reestr_date;
                 //MD_DCA.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
