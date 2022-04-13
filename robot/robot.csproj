@@ -83,6 +83,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Structures\cl_SMS_CESS.cs" />
+    <Compile Include="Total_Bosnia.cs">
+      <DependentUpon>Total_Bosnia.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Total_Bosnia.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Total_Bosnia.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -112,6 +120,17 @@
     </None>
     <None Include="Risk.xss">
       <DependentUpon>Risk.xsd</DependentUpon>
+    </None>
+    <None Include="Total_Bosnia.xsc">
+      <DependentUpon>Total_Bosnia.xsd</DependentUpon>
+    </None>
+    <None Include="Total_Bosnia.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Total_Bosnia.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Total_Bosnia.xss">
+      <DependentUpon>Total_Bosnia.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup />
