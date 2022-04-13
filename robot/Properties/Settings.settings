@@ -13,10 +13,18 @@
     <Setting Name="RiskConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=10.50.50.20;Initial Catalog=Risk;Persist Security Info=True;User ID=LyudmilaNesmachnaya&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=10.50.50.20;Initial Catalog=Risk;Persist Security Info=True;User ID=LyudmilaNesmachnaya;Password=vP1Ch57Q7mPD&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=10.50.50.20;Initial Catalog=Risk;Persist Security Info=True;User ID=LyudmilaNesmachnaya</Value>
+      <Value Profile="(Default)">Data Source=10.50.50.20;Initial Catalog=Risk;Persist Security Info=True;User ID=LyudmilaNesmachnaya;Password=vP1Ch57Q7mPD</Value>
+    </Setting>
+    <Setting Name="Total_BosniaConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=dwh.2pp.dev;Initial Catalog=Total_Bosnia;Persist Security Info=True;User ID=nesmachnaja;Password=7ujmvfr49ol.&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=dwh.2pp.dev;Initial Catalog=Total_Bosnia;Persist Security Info=True;User ID=nesmachnaja;Password=7ujmvfr49ol.</Value>
     </Setting>
   </Settings>
 </SettingsFile>

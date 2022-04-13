@@ -3,6 +3,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.IO;
 using robot.DataSet1TableAdapters;
 using Microsoft.Office.Interop.Excel;
+using robot.RiskTableAdapters;
+using robot.Total_BosniaTableAdapters;
 
 namespace robot
 {
@@ -11,6 +13,8 @@ namespace robot
         private int lastUsedRow;
         cl_BIH_DCA BIH_DCA = new cl_BIH_DCA();
         COUNTRY_LogTableAdapter logAdapter;
+        SPRisk sprisk = new SPRisk();
+        string report;
 
         public void OpenFile()
         {
@@ -31,7 +35,7 @@ namespace robot
 
         public void parse_BIH_DCA(Application ex)
         {
-            string report = "Loading started.";
+            report = "Loading started.";
             logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, true, report);
 
             lastUsedRow = 0;
@@ -67,6 +71,37 @@ namespace robot
 
             report = "Loading is ready. " + lastUsedRow.ToString() + " rows were processed.";
             logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, true, report);
+
+            Console.WriteLine("Do you want to transport DCA to Risk? Y - Yes, N - No");
+            string reply = Console.ReadKey().Key.ToString();
+
+
+            if (reply.Equals("Y"))
+            {
+                TransportDCAToRisk(BIH_DCA.Reestr_date);
+            }
+
+            //Console.ReadKey();
+
+        }
+
+        private void TransportDCAToRisk(DateTime t_date)
+        {
+            try
+            {
+                //SPRisk sprisk = new SPRisk();
+                sprisk.sp_BIH_TOTAL_DCA(t_date);
+                Console.WriteLine("DCA was transported to [Risk].[dbo].[BIH2_DCA], [Risk].[dbo].[TOTAL_DCA]");
+                report = "DCA was transported to [Risk].[dbo].[BIH2_DCA], [Risk].[dbo].[TOTAL_DCA]";
+                logAdapter.InsertRow("cl_Parser_BIH", "TransportDCAToRisk", "BIH", DateTime.Now, true, report);
+                //report into log
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_BIH", "TransportDCAToRisk", "BIH", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+            }
 
             Console.ReadKey();
 
@@ -144,7 +179,7 @@ namespace robot
 
         public void parse_BIH_SNAP(Application ex)
         {
-            string report = "Loading started.";
+            report = "Loading started.";
             logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
             
             Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
@@ -152,14 +187,12 @@ namespace robot
             Range range = sheet.get_Range("A1", last);
             lastUsedRow = last.Row; // Последняя строка в документе
             int lastUsedColumn = last.Column;
+            cl_BIH_SNAP BIH_SNAP = new cl_BIH_SNAP();
 
             int i = 2; // Строка начала периода
 
             try
             {
-
-                cl_BIH_SNAP BIH_SNAP = new cl_BIH_SNAP();
-
                 string fileName = ex.Workbooks.Item[1].Name;
                 fileName = fileName.Substring(fileName.IndexOf("_") + 1, 10); //.ToString("yyyy-MM-dd");
 
@@ -211,6 +244,7 @@ namespace robot
                 sp.sp_BIH_TOTAL_SNAP(BIH_SNAP.Reestr_date);
 
                 Console.WriteLine("Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.");
+
             }
             catch (Exception exc)
             {
@@ -225,13 +259,65 @@ namespace robot
 
             report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
             logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
+            
+            TransportSnapToBosnia(BIH_SNAP.Reestr_date);
+            TransportSnapToRisk(BIH_SNAP.Reestr_date);
 
-            Console.ReadKey();
+            //Console.ReadKey();
 
             //report                                                           ----TO_DO
 
         }
 
+        private void TransportSnapToBosnia(DateTime snapdate)
+        {
+            try
+            {
+                TOTAL_SNAPTableAdapter ad_TOTAL_SNAP = new TOTAL_SNAPTableAdapter();
+                ad_TOTAL_SNAP.DeletePeriod(snapdate.ToString("yyyy-MM-dd"));
+                ad_TOTAL_SNAP.InsertPeriod(snapdate.ToString("yyyy-MM-dd"));
 
+                Console.WriteLine("Snap was transported to [Total_Bosnia].[dbo].[TOTAL_SNAP]");
+                report = "Snap was transported to [Total_Bosnia].[dbo].[TOTAL_SNAP]";
+                logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToBosnia", "BIH", DateTime.Now, true, report);
+                //report into log
+
+                SPBosnia spbosnia = new SPBosnia();
+                spbosnia.sp_BIH_TOTAL_SNAP_CFIELD();
+                Console.WriteLine("[Total_Bosnia].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
+                report = "[Total_Bosnia].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToBosnia", "BIH", DateTime.Now, true, report);
+
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToBosnia", "BIH", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+            }
+
+            Console.ReadKey();
+        }
+
+        private void TransportSnapToRisk(DateTime snapdate)
+        {
+            try
+            {
+                //SPRisk sprisk = new sp();
+                sprisk.sp_BIH_TOTAL_SNAP(snapdate);
+                Console.WriteLine("Snap was transported to [Risk].[dbo].[BIH2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP]");
+                report = "Snap was transported to [Risk].[dbo].[BIH2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP]";
+                logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToRisk", "BIH", DateTime.Now, true, report);
+
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToRisk", "BIH", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+            }
+
+            Console.ReadKey();
+        }
     }
 }
