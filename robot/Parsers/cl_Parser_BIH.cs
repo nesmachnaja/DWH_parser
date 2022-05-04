@@ -13,6 +13,7 @@ namespace robot
         private int lastUsedRow;
         cl_BIH_DCA BIH_DCA = new cl_BIH_DCA();
         COUNTRY_LogTableAdapter logAdapter;
+        SP sp = new SP();
         SPRisk sprisk = new SPRisk();
         string report;
 
@@ -20,7 +21,7 @@ namespace robot
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\external_collection_03_2022.xlsx"; // Путь к файлу отчета
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_27.04.2022+00_00_00 (1).xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
@@ -54,7 +55,7 @@ namespace robot
 
             try
             {
-                SP sp = new SP();
+                //SP sp = new SP();
                 sp.sp_BIH2_DCA(BIH_DCA.Reestr_date);
                 sp.sp_BIH_TOTAL_DCA(BIH_DCA.Reestr_date);
                 Console.WriteLine("Loading is ready. " + lastUsedRow.ToString() + " rows were processed.");
@@ -239,11 +240,18 @@ namespace robot
                     i++;
                 }
 
-                SP sp = new SP();
+                //SP sp = new SP();
                 sp.sp_BIH2_portfolio_snapshot(BIH_SNAP.Reestr_date);
                 sp.sp_BIH_TOTAL_SNAP(BIH_SNAP.Reestr_date);
 
                 Console.WriteLine("Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.");
+                report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
+                logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
+
+                sp.sp_BIH_TOTAL_SNAP_CFIELD();
+                Console.WriteLine("[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
+                report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
 
             }
             catch (Exception exc)
@@ -257,11 +265,16 @@ namespace robot
 
             ex.Quit();
 
-            report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
-            logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
-            
             TransportSnapToBosnia(BIH_SNAP.Reestr_date);
-            TransportSnapToRisk(BIH_SNAP.Reestr_date);
+
+            Console.WriteLine("Do you want to transport Snap to Risk? Y - Yes, N - No");
+            string reply = Console.ReadKey().Key.ToString();
+
+
+            if (reply.Equals("Y"))
+            {
+                TransportSnapToRisk(BIH_SNAP.Reestr_date);
+            }
 
             //Console.ReadKey();
 
@@ -275,17 +288,22 @@ namespace robot
             {
                 TOTAL_SNAPTableAdapter ad_TOTAL_SNAP = new TOTAL_SNAPTableAdapter();
                 ad_TOTAL_SNAP.DeletePeriod(snapdate.ToString("yyyy-MM-dd"));
-                ad_TOTAL_SNAP.InsertPeriod(snapdate.ToString("yyyy-MM-dd"));
+                ad_TOTAL_SNAP.InsertPeriod(snapdate);
 
                 Console.WriteLine("Snap was transported to [Total_Bosnia].[dbo].[TOTAL_SNAP]");
                 report = "Snap was transported to [Total_Bosnia].[dbo].[TOTAL_SNAP]";
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToBosnia", "BIH", DateTime.Now, true, report);
                 //report into log
 
-                SPBosnia spbosnia = new SPBosnia();
-                spbosnia.sp_BIH_TOTAL_SNAP_CFIELD();
-                Console.WriteLine("[Total_Bosnia].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
-                report = "[Total_Bosnia].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                //SPBosnia spbosnia = new SPBosnia();
+                //SP sp = new SP();
+                //sp.sp_BIH_TOTAL_SNAP_CFIELD();
+                TOTAL_SNAP_CFIELDTableAdapter ad_TOTAL_SNAP_CFIELD = new TOTAL_SNAP_CFIELDTableAdapter();
+                ad_TOTAL_SNAP_CFIELD.DeletePeriod(snapdate.ToString("yyyy-MM-dd"));
+                ad_TOTAL_SNAP_CFIELD.InsertPeriod(snapdate);
+
+                Console.WriteLine("CField was transported to [Total_Bosnia].[dbo].[TOTAL_SNAP_CFIELD].");
+                report = "CField was transported to [Total_Bosnia].[dbo].[TOTAL_SNAP_CFIELD].";
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToBosnia", "BIH", DateTime.Now, true, report);
 
             }
@@ -307,6 +325,11 @@ namespace robot
                 sprisk.sp_BIH_TOTAL_SNAP(snapdate);
                 Console.WriteLine("Snap was transported to [Risk].[dbo].[BIH2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP]");
                 report = "Snap was transported to [Risk].[dbo].[BIH2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP]";
+                logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToRisk", "BIH", DateTime.Now, true, report);
+                
+                sprisk.sp_BIH_TOTAL_SNAP_CFIELD(snapdate);
+                Console.WriteLine("Snap_CField was transported to [Risk].[dbo].[TOTAL_SNAP_CFIELD]");
+                report = "Snap_CField was transported to [Risk].[dbo].[TOTAL_SNAP_CFIELD]";
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToRisk", "BIH", DateTime.Now, true, report);
 
             }

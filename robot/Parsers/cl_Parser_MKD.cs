@@ -15,7 +15,7 @@ namespace robot
         {
             logAdapter = new COUNTRY_LogTableAdapter();
             
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_31.03.2022+00_00_00.xlsx"; // Путь к файлу отчета
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\MKD_DCA_03.22.xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Excel.Application ex = new Excel.Application();
