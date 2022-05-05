@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parsers\cl_Parser_LIGA.cs" />
     <Compile Include="Parsers\cl_Parser_MD.cs" />
     <Compile Include="Parsers\cl_Parser_SMS.cs" />
     <Compile Include="Risk.cs">
@@ -61,6 +62,7 @@
     </Compile>
     <Compile Include="Structures\cl_BIH_DCA.cs" />
     <Compile Include="Structures\cl_BIH_SNAP.cs" />
+    <Compile Include="Structures\cl_LIGA_SNAP.cs" />
     <Compile Include="Structures\cl_MD_DCA.cs" />
     <Compile Include="Structures\cl_MD_SNAP.cs" />
     <Compile Include="Structures\cl_MKD_DCA.cs" />
