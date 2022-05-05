@@ -15,7 +15,7 @@ namespace robot
         {
             logAdapter = new COUNTRY_LogTableAdapter();
             
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\MKD_DCA_03.22.xlsx"; // Путь к файлу отчета
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_30.4.2022+00_00_00 (1).xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Excel.Application ex = new Excel.Application();
@@ -149,7 +149,7 @@ namespace robot
             try
             {
                 string fileName = ex.Workbooks.Item[1].Name;
-                fileName = fileName.Substring(fileName.IndexOf("_") + 1, 10); //.ToString("yyyy-MM-dd");
+                fileName = fileName.Substring(fileName.IndexOf("_") + 1, 10).Replace("+",""); //.ToString("yyyy-MM-dd");
 
                 DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Excel.Range).Value;
                 MKD_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
