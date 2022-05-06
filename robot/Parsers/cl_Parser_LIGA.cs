@@ -23,7 +23,7 @@ namespace robot.Parsers
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\Портфель ЛД 31.03.xlsb"; // Путь к файлу отчета
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\Портфель ЛД 30.04.xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
@@ -53,8 +53,11 @@ namespace robot.Parsers
 
             for (int firstEmpty = lastUsedRow; firstEmpty > 1; firstEmpty--)
             {
-                if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) != 0)
+                if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) != 0 && 
+                        sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) == sheet.Application.WorksheetFunction.CountA(sheet.Rows[1]))
                 {
+                    //string a = sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]).ToString();
+                    //string w = sheet.Application.WorksheetFunction.CountA(sheet.Rows[1]).ToString();
                     firstNull = firstEmpty + 1;
                     break;
                 }
@@ -63,7 +66,7 @@ namespace robot.Parsers
             try
             {
                 string fileName = ex.Workbooks.Item[1].Name;
-                fileName = fileName.Replace("xlsb","").Replace("Портфель ЛД ","") + DateTime.Now.Year.ToString(); //.ToString("yyyy-MM-dd");
+                fileName = fileName.Replace("xlsb","").Replace("xlsx","").Replace("Портфель ЛД ","") + DateTime.Now.Year.ToString(); //.ToString("yyyy-MM-dd");
 
                 DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
                 //LIGA_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
