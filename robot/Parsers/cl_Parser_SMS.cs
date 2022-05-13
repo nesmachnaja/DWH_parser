@@ -23,7 +23,7 @@ namespace robot.Parsers
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\portf_smsfin_0322.xlsx"; // Путь к файлу отчета
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\portf_smsfin_0422.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
             Workbook workBook = ex.Workbooks.Open(fullPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
@@ -99,6 +99,7 @@ namespace robot.Parsers
                     {
                         logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
+                        Console.WriteLine("Error_descr: " + exc.Message);
                         ex.Quit();
                         Console.ReadKey();
                     }
@@ -122,6 +123,7 @@ namespace robot.Parsers
                 //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_descr: " + exc.Message);
                 ex.Quit();
                 Console.ReadKey();
                 return;
@@ -163,6 +165,7 @@ namespace robot.Parsers
             {
                 logAdapter.InsertRow("cl_Parser_SMS", "TransportToRisk", "SMS", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_descr: " + exc.Message);
             }
 
             Console.ReadKey();
@@ -171,12 +174,12 @@ namespace robot.Parsers
         private static int SearchFirstNullRow(Worksheet sheet, int lastUsedRow)
         {
             int firstNull = 0;
-            for (int firstEmpty = 1; firstEmpty < lastUsedRow; firstEmpty++)
+            for (int firstEmpty = lastUsedRow + 1; firstEmpty > 1; firstEmpty--)
             {
-                if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) == 0 &&
-                        sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) == sheet.Application.WorksheetFunction.CountA(sheet.Rows[1]))
+                if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) != 0 )
+                    //&& sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) == sheet.Application.WorksheetFunction.CountA(sheet.Rows[1]))
                 {
-                    firstNull = firstEmpty;
+                    firstNull = firstEmpty + 1;
                     break;
                 }
             }
@@ -204,14 +207,14 @@ namespace robot.Parsers
             {
                 string fileName = ex.Workbooks.Item[1].Name;
 
-                if (fileName.Contains("SMS")) SMS_SNAP.Brand = "SMS";
-                if (fileName.Contains("VIV")) SMS_SNAP.Brand = "Vivus";
+                if (fileName.ToLower().Contains("sms")) SMS_SNAP.Brand = "SMS";
+                if (fileName.ToLower().Contains("viv")) SMS_SNAP.Brand = "Vivus";
 
-                fileName = fileName.Replace("portf_", "").Replace("smsfin_", "").Replace("vivus_", "").Replace(".xlsx", "").Insert(2, ".").Insert(5, "."); //.ToString("yyyy-MM-dd");
+                fileName = "01." + fileName.Replace("portf_", "").Replace("smsfin_", "").Replace("vivus_", "").Replace(".xlsx", "").Insert(2, "."); //.Insert(5, "."); //.ToString("yyyy-MM-dd");
 
                 DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
-                //SMS_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
-                SMS_SNAP.Reestr_date = reestr_date;       //current date
+                SMS_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
+                //SMS_SNAP.Reestr_date = reestr_date;       //current date
 
                 SMS_SNAP_rawTableAdapter ad_SMS_SNAP_raw = new SMS_SNAP_rawTableAdapter();
                 ad_SMS_SNAP_raw.DeletePeriod(SMS_SNAP.Reestr_date.ToString("yyyy-MM-dd"), SMS_SNAP.Brand);
@@ -263,6 +266,7 @@ namespace robot.Parsers
                 //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_descr: " + exc.Message);
                 ex.Quit();
             }
 
