@@ -21,7 +21,7 @@ namespace robot
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\external_collection_04_2022.xlsx"; // Путь к файлу отчета
+            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_30.04.2022+00_00_00_AM.xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
@@ -65,6 +65,7 @@ namespace robot
                 //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
                 ex.Quit();
             }
 
@@ -156,6 +157,7 @@ namespace robot
                         //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                         logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
+                        Console.WriteLine("Error_desc: " + exc.Message.ToString());
                         sheet.Application.Quit();
                     }
 
@@ -169,6 +171,7 @@ namespace robot
                 //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
                 sheet.Application.Quit();
             }
 
@@ -190,7 +193,7 @@ namespace robot
             int lastUsedColumn = last.Column;
             cl_BIH_SNAP BIH_SNAP = new cl_BIH_SNAP();
 
-            int i = 2; // Строка начала периода
+            int i = 29000; // Строка начала периода
 
             try
             {
@@ -202,7 +205,7 @@ namespace robot
                 BIH_SNAP.Reestr_date = reestr_date;       //current date
 
                 BIH_SNAP_rawTableAdapter ad_BIH_SNAP_raw = new BIH_SNAP_rawTableAdapter();
-                ad_BIH_SNAP_raw.DeletePeriod(BIH_SNAP.Reestr_date.ToString("yyyy-MM-dd"));
+                //ad_BIH_SNAP_raw.DeletePeriod(BIH_SNAP.Reestr_date.ToString("yyyy-MM-dd"));
 
                 while (i <= lastUsedRow)
                 {
@@ -234,6 +237,7 @@ namespace robot
                     {
                         logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
+                        Console.WriteLine("Error_desc: " + exc.Message.ToString());
                         ex.Quit();
                     }
 
@@ -259,6 +263,7 @@ namespace robot
                 //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
                 ex.Quit();
             }
 
