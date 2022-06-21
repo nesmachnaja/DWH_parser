@@ -23,8 +23,12 @@ namespace robot.Parsers
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\Портфель ЛД 30.04.xlsx"; // Путь к файлу отчета
+            Console.WriteLine("Appoint file path: ");
+            string pathFile = Console.ReadLine();
+
+            //string pathFile = @"C:\Users\Людмила\source\repos\robot\Портфель ЛД 05.2022.xlsb"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
+            
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
             Workbook workBook = ex.Workbooks.Open(fullPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
@@ -66,31 +70,31 @@ namespace robot.Parsers
             try
             {
                 string fileName = ex.Workbooks.Item[1].Name;
-                fileName = fileName.Replace("xlsb","").Replace("xlsx","").Replace("Портфель ЛД ","") + DateTime.Now.Year.ToString(); //.ToString("yyyy-MM-dd");
+                fileName = fileName.Replace(".xlsb", "").Replace("xlsx", "").Replace("Портфель ЛД ", ""); //+ DateTime.Now.Year.ToString(); //.ToString("yyyy-MM-dd");
 
                 DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
-                //LIGA_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
-                LIGA_SNAP.Reestr_date = reestr_date;       //current date
+                LIGA_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
+                //LIGA_SNAP.Reestr_date = reestr_date;       //current date
 
                 LIGA_SNAP_rawTableAdapter ad_LIGA_SNAP_raw = new LIGA_SNAP_rawTableAdapter();
                 ad_LIGA_SNAP_raw.DeletePeriod(LIGA_SNAP.Reestr_date.ToString("yyyy-MM-dd"));
 
                 while (i < firstNull)
                 {
-                    LIGA_SNAP.Disbursement_date = (DateTime)(sheet.Cells[i, 1] as Range).Value;
-                    LIGA_SNAP.Loan_id = (sheet.Cells[i, 2] as Range).Value.ToString();
-                    LIGA_SNAP.Client_id = (sheet.Cells[i, 3] as Range).Value.ToString();
-                    LIGA_SNAP.Loan_amount = (double)(sheet.Cells[i, 5] as Range).Value;
-                    LIGA_SNAP.Interest_rate = (double)(sheet.Cells[i, 6] as Range).Value;
-                    LIGA_SNAP.Product_raw = (sheet.Cells[i, 8] as Range).Value;
-                    LIGA_SNAP.Client_cycle = (double)(sheet.Cells[i, 11] as Range).Value;
-                    LIGA_SNAP.Principal = (double)(sheet.Cells[i, 12] as Range).Value;
-                    LIGA_SNAP.Interest = (double)(sheet.Cells[i, 13] as Range).Value;
-                    LIGA_SNAP.Overdue_principal = (double)(sheet.Cells[i, 14] as Range).Value;
-                    LIGA_SNAP.Overdue_interest = (double)(sheet.Cells[i, 15] as Range).Value;
-                    LIGA_SNAP.DPD = (int)(sheet.Cells[i, 16] as Range).Value;
-                    LIGA_SNAP.Prepayment = (double)(sheet.Cells[i, 17] as Range).Value;
-                    LIGA_SNAP.Status = (sheet.Cells[i, 18] as Range).Value;
+                    LIGA_SNAP.Disbursement_date = (DateTime)(sheet.Cells[i, 2] as Range).Value;
+                    LIGA_SNAP.Loan_id = (sheet.Cells[i, 3] as Range).Value.ToString();
+                    LIGA_SNAP.Client_id = (sheet.Cells[i, 4] as Range).Value.ToString();
+                    LIGA_SNAP.Loan_amount = (double)(sheet.Cells[i, 6] as Range).Value;
+                    LIGA_SNAP.Interest_rate = (double)(sheet.Cells[i, 7] as Range).Value;
+                    LIGA_SNAP.Product_raw = (sheet.Cells[i, 9] as Range).Value;
+                    LIGA_SNAP.Client_cycle = (double)(sheet.Cells[i, 12] as Range).Value;
+                    LIGA_SNAP.Principal = (double)(sheet.Cells[i, 13] as Range).Value;
+                    LIGA_SNAP.Interest = (double)(sheet.Cells[i, 14] as Range).Value;
+                    LIGA_SNAP.Overdue_principal = (double)(sheet.Cells[i, 15] as Range).Value;
+                    LIGA_SNAP.Overdue_interest = (double)(sheet.Cells[i, 16] as Range).Value;
+                    LIGA_SNAP.DPD = (int)(sheet.Cells[i, 17] as Range).Value;
+                    LIGA_SNAP.Prepayment = (double)(sheet.Cells[i, 18] as Range).Value;
+                    LIGA_SNAP.Status = (sheet.Cells[i, 19] as Range).Value;
 
                     try
                     {
@@ -133,6 +137,7 @@ namespace robot.Parsers
                 //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_SNAP", "LIGA", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_descr: " + exc.Message);
                 ex.Quit();
             }
 

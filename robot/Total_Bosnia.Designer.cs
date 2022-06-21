@@ -3585,7 +3585,7 @@ select distinct
 [SnapDate], [mob_v], [a_month], [a_id], [country], [Product], [Product_group], [b_product], [cycle_name], [brand], [brand_cycle_type], [loan_amount], [loan_term], [loan_repay_amount], [loan_date], [PRINCIPAL_RESIDUAL], [INTFEE_RESIDUAL], [PORTFOLIO_RESIDUAL], [PREPAY_RESIDUAL], [PENALTIES_RESIDUAL], [OTHER_RESIDUAL], [EXT_FEE_RESIDUAL], [OVERPAYMENT_RESIDUAL], [PORTFOLIO_SOLD_RESIDUAL], [PRINCIPAL_SOLD_RESIDUAL], [INTFEE_SOLD_RESIDUAL], [AGREEMENT_CNT], [AGREEMENT_SOLD_CNT], [DPD], [DPD_prev]
 from [DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] where country = 'BIH' and Snapdate = @date";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
-            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@date", global::System.Data.SqlDbType.VarChar, 3, global::System.Data.ParameterDirection.Input, 0, 0, "SnapDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@date", global::System.Data.SqlDbType.DateTime, 3, global::System.Data.ParameterDirection.Input, 0, 0, "SnapDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3905,13 +3905,13 @@ from [DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] where country = 'BIH' and Snapdate = @
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
-        public virtual int InsertPeriod(string date) {
+        public virtual int InsertPeriod(global::System.Nullable<global::System.DateTime> date) {
             global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[2];
-            if ((date == null)) {
-                command.Parameters[0].Value = global::System.DBNull.Value;
+            if ((date.HasValue == true)) {
+                command.Parameters[0].Value = ((System.DateTime)(date.Value));
             }
             else {
-                command.Parameters[0].Value = ((string)(date));
+                command.Parameters[0].Value = global::System.DBNull.Value;
             }
             global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
             if (((command.Connection.State & global::System.Data.ConnectionState.Open) 

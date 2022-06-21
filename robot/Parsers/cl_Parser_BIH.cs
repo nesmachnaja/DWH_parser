@@ -21,7 +21,10 @@ namespace robot
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_30.04.2022+00_00_00_AM.xlsx"; // Путь к файлу отчета
+            Console.WriteLine("Appoint file path: ");
+            string pathFile = Console.ReadLine();
+
+            //string pathFile = @"C:\Users\Людмила\source\repos\robot\external_collection_05_2022.xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
@@ -193,7 +196,7 @@ namespace robot
             int lastUsedColumn = last.Column;
             cl_BIH_SNAP BIH_SNAP = new cl_BIH_SNAP();
 
-            int i = 29000; // Строка начала периода
+            int i = 2; // Строка начала периода
 
             try
             {
@@ -205,7 +208,7 @@ namespace robot
                 BIH_SNAP.Reestr_date = reestr_date;       //current date
 
                 BIH_SNAP_rawTableAdapter ad_BIH_SNAP_raw = new BIH_SNAP_rawTableAdapter();
-                //ad_BIH_SNAP_raw.DeletePeriod(BIH_SNAP.Reestr_date.ToString("yyyy-MM-dd"));
+                ad_BIH_SNAP_raw.DeletePeriod(BIH_SNAP.Reestr_date.ToString("yyyy-MM-dd"));
 
                 while (i <= lastUsedRow)
                 {
