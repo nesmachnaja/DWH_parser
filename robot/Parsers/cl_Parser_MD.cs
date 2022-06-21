@@ -21,7 +21,10 @@ namespace robot.Parsers
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\Moldova_WO_accumulated_30.04.22.xlsx"; // Путь к файлу отчета
+            Console.WriteLine("Appoint file path: ");
+            string pathFile = Console.ReadLine();
+
+            //string pathFile = @"C:\Users\Людмила\source\repos\robot\Plati colectate totalizator generalizat INCASO PFBC si Agerlex_08.02.22_v2 (1).xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();

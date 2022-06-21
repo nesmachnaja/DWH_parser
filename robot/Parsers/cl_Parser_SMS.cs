@@ -23,7 +23,10 @@ namespace robot.Parsers
         {
             logAdapter = new COUNTRY_LogTableAdapter();
 
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\portf_smsfin_0422.xlsx"; // Путь к файлу отчета
+            Console.WriteLine("Appoint file path: ");
+            string pathFile = Console.ReadLine();
+
+            //string pathFile = @"C:\Users\Людмила\source\repos\robot\proshSMS31052022.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
             Workbook workBook = ex.Workbooks.Open(fullPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,

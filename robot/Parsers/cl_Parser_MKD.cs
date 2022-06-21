@@ -14,8 +14,11 @@ namespace robot
         public void OpenFile() 
         {
             logAdapter = new COUNTRY_LogTableAdapter();
-            
-            string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_30.4.2022+00_00_00 (1).xlsx"; // Путь к файлу отчета
+
+            Console.WriteLine("Appoint file path: ");
+            string pathFile = Console.ReadLine();
+
+            //string pathFile = @"C:\Users\Людмила\source\repos\robot\Loan+snapshot_31.5.2022+00_00_00 (1).xlsx"; // Путь к файлу отчета
             //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Excel.Application ex = new Excel.Application();
@@ -190,11 +193,16 @@ namespace robot
                     i++;
                 }
 
+                Console.WriteLine("Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.");
+                logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
+
                 SP sp = new SP();
                 sp.sp_MKD2_portfolio_snapshot();
                 sp.sp_MKD_TOTAL_SNAP();
 
-                Console.WriteLine("Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.");
+                report = "[DWH_Risk].[dbo].[MKD2_portfolio_snapshot], [DWH_Risk].[dbo].[TOTAL_SNAP] were formed.";
+                Console.WriteLine(report);
+                logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
             }
             catch (Exception exc)
             {
@@ -208,8 +216,7 @@ namespace robot
 
             ex.Quit();
 
-            report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
-            logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
+            //report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
 
             Console.WriteLine("Do you want to transport Snap to Risk? Y - Yes, N - No");
             string reply = Console.ReadKey().Key.ToString();
@@ -243,6 +250,7 @@ namespace robot
                 logAdapter.InsertRow("cl_Parser_MKD", "TransportSnapToRisk", "MKD", DateTime.Now, true, report);
 
                 //report into log
+                Console.ReadKey();
             }
             catch (Exception exc)
             {
