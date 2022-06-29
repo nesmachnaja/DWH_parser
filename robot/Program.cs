@@ -48,6 +48,12 @@ namespace robot
                         Parser.OpenFile();
                         break;
                     }
+                case "MX":
+                    {
+                        cl_Parser_MX Parser = new cl_Parser_MX();
+                        Parser.StartParsing();
+                        break;
+                    }
             }
 
             //cl_Parser_MD Parser = new cl_Parser_MD();
