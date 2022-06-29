@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Parsers\cl_Parser_LIGA.cs" />
     <Compile Include="Parsers\cl_Parser_MD.cs" />
+    <Compile Include="Parsers\cl_Parser_MX.cs" />
     <Compile Include="Parsers\cl_Parser_SMS.cs" />
     <Compile Include="Risk.cs">
       <DependentUpon>Risk.xsd</DependentUpon>
@@ -84,6 +85,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Structures\cl_MX_CESS.cs" />
     <Compile Include="Structures\cl_SMS_CESS.cs" />
     <Compile Include="Structures\cl_SMS_SNAP.cs" />
     <Compile Include="Total_Bosnia.cs">
