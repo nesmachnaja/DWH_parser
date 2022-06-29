@@ -21,7 +21,7 @@ namespace robot
                 case "BIH":
                     {
                         cl_Parser_BIH Parser = new cl_Parser_BIH();
-                        Parser.OpenFile();
+                        Parser.StartParsing();
                         break;
                     }
                 case "LIGA":
@@ -54,7 +54,15 @@ namespace robot
                         Parser.StartParsing();
                         break;
                     }
+                case "send":
+                    {
+                        cl_Send_Email email = new cl_Send_Email();
+                        break;
+                    }
+
             }
+
+            Console.ReadKey();
 
             //cl_Parser_MD Parser = new cl_Parser_MD();
             //Parser.OpenFile();
