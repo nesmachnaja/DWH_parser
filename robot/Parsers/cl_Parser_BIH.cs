@@ -16,16 +16,37 @@ namespace robot
         SP sp = new SP();
         SPRisk sprisk = new SPRisk();
         string report;
+        string pathFile;
 
-        public void OpenFile()
+        public void StartParsing()
         {
             logAdapter = new COUNTRY_LogTableAdapter();
+            int correctPath = 0;
 
+            while (correctPath == 0)
+            {
+                try
+                {
+                    pathFile = GetPath();
+                    OpenFile(pathFile);
+                    correctPath = 1;
+                }
+                catch
+                {
+                    Console.WriteLine("Incorrect file path.");
+                }
+            }
+        }
+
+        private static string GetPath()
+        {
             Console.WriteLine("Appoint file path: ");
             string pathFile = Console.ReadLine();
+            return pathFile;
+        }
 
-            //string pathFile = @"C:\Users\Людмила\source\repos\robot\external_collection_05_2022.xlsx"; // Путь к файлу отчета
-            //static string pathFile = @"C:\Users\Людмила\source\repos\robot\DCA.xlsx"; // Путь к файлу отчета
+        private void OpenFile(string pathFile)
+        {
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
             Workbook workBook = ex.Workbooks.Open(fullPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
@@ -70,6 +91,8 @@ namespace robot
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
                 ex.Quit();
+
+                return;
             }
 
             ex.Quit();
@@ -162,6 +185,8 @@ namespace robot
                         Console.WriteLine("Error");
                         Console.WriteLine("Error_desc: " + exc.Message.ToString());
                         sheet.Application.Quit();
+
+                        return;
                     }
 
                     i++;
@@ -176,6 +201,8 @@ namespace robot
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
                 sheet.Application.Quit();
+
+                return;
             }
 
 
@@ -242,6 +269,8 @@ namespace robot
                         Console.WriteLine("Error");
                         Console.WriteLine("Error_desc: " + exc.Message.ToString());
                         ex.Quit();
+
+                        return;
                     }
 
                     i++;
@@ -249,15 +278,20 @@ namespace robot
 
                 //SP sp = new SP();
                 sp.sp_BIH2_portfolio_snapshot(BIH_SNAP.Reestr_date);
+                report = "[DWH_Risk].[dbo].[BIH2_portfolio_snapshot] was formed.";
+                Console.WriteLine(report);
+
                 sp.sp_BIH_TOTAL_SNAP(BIH_SNAP.Reestr_date);
+                report = "[DWH_Risk].[dbo].[TOTAL_SNAP] was formed.";
+                Console.WriteLine(report);
 
                 Console.WriteLine("Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.");
                 report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
 
                 sp.sp_BIH_TOTAL_SNAP_CFIELD();
-                Console.WriteLine("[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
                 report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                Console.WriteLine(report);
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
 
             }
@@ -268,6 +302,8 @@ namespace robot
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
                 ex.Quit();
+
+                return;
             }
 
 
@@ -322,7 +358,7 @@ namespace robot
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
             }
 
-            Console.ReadKey();
+            //Console.ReadKey();
         }
 
         private void TransportSnapToRisk(DateTime snapdate)

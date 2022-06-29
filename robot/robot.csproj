@@ -111,6 +111,7 @@
     <None Include="DWH.xss">
       <DependentUpon>DWH.xsd</DependentUpon>
     </None>
+    <None Include="js_Accounts.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
