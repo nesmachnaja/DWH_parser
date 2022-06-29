@@ -54,6 +54,11 @@ namespace robot
                         Parser.StartParsing();
                         break;
                     }
+                case "send":
+                    {
+                        cl_Send_Email email = new cl_Send_Email();
+                        break;
+                    }
             }
 
             //cl_Parser_MD Parser = new cl_Parser_MD();
