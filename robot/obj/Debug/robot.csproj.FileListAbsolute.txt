@@ -5,3 +5,6 @@ C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.csprojAssemblyR
 C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.csproj.CoreCompileInputs.cache
 C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.exe
 C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.pdb
+C:\Users\Людмила\source\repos\robot\robot\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Людмила\source\repos\robot\robot\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.csproj.CopyComplete
