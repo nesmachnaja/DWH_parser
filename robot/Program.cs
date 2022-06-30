@@ -1,6 +1,8 @@
-﻿using robot.Parsers;
+﻿using Newtonsoft.Json.Linq;
+using robot.Parsers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +12,7 @@ namespace robot
 {
     class Program
     {
-        private static string path;
+        static JObject accounts; 
         static void Main(string[] args)
         {
             Console.WriteLine("Appoint a country: ");
@@ -54,26 +56,31 @@ namespace robot
                         Parser.StartParsing();
                         break;
                     }
-                case "send":
-                    {
-                        cl_Send_Email email = new cl_Send_Email();
-                        break;
-                    }
 
             }
 
+
+            try
+            {
+                accounts = JObject.Parse(File.ReadAllText(@"js_Accounts.json"));
+                JToken account_param;
+                foreach (JObject account in accounts["accounts"])
+                    if (account["name"].ToString().Equals(country))
+                    {
+                        account_param = (JToken)account["transport"];
+                        cl_Send_Report Report = new cl_Send_Report(account_param);
+                    }
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine("Configuration file wasnt found.");
+                Console.ReadLine();
+                return;
+            }
+
+
             Console.ReadKey();
 
-            //cl_Parser_MD Parser = new cl_Parser_MD();
-            //Parser.OpenFile();
-            //cl_Parser_BIH Parser = new cl_Parser_BIH();
-            //Parser.OpenFile();
-            //cl_Parser_LIGA Parser = new cl_Parser_LIGA();
-            //Parser.OpenFile();
-            //cl_Parser_SMS Parser = new cl_Parser_SMS();
-            //Parser.OpenFile();
-            //cl_Parser_MKD Parser = new cl_Parser_MKD();
-            //Parser.OpenFile();
         }
 
     }
