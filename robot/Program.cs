@@ -12,7 +12,7 @@ namespace robot
     {
         static void Main(string[] args)
         {
-            cl_Tasks tasks = new cl_Tasks();
+            //cl_Tasks tasks = new cl_Tasks();
 
             Console.WriteLine("Appoint a country: ");
             string country = Console.ReadLine();

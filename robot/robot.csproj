@@ -90,7 +90,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Structures\cl_MX_CESS.cs" />
     <Compile Include="Structures\cl_SMS_CESS.cs" />
     <Compile Include="Structures\cl_SMS_SNAP.cs" />
     <Compile Include="Total_Bosnia.cs">

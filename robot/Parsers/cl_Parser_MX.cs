@@ -1,19 +1,15 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using robot.DataSet1TableAdapters;
 using robot.RiskTableAdapters;
-using robot.Structures;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using static robot.Risk;
 
 namespace robot.Parsers
 {
     class cl_Parser_MX
     {
-        //private int lastUsedRow;
         COUNTRY_LogTableAdapter logAdapter;
         SP sp = new SP();
         SPRisk sprisk = new SPRisk();
@@ -71,9 +67,8 @@ namespace robot.Parsers
             int lastUsedColumn = last.Column;
 
             int firstNull = SearchFirstNullRow(sheet, lastUsedRow);
-            //int firstNull = 7000;
+            //int firstNull = 12;
 
-            cl_MX_CESS MX_CESS = new cl_MX_CESS();
             int i = 2; // Строка начала периода
 
             try
@@ -83,57 +78,62 @@ namespace robot.Parsers
                 fileName = "01." + fileName.Replace("cessions_", "").Replace(".xlsx", "").Substring(4, 2) + "." + fileName.Replace("cessions_", "").Replace(".xlsx", "").Substring(0, 4); //.ToString("yyyy-MM-dd");
 
                 DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
-                MX_CESS.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
+                reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
                                                                                                                          //MX_CESS.Reestr_date = reestr_date;       //current date
-
-                //ex.Quit();
+                MX_CESS_rawDataTable mx_cess = new MX_CESS_rawDataTable();
 
                 MX_CESS_rawTableAdapter ad_MX_CESS_raw = new MX_CESS_rawTableAdapter();
-                ad_MX_CESS_raw.DeletePeriod(MX_CESS.Reestr_date.ToString("yyyy-MM-dd"));
+                ad_MX_CESS_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
 
                 while (i < firstNull)
                 {
-                    MX_CESS.Loan_id = (double)(sheet.Cells[i, 1] as Range).Value;
-                    MX_CESS.Cession_date = (DateTime)(sheet.Cells[i, 2] as Range).Value;
-                    MX_CESS.Principal = (decimal)(sheet.Cells[i, 3] as Range).Value;
-                    MX_CESS.Interest = (decimal)(sheet.Cells[i, 4] as Range).Value;
-                    MX_CESS.Fee = (decimal)(sheet.Cells[i, 5] as Range).Value;
-                    MX_CESS.Penalty = (decimal)(sheet.Cells[i, 6] as Range).Value;
-                    MX_CESS.Otherdebt = (decimal)(sheet.Cells[i, 7] as Range).Value;
-                    MX_CESS.Price_amount = (decimal)(sheet.Cells[i, 8] as Range).Value;
-                    MX_CESS.Price_rate = (double)(sheet.Cells[i, 9] as Range).Value;
-                    MX_CESS.DPD = (int)(sheet.Cells[i, 10] as Range).Value;
+                    MX_CESS_rawRow row = mx_cess.NewMX_CESS_rawRow();
 
-                    try
-                    {
-                        ad_MX_CESS_raw.InsertRow(MX_CESS.Reestr_date.ToString("yyyy-MM-dd"), MX_CESS.Loan_id, MX_CESS.Cession_date, MX_CESS.Principal, MX_CESS.Interest,
-                            MX_CESS.Fee, MX_CESS.Penalty, MX_CESS.Otherdebt, MX_CESS.Price_amount, MX_CESS.Price_rate, MX_CESS.DPD); //.ToString("yyyy-MM-dd"));
-                        Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
-                    }
-                    catch (Exception exc)
-                    {
-                        logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, false, exc.Message);
-                        Console.WriteLine("Error");
-                        Console.WriteLine("Error_descr: " + exc.Message);
-                        ex.Quit();
-                        Console.ReadKey();
+                    row["Reestr_date"] = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
 
-                        return;
-                    }
+                    row["Loan_id"] = (double)(sheet.Cells[i, 1] as Range).Value;
+                    row["Cession_date"] = (DateTime)(sheet.Cells[i, 2] as Range).Value;
+                    row["Principal"] = (decimal)(sheet.Cells[i, 3] as Range).Value;
+                    row["Interest"] = (decimal)(sheet.Cells[i, 4] as Range).Value;
+                    row["Fee"] = (decimal)(sheet.Cells[i, 5] as Range).Value;
+                    row["Penalty"] = (decimal)(sheet.Cells[i, 6] as Range).Value;
+                    row["Otherdebt"] = (decimal)(sheet.Cells[i, 7] as Range).Value;
+                    row["Price_amount"] = (decimal)(sheet.Cells[i, 8] as Range).Value;
+                    row["Price_rate"] = (double)(sheet.Cells[i, 9] as Range).Value;
+                    row["DPD"] = (int)(sheet.Cells[i, 10] as Range).Value;
+
+                    mx_cess.AddMX_CESS_rawRow(row);
+                    mx_cess.AcceptChanges();
+
+                    Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
 
                     i++;
                 }
 
-                report = "Loading is ready. " + (firstNull - 1).ToString() + " rows were processed.";
+                try
+                {
+                    sprisk.sp_MX_CESS_raw(mx_cess);
+                }
+                catch (Exception exc)
+                {
+                    logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, false, exc.Message);
+                    Console.WriteLine("Error");
+                    Console.WriteLine("Error_descr: " + exc.Message);
+                    ex.Quit();
+                    Console.ReadKey();
+
+                    return;
+                }
+
+                report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
                 logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, true, report);
                 Console.WriteLine(report);
 
-                MX_Totoal_CESS_forming(MX_CESS.Reestr_date);
+                MX_Total_CESS_forming(reestr_date);
 
             }
             catch (Exception exc)
             {
-                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_descr: " + exc.Message);
@@ -146,21 +146,11 @@ namespace robot.Parsers
 
             ex.Quit();
 
-            /*
-            Console.WriteLine("Do you want to transport snap to Risk? Y - Yes, N - No");
-            string reply = Console.ReadKey().Key.ToString();
-
-            
-            if (reply.Equals("Y"))
-            {
-                TransportToRisk(MX_CESS.Reestr_date);
-            }*/
-
             //report                                                           ----TO_DO
 
         }
 
-        private void MX_Totoal_CESS_forming(DateTime reestr_date)
+        private void MX_Total_CESS_forming(DateTime reestr_date)
         {
             object result;
             int indefinites = 0;
@@ -188,31 +178,6 @@ namespace robot.Parsers
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
             }
         }
-
-        /*
-        private void TransportToRisk(DateTime reestr_date)
-        {
-            try
-            {
-                reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
-                SPRisk sprisk = new SPRisk();
-                sprisk.sp_MX_TOTAL_CESS(reestr_date);
-
-                Console.WriteLine("Cessions were transported to their destination on [Risk]");
-                report = "Cessions were transported to their destination on [Risk]";
-                logAdapter.InsertRow("cl_Parser_MX", "TransportToRisk", "MX", DateTime.Now, true, report);
-
-            }
-            catch (Exception exc)
-            {
-                logAdapter.InsertRow("cl_Parser_MX", "TransportToRisk", "MX", DateTime.Now, false, exc.Message);
-                Console.WriteLine("Error");
-                Console.WriteLine("Error_descr: " + exc.Message);
-            }
-
-            Console.ReadKey();
-        }
-        */
 
         private static int SearchFirstNullRow(Worksheet sheet, int lastUsedRow)
         {
