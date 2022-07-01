@@ -5,6 +5,7 @@ using robot.DataSet1TableAdapters;
 using Microsoft.Office.Interop.Excel;
 using robot.RiskTableAdapters;
 using robot.Total_BosniaTableAdapters;
+using System.Threading.Tasks;
 
 namespace robot
 {
@@ -115,10 +116,19 @@ namespace robot
 
         private void TransportDCAToRisk(DateTime t_date)
         {
+            Task task = new Task(() =>
+            {
+                SPRisk sprisk = new SPRisk();
+                sprisk.sp_BIH_TOTAL_DCA(t_date);
+            },
+            TaskCreationOptions.LongRunning);
+
             try
             {
+                task.RunSynchronously();
+
                 //SPRisk sprisk = new SPRisk();
-                sprisk.sp_BIH_TOTAL_DCA(t_date);
+                //sprisk.sp_BIH_TOTAL_DCA(t_date);
                 Console.WriteLine("DCA was transported to [Risk].[dbo].[BIH2_DCA], [Risk].[dbo].[TOTAL_DCA]");
                 report = "DCA was transported to [Risk].[dbo].[BIH2_DCA], [Risk].[dbo].[TOTAL_DCA]";
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportDCAToRisk", "BIH", DateTime.Now, true, report);
@@ -318,6 +328,7 @@ namespace robot
             if (reply.Equals("Y"))
             {
                 TransportSnapToRisk(BIH_SNAP.Reestr_date);
+                TransportSnapCFToRisk(BIH_SNAP.Reestr_date);
             }
 
             //Console.ReadKey();
@@ -363,15 +374,47 @@ namespace robot
 
         private void TransportSnapToRisk(DateTime snapdate)
         {
+            Task task_snap = new Task(() =>
+            {
+                SPRisk sprisk = new SPRisk();
+                sprisk.sp_BIH_TOTAL_SNAP(snapdate);
+            },
+            TaskCreationOptions.LongRunning);
+
             try
             {
+                task_snap.RunSynchronously();
+
                 //SPRisk sprisk = new sp();
-                sprisk.sp_BIH_TOTAL_SNAP(snapdate);
+                //sprisk.sp_BIH_TOTAL_SNAP(snapdate);
                 Console.WriteLine("Snap was transported to [Risk].[dbo].[BIH2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP]");
                 report = "Snap was transported to [Risk].[dbo].[BIH2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP]";
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToRisk", "BIH", DateTime.Now, true, report);
-                
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToRisk", "BIH", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+            }
+
+            //Console.ReadKey();
+        }
+
+        private void TransportSnapCFToRisk(DateTime snapdate)
+        {
+            Task task_snapCF = new Task(() =>
+            {
+                SPRisk sprisk = new SPRisk();
                 sprisk.sp_BIH_TOTAL_SNAP_CFIELD(snapdate);
+            },
+            TaskCreationOptions.LongRunning);
+
+            try
+            { 
+                task_snapCF.RunSynchronously();
+
+                //sprisk.sp_BIH_TOTAL_SNAP_CFIELD(snapdate);
                 Console.WriteLine("Snap_CField was transported to [Risk].[dbo].[TOTAL_SNAP_CFIELD]");
                 report = "Snap_CField was transported to [Risk].[dbo].[TOTAL_SNAP_CFIELD]";
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToRisk", "BIH", DateTime.Now, true, report);
@@ -384,7 +427,7 @@ namespace robot
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
             }
 
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace robot.Parsers
 {
     class cl_Parser_MX
     {
-        private int lastUsedRow;
+        //private int lastUsedRow;
         COUNTRY_LogTableAdapter logAdapter;
         SP sp = new SP();
         SPRisk sprisk = new SPRisk();
@@ -71,7 +71,7 @@ namespace robot.Parsers
             int lastUsedColumn = last.Column;
 
             int firstNull = SearchFirstNullRow(sheet, lastUsedRow);
-            //int firstNull = 8;
+            //int firstNull = 7000;
 
             cl_MX_CESS MX_CESS = new cl_MX_CESS();
             int i = 2; // Строка начала периода
@@ -84,10 +84,10 @@ namespace robot.Parsers
 
                 DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
                 MX_CESS.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
-                //MX_CESS.Reestr_date = reestr_date;       //current date
+                                                                                                                         //MX_CESS.Reestr_date = reestr_date;       //current date
 
                 //ex.Quit();
-                
+
                 MX_CESS_rawTableAdapter ad_MX_CESS_raw = new MX_CESS_rawTableAdapter();
                 ad_MX_CESS_raw.DeletePeriod(MX_CESS.Reestr_date.ToString("yyyy-MM-dd"));
 
@@ -117,6 +117,8 @@ namespace robot.Parsers
                         Console.WriteLine("Error_descr: " + exc.Message);
                         ex.Quit();
                         Console.ReadKey();
+
+                        return;
                     }
 
                     i++;
@@ -124,14 +126,10 @@ namespace robot.Parsers
 
                 report = "Loading is ready. " + (firstNull - 1).ToString() + " rows were processed.";
                 logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, true, report);
-
-                object result = sprisk.sp_MX_TOTAL_CESS(MX_CESS.Reestr_date);
-                int indefinites = int.Parse(result.ToString());
-
-                report = indefinites == 1 ? "TOTAL_CESS was formed. Indefinite loan_ids were found." : "TOTAL_CESS was formed successfully.";
-                logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, true, report);
-
                 Console.WriteLine(report);
+
+                MX_Totoal_CESS_forming(MX_CESS.Reestr_date);
+
             }
             catch (Exception exc)
             {
@@ -141,6 +139,7 @@ namespace robot.Parsers
                 Console.WriteLine("Error_descr: " + exc.Message);
                 ex.Quit();
                 Console.ReadKey();
+
                 return;
             }
 
@@ -159,6 +158,35 @@ namespace robot.Parsers
 
             //report                                                           ----TO_DO
 
+        }
+
+        private void MX_Totoal_CESS_forming(DateTime reestr_date)
+        {
+            object result;
+            int indefinites = 0;
+
+            Task task_cess = new Task(() =>
+            {
+                SPRisk sprisk = new SPRisk();
+                result = sprisk.sp_MX_TOTAL_CESS(reestr_date);
+                indefinites = int.Parse(result.ToString());
+            },
+            TaskCreationOptions.LongRunning);
+
+            try
+            {
+                task_cess.RunSynchronously();
+
+                report = indefinites == 1 ? "TOTAL_CESS was formed. Indefinite loan_ids were found." : "TOTAL_CESS was formed successfully.";
+                logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, true, report);
+                Console.WriteLine(report);
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_MX", "MX_Totoal_CESS_forming", "MX", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+            }
         }
 
         /*
