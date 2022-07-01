@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using robot.Parsers;
+﻿using robot.Parsers;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,11 +10,15 @@ namespace robot
 {
     class Program
     {
-        static JObject accounts; 
         static void Main(string[] args)
         {
+            //cl_Tasks tasks = new cl_Tasks();
+
             Console.WriteLine("Appoint a country: ");
             string country = Console.ReadLine();
+
+            //cl_Send_Report report = new cl_Send_Report("test");
+
 
             switch (country)
             {
@@ -58,26 +60,6 @@ namespace robot
                     }
 
             }
-
-
-            try
-            {
-                accounts = JObject.Parse(File.ReadAllText(@"js_Accounts.json"));
-                JToken account_param;
-                foreach (JObject account in accounts["accounts"])
-                    if (account["name"].ToString().Equals(country))
-                    {
-                        account_param = (JToken)account["transport"];
-                        cl_Send_Report Report = new cl_Send_Report(account_param);
-                    }
-            }
-            catch (FileNotFoundException ex)
-            {
-                Console.WriteLine("Configuration file wasnt found.");
-                Console.ReadLine();
-                return;
-            }
-
 
             Console.ReadKey();
 

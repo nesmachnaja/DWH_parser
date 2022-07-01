@@ -9,25 +9,47 @@ using System.Net.Mime;
 using Newtonsoft.Json.Linq;
 using robot.DataSet1TableAdapters;
 using System.Data;
+using System.IO;
 
 namespace robot
 {
     class cl_Send_Report
     {
-        public cl_Send_Report(JToken account)
+        static JObject accounts;
+        string _country;
+        string _country_file;
+        int _report_type;
+
+        public cl_Send_Report(string country_file, int report_type)
         {
-            string country = account["country"].ToString();
+            _report_type = report_type;
+            //_country = country_file.Substring(0,country_file.IndexOf("_")).ToLower();
+            _country = "test";
+            _country_file = "[" + country_file + "]";
+
+            GetContactList();
+            //SendEmail(account);
+        }
+
+        private void SendEmail(JToken account)
+        {
+            //string country = account["country"].ToString();
             var from_address = new MailAddress(account["email"].ToString(), "ETL_bot");
-            List <MailAddress> to_address_list = new List<MailAddress>();
+            List<MailAddress> to_address_list = new List<MailAddress>();
 
             COUNTRY_contactsTableAdapter contacts = new COUNTRY_contactsTableAdapter();
-            DataTable contact_data = contacts.GetCountryContacts(country);
+            DataTable contact_data = contacts.GetCountryContacts(_country);
             foreach (DataRow email in contact_data.Rows)
                 to_address_list.Add(new MailAddress(email.ItemArray[2].ToString(), ""));
 
             string from_password = account["password"].ToString();
-            const string subject = "BOT_notification";
-            const string body = "Hello!<br> <b>File</b> was uploaded successfully.";
+
+            COUNTRY_reportingTableAdapter report_data = new COUNTRY_reportingTableAdapter();
+            DataRow message_row;
+            message_row = report_data.GetMessageParameters(_report_type).Rows[0];
+
+            string subject = message_row.ItemArray[1].ToString();
+            string body = message_row.ItemArray[2].ToString().Insert(18, _country_file);
 
             var smtp = new SmtpClient
             {
@@ -49,6 +71,28 @@ namespace robot
                 {
                     smtp.Send(message);
                 }
+            }
+        }
+
+        private void GetContactList()
+        {
+            try
+            {
+                accounts = JObject.Parse(File.ReadAllText(@"js_Accounts.json"));
+                JToken account_param;
+                foreach (JObject account in accounts["accounts"])
+                    if (account["name"].ToString().Equals(_country))
+                    {
+                        account_param = (JToken)account["transport"];
+                        SendEmail(account_param);
+                        //cl_Send_Report Report = new cl_Send_Report(account_param);
+                    }
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine("Configuration file wasnt found.");
+                Console.ReadLine();
+                return;
             }
         }
     }
