@@ -25,7 +25,7 @@ namespace robot
             _report_type = report_type;
             //_country = country_file.Substring(0,country_file.IndexOf("_")).ToLower();
             _country = "test";
-            _country_file = "[" + country_file + "]";
+            _country_file = country_file;
 
             GetContactList();
             //SendEmail(account);

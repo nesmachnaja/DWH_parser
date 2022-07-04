@@ -120,7 +120,7 @@ namespace robot.Parsers
                     Console.WriteLine("Error");
                     Console.WriteLine("Error_descr: " + exc.Message);
                     ex.Quit();
-                    Console.ReadKey();
+                    //Console.ReadKey();
 
                     return;
                 }
