@@ -146,7 +146,8 @@ namespace robot.Parsers
 
             ex.Quit();
 
-            //report                                                           ----TO_DO
+            cl_Send_Report send_report = new cl_Send_Report("MX_CESS", 1);
+            Console.WriteLine("Report was sended.");
 
         }
 

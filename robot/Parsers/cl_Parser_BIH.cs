@@ -6,18 +6,20 @@ using Microsoft.Office.Interop.Excel;
 using robot.RiskTableAdapters;
 using robot.Total_BosniaTableAdapters;
 using System.Threading.Tasks;
+using static robot.DataSet1;
 
 namespace robot
 {
     class cl_Parser_BIH
     {
         private int lastUsedRow;
-        cl_BIH_DCA BIH_DCA = new cl_BIH_DCA();
+        BIH_DCA_rawDataTable bih_dca = new BIH_DCA_rawDataTable();
         COUNTRY_LogTableAdapter logAdapter;
         SP sp = new SP();
         SPRisk sprisk = new SPRisk();
         string report;
         string pathFile;
+        DateTime reestr_date;
 
         public void StartParsing()
         {
@@ -69,7 +71,7 @@ namespace robot
             
             //int startIndex = fileName.LastIndexOf("_") + 1;
             fileName = "01." + fileName.Replace(".xlsx","").Replace("external_collection_","").Replace("_",".");
-            BIH_DCA.Reestr_date = DateTime.Parse(fileName).AddMonths(1).AddDays(-1);
+            reestr_date = DateTime.Parse(fileName).AddMonths(1).AddDays(-1);
 
             for (int j = 1; j <= 2; j++)
             {
@@ -78,16 +80,19 @@ namespace robot
                 parse_BIH_DCA_current_sheet(sheet);
             }
 
+            report = "Loading is ready. " + lastUsedRow.ToString() + " rows were processed.";
+            Console.WriteLine(report);
+            logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, true, report);
+
             try
             {
-                //SP sp = new SP();
-                sp.sp_BIH2_DCA(BIH_DCA.Reestr_date);
-                sp.sp_BIH_TOTAL_DCA(BIH_DCA.Reestr_date);
-                Console.WriteLine("Loading is ready. " + lastUsedRow.ToString() + " rows were processed.");
+                sp.sp_BIH2_DCA(reestr_date);
+                sp.sp_BIH_TOTAL_DCA(reestr_date);
+                report = "[DWH_Risk].[dbo].[BIH2_DCA] and [DWH_Risk].[dbo].[TOTAL_DCA] were formed.";
+                Console.WriteLine(report);
             }
             catch (Exception exc)
             {
-                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
@@ -98,19 +103,17 @@ namespace robot
 
             ex.Quit();
 
-            report = "Loading is ready. " + lastUsedRow.ToString() + " rows were processed.";
-            logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, true, report);
-
             Console.WriteLine("Do you want to transport DCA to Risk? Y - Yes, N - No");
             string reply = Console.ReadKey().Key.ToString();
 
 
             if (reply.Equals("Y"))
             {
-                TransportDCAToRisk(BIH_DCA.Reestr_date);
+                TransportDCAToRisk(reestr_date);
             }
 
-            //Console.ReadKey();
+            cl_Send_Report send_report = new cl_Send_Report("BIH_DCA", 1);
+            Console.WriteLine("Report was sended.");
 
         }
 
@@ -127,8 +130,6 @@ namespace robot
             {
                 task.RunSynchronously();
 
-                //SPRisk sprisk = new SPRisk();
-                //sprisk.sp_BIH_TOTAL_DCA(t_date);
                 Console.WriteLine("DCA was transported to [Risk].[dbo].[BIH2_DCA], [Risk].[dbo].[TOTAL_DCA]");
                 report = "DCA was transported to [Risk].[dbo].[BIH2_DCA], [Risk].[dbo].[TOTAL_DCA]";
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportDCAToRisk", "BIH", DateTime.Now, true, report);
@@ -139,9 +140,9 @@ namespace robot
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportDCAToRisk", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
-            }
 
-            Console.ReadKey();
+                return;
+            }
 
         }
 
@@ -168,45 +169,53 @@ namespace robot
 
             try
             {
-                BIH_DCA.Debt_collector = (sheet.Cells[i, 5] as Range).Value;
+                string debt_collector = (sheet.Cells[i, 5] as Range).Value;
 
                 BIH_DCA_rawTableAdapter ad_BIH_DCA_raw = new BIH_DCA_rawTableAdapter();
-                ad_BIH_DCA_raw.DeletePeriod(BIH_DCA.Reestr_date.ToString("yyyy-MM-dd"), BIH_DCA.Debt_collector);
+                ad_BIH_DCA_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), debt_collector);
 
                 while (i < firstNull)
                 {
-                    BIH_DCA.Loan = (sheet.Cells[i, 1] as Range).Value.ToString();
-                    BIH_DCA.Client = (sheet.Cells[i, 2] as Range).Value;
-                    BIH_DCA.DPD = (int)(sheet.Cells[i, 3] as Range).Value;
-                    BIH_DCA.Bucket = (sheet.Cells[i, 4] as Range).Value;
-                    BIH_DCA.Amount = (double)(sheet.Cells[i, 6] as Range).Value;
-                    BIH_DCA.Percent = (double)(sheet.Cells[i, 7] as Range).Value;
-                    BIH_DCA.Fee_amount = (double)(sheet.Cells[i, 8] as Range).Value;
+                    BIH_DCA_rawRow bih_dca_row = bih_dca.NewBIH_DCA_rawRow();
 
-                    try
-                    {
-                        ad_BIH_DCA_raw.InsertRow(BIH_DCA.Reestr_date.ToString("yyyy-MM-dd"), BIH_DCA.Loan, BIH_DCA.Client, BIH_DCA.DPD, BIH_DCA.Bucket, BIH_DCA.Debt_collector, BIH_DCA.Amount, BIH_DCA.Percent, BIH_DCA.Fee_amount);
-                        Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
-                    }
-                    catch (Exception exc)
-                    {
-                        //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                        logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
-                        Console.WriteLine("Error");
-                        Console.WriteLine("Error_desc: " + exc.Message.ToString());
-                        sheet.Application.Quit();
+                    bih_dca_row["Reestr_date"] = reestr_date;
 
-                        return;
-                    }
+                    bih_dca_row["Loan"] = (sheet.Cells[i, 1] as Range).Value.ToString();
+                    bih_dca_row["Client"] = (sheet.Cells[i, 2] as Range).Value;
+                    bih_dca_row["DPD"] = (int)(sheet.Cells[i, 3] as Range).Value;
+                    bih_dca_row["Bucket"] = (sheet.Cells[i, 4] as Range).Value;
+                    bih_dca_row["Debt_collector"] = debt_collector;
+                    bih_dca_row["Amount"] = (double)(sheet.Cells[i, 6] as Range).Value;
+                    bih_dca_row["Percent"] = (double)(sheet.Cells[i, 7] as Range).Value;
+                    bih_dca_row["Fee_amount"] = (double)(sheet.Cells[i, 8] as Range).Value;
+
+                    bih_dca.AddBIH_DCA_rawRow(bih_dca_row);
+                    bih_dca.AcceptChanges();
+                    
+                    Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
 
                     i++;
                 }
 
-                
+
+                try
+                {
+                    sp.sp_BIH_DCA_raw(bih_dca);
+                }
+                catch (Exception exc)
+                {
+                    logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
+                    Console.WriteLine("Error");
+                    Console.WriteLine("Error_desc: " + exc.Message.ToString());
+                    sheet.Application.Quit();
+
+                    return;
+                }
+
+
             }
             catch (Exception exc)
             {
-                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
@@ -215,9 +224,6 @@ namespace robot
                 return;
             }
 
-
-
-            //report                                                           ----TO_DO
         }
 
 
