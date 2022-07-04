@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static robot.DataSet1;
 
 namespace robot.Parsers
 {
@@ -18,15 +19,37 @@ namespace robot.Parsers
         SP sp = new SP();
         SPRisk sprisk = new SPRisk();
         string report;
+        string pathFile;
 
-        public void OpenFile()
+        public void StartParsing()
         {
             logAdapter = new COUNTRY_LogTableAdapter();
+            int correctPath = 0;
 
+            while (correctPath == 0)
+            {
+                try
+                {
+                    pathFile = GetPath();
+                    OpenFile(pathFile);
+                    correctPath = 1;
+                }
+                catch
+                {
+                    Console.WriteLine("Incorrect file path.");
+                }
+            }
+        }
+
+        private static string GetPath()
+        {
             Console.WriteLine("Appoint file path: ");
             string pathFile = Console.ReadLine();
+            return pathFile;
+        }
 
-            //string pathFile = @"C:\Users\Людмила\source\repos\robot\proshSMS31052022.xlsx"; // Путь к файлу отчета
+        public void OpenFile(string pathFile)
+        {
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Application ex = new Application();
             Workbook workBook = ex.Workbooks.Open(fullPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
@@ -197,10 +220,8 @@ namespace robot.Parsers
 
             Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
             Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
-            Range range = sheet.get_Range("A1", last);
             lastUsedRow = last.Row; // Последняя строка в документе
-            int lastUsedColumn = last.Column;
-            cl_SMS_SNAP SMS_SNAP = new cl_SMS_SNAP();
+            DateTime reestr_date;
 
             int i = 2; // Строка начала периода
 
@@ -210,67 +231,78 @@ namespace robot.Parsers
             {
                 string fileName = ex.Workbooks.Item[1].Name;
 
-                if (fileName.ToLower().Contains("sms")) SMS_SNAP.Brand = "SMS";
-                if (fileName.ToLower().Contains("viv")) SMS_SNAP.Brand = "Vivus";
+                SMS_SNAP_rawDataTable sms_snap = new SMS_SNAP_rawDataTable();
+                string brand = "";
+
+                if (fileName.ToLower().Contains("sms")) brand = "SMS";
+                if (fileName.ToLower().Contains("viv")) brand = "Vivus";
 
                 fileName = "01." + fileName.Replace("portf_", "").Replace("smsfin_", "").Replace("vivus_", "").Replace(".xlsx", "").Insert(2, "."); //.Insert(5, "."); //.ToString("yyyy-MM-dd");
 
-                DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
-                SMS_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
+                reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
+                reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
                 //SMS_SNAP.Reestr_date = reestr_date;       //current date
 
                 SMS_SNAP_rawTableAdapter ad_SMS_SNAP_raw = new SMS_SNAP_rawTableAdapter();
-                ad_SMS_SNAP_raw.DeletePeriod(SMS_SNAP.Reestr_date.ToString("yyyy-MM-dd"), SMS_SNAP.Brand);
+                ad_SMS_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), brand);
 
                 while (i < firstNull)
                 {
-                    SMS_SNAP.ID_loan = (sheet.Cells[i, 1] as Range).Value.ToString();
-                    SMS_SNAP.Phone = (sheet.Cells[i, 2] as Range).Value.ToString();
-                    SMS_SNAP.Od = (double)(sheet.Cells[i, 3] as Range).Value;
-                    SMS_SNAP.Com = (double)(sheet.Cells[i, 4] as Range).Value;
-                    SMS_SNAP.Pen_balance = (double)(sheet.Cells[i, 5] as Range).Value;
-                    SMS_SNAP.Od_com = (double)(sheet.Cells[i, 6] as Range).Value;
-                    SMS_SNAP.Day_delay = (int)(sheet.Cells[i, 7] as Range).Value;
-                    SMS_SNAP.Date_start = (DateTime)(sheet.Cells[i, 8] as Range).Value;
-                    SMS_SNAP.ID_client = (sheet.Cells[i, 9] as Range).Value.ToString();
-                    SMS_SNAP.Interest = (double)(sheet.Cells[i, 10] as Range).Value;
-                    SMS_SNAP.Product = (sheet.Cells[i, 11] as Range).Value;
-                    SMS_SNAP.Ces = (sheet.Cells[i, 12] as Range).Value;
-                    SMS_SNAP.Final_interest = (double)(sheet.Cells[i, 13] as Range).Value;
-                    SMS_SNAP.Prod = (sheet.Cells[i, 14] as Range).Value;
-                    SMS_SNAP.Status = (sheet.Cells[i, 15] as Range).Value;
+                    SMS_SNAP_rawRow sms_snap_row = sms_snap.NewSMS_SNAP_rawRow();
 
-                    try
-                    {
-                        ad_SMS_SNAP_raw.InsertRow(SMS_SNAP.Reestr_date.ToString("yyyy-MM-dd"), SMS_SNAP.ID_loan, SMS_SNAP.Phone, SMS_SNAP.Od, SMS_SNAP.Com,
-                            SMS_SNAP.Pen_balance, SMS_SNAP.Od_com, SMS_SNAP.Day_delay, SMS_SNAP.Date_start.ToString("yyyy-MM-dd"), SMS_SNAP.ID_client, SMS_SNAP.Interest,
-                            SMS_SNAP.Product, SMS_SNAP.Ces, SMS_SNAP.Final_interest, SMS_SNAP.Prod, SMS_SNAP.Status, SMS_SNAP.Brand);
-                        Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
-                    }
-                    catch (Exception exc)
-                    {
-                        logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, false, exc.Message);
-                        Console.WriteLine("Error");
-                        Console.WriteLine("Error_descr: " + exc.Message);
-                        ex.Quit();
-                    }
+                    sms_snap_row["ID_loan"] = (sheet.Cells[i, 1] as Range).Value.ToString();
+                    sms_snap_row["Phone"] = (sheet.Cells[i, 2] as Range).Value.ToString();
+                    sms_snap_row["Od"] = (double)(sheet.Cells[i, 3] as Range).Value;
+                    sms_snap_row["Com"] = (double)(sheet.Cells[i, 4] as Range).Value;
+                    sms_snap_row["Pen_balance"] = (double)(sheet.Cells[i, 5] as Range).Value;
+                    sms_snap_row["Od_com"] = (double)(sheet.Cells[i, 6] as Range).Value;
+                    sms_snap_row["Day_delay"] = (int)(sheet.Cells[i, 7] as Range).Value;
+                    sms_snap_row["Date_start"] = (DateTime)(sheet.Cells[i, 8] as Range).Value;
+                    sms_snap_row["ID_client"] = (sheet.Cells[i, 9] as Range).Value.ToString();
+                    sms_snap_row["Interest"] = (double)(sheet.Cells[i, 10] as Range).Value;
+                    sms_snap_row["Product"] = (sheet.Cells[i, 11] as Range).Value;
+                    sms_snap_row["Ces"] = (sheet.Cells[i, 12] as Range).Value;
+                    sms_snap_row["Final_interest"] = (double)(sheet.Cells[i, 13] as Range).Value;
+                    sms_snap_row["Prod"] = (sheet.Cells[i, 14] as Range).Value;
+                    sms_snap_row["Status"] = (sheet.Cells[i, 15] as Range).Value;
+
+                    sms_snap.AddSMS_SNAP_rawRow(sms_snap_row);
+                    sms_snap.AcceptChanges();
+
+                    Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
 
                     i++;
+
+                }
+
+                try
+                {
+                    sp.sp_SMS_SNAP_raw(sms_snap);
+                }
+                catch (Exception exc)
+                {
+                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, false, exc.Message);
+                    Console.WriteLine("Error");
+                    Console.WriteLine("Error_descr: " + exc.Message);
+                    ex.Quit();
+
+                    return;
                 }
 
 
-                Console.WriteLine("Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.");
                 report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
                 logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, true, report);
+                Console.WriteLine(report);
 
             }
             catch (Exception exc)
             {
-                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_descr: " + exc.Message);
                 ex.Quit();
+
+                return;
             }
 
 
@@ -282,25 +314,27 @@ namespace robot.Parsers
 
             if (reply.Equals("Y"))
             {
-                TransportSnapToRisk(SMS_SNAP.Reestr_date);
+                TransportSnapToRisk(reestr_date);
+                TransportSnapCFToRisk(reestr_date);
             }
 
         }
 
         private void TransportSnapToRisk(DateTime snapdate)
         {
-            try
+            Task task_snap = new Task(() =>
             {
                 SPRisk sprisk = new SPRisk();
                 sprisk.sp_SMS_TOTAL_SNAP(snapdate);
+            },
+            TaskCreationOptions.LongRunning);
+
+            try
+            {
+                task_snap.RunSynchronously();
+
                 Console.WriteLine("Snap was transported to [Risk].[dbo].[SMS_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].");
                 report = "Snap was transported to [Risk].[dbo].[SMS_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
-                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapToRisk", "SMS", DateTime.Now, true, report);
-
-                //report
-                sprisk.sp_SMS_TOTAL_SNAP_CFIELD();
-                Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
-                report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapToRisk", "SMS", DateTime.Now, true, report);
 
                 //report into log
@@ -310,9 +344,43 @@ namespace robot.Parsers
                 logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapToRisk", "SMS", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return;
             }
 
-            Console.ReadKey();
+            //Console.ReadKey();
+
+        }
+
+        private void TransportSnapCFToRisk(DateTime snapdate)
+        {
+            Task task_snap_cf = new Task(() =>
+            {
+                SPRisk sprisk = new SPRisk();
+                sprisk.sp_SMS_TOTAL_SNAP_CFIELD();
+            },
+            TaskCreationOptions.LongRunning);
+
+            try
+            {
+                task_snap_cf.RunSynchronously();
+
+                Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
+                report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapCFToRisk", "SMS", DateTime.Now, true, report);
+
+                //report into log
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapCFToRisk", "SMS", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return;
+            }
+
+            //Console.ReadKey();
 
         }
     }

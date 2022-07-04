@@ -72,7 +72,6 @@
     <Compile Include="Structures\cl_MD_DCA.cs" />
     <Compile Include="Structures\cl_MD_SNAP.cs" />
     <Compile Include="Structures\cl_MKD_DCA.cs" />
-    <Compile Include="Structures\cl_MKD_SNAP.cs" />
     <Compile Include="Parsers\cl_Parser_BIH.cs" />
     <Compile Include="Parsers\cl_Parser_MKD.cs" />
     <Compile Include="DWH.cs">
@@ -91,7 +90,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Structures\cl_SMS_CESS.cs" />
-    <Compile Include="Structures\cl_SMS_SNAP.cs" />
     <Compile Include="Total_Bosnia.cs">
       <DependentUpon>Total_Bosnia.xsd</DependentUpon>
     </Compile>

@@ -20,39 +20,39 @@ namespace robot
             //cl_Send_Report report = new cl_Send_Report("test");
 
 
-            switch (country)
+            switch (country.ToLower())
             {
-                case "BIH":
+                case "bih":
                     {
                         cl_Parser_BIH Parser = new cl_Parser_BIH();
                         Parser.StartParsing();
                         break;
                     }
-                case "LIGA":
+                case "liga":
                     {
                         cl_Parser_LIGA Parser = new cl_Parser_LIGA();
                         Parser.OpenFile();
                         break;
                     }
-                case "MD":
+                case "md":
                     {
                         cl_Parser_MD Parser = new cl_Parser_MD();
                         Parser.OpenFile();
                         break;
                     }
-                case "MKD":
+                case "mkd":
                     {
                         cl_Parser_MKD Parser = new cl_Parser_MKD();
-                        Parser.OpenFile();
+                        Parser.StartParsing();
                         break;
                     }
-                case "SMS":
+                case "sms":
                     {
                         cl_Parser_SMS Parser = new cl_Parser_SMS();
-                        Parser.OpenFile();
+                        Parser.StartParsing();
                         break;
                     }
-                case "MX":
+                case "mx":
                     {
                         cl_Parser_MX Parser = new cl_Parser_MX();
                         Parser.StartParsing();
