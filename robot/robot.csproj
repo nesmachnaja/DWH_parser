@@ -86,7 +86,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Structures\cl_SMS_CESS.cs" />
     <Compile Include="Total_Bosnia.cs">
       <DependentUpon>Total_Bosnia.xsd</DependentUpon>
     </Compile>
