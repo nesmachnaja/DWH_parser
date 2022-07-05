@@ -62,9 +62,7 @@ namespace robot.Parsers
 
             Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
             Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
-            Range range = sheet.get_Range("A1", last);
             int lastUsedRow = last.Row; // Последняя строка в документе
-            int lastUsedColumn = last.Column;
 
             int firstNull = SearchFirstNullRow(sheet, lastUsedRow);
             //int firstNull = 12;

@@ -31,7 +31,7 @@ namespace robot
                 case "liga":
                     {
                         cl_Parser_LIGA Parser = new cl_Parser_LIGA();
-                        Parser.OpenFile();
+                        Parser.StartParsing();
                         break;
                     }
                 case "md":
