@@ -20,6 +20,7 @@ namespace robot.Parsers
         SPRisk sprisk = new SPRisk();
         string report;
         string pathFile;
+        int success = 0;
 
         public void StartParsing()
         {
@@ -275,9 +276,16 @@ namespace robot.Parsers
 
                 }
 
-                try
+                Task task_sms_snap_raw = new Task(() =>
                 {
                     sp.sp_SMS_SNAP_raw(sms_snap);
+                },
+                TaskCreationOptions.LongRunning);
+
+                try
+                {
+                    task_sms_snap_raw.RunSynchronously();
+                    //sp.sp_SMS_SNAP_raw(sms_snap);
                 }
                 catch (Exception exc)
                 {
@@ -315,7 +323,13 @@ namespace robot.Parsers
             if (reply.Equals("Y"))
             {
                 TransportSnapToRisk(reestr_date);
-                TransportSnapCFToRisk(reestr_date);
+                success = TransportSnapCFToRisk(reestr_date);
+            }
+
+            if (success == 1)
+            {
+                cl_Send_Report send_report = new cl_Send_Report("SMS_SNAP", 1);
+                Console.WriteLine("Report was sended.");
             }
 
         }
@@ -352,12 +366,12 @@ namespace robot.Parsers
 
         }
 
-        private void TransportSnapCFToRisk(DateTime snapdate)
+        private int TransportSnapCFToRisk(DateTime snapdate)
         {
             Task task_snap_cf = new Task(() =>
             {
                 SPRisk sprisk = new SPRisk();
-                sprisk.sp_SMS_TOTAL_SNAP_CFIELD();
+                sprisk.sp_SMS_TOTAL_SNAP_CFIELD(snapdate);
             },
             TaskCreationOptions.LongRunning);
 
@@ -369,7 +383,7 @@ namespace robot.Parsers
                 report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapCFToRisk", "SMS", DateTime.Now, true, report);
 
-                //report into log
+                return 1;
             }
             catch (Exception exc)
             {
@@ -377,7 +391,7 @@ namespace robot.Parsers
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
-                return;
+                return 0;
             }
 
             //Console.ReadKey();

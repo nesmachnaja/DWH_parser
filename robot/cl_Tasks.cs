@@ -17,17 +17,17 @@ namespace robot
             Task task = new Task(() =>
             {
                 SPRisk sprisk = new SPRisk();
-                sprisk.sp_LIGA_TOTAL_SNAP_CFIELD(DateTime.Parse("31.05.2022"));
-                //COUNTRY_LogTableAdapter adpr = new COUNTRY_LogTableAdapter();
-                //adpr.GetData();
+                //SP sp = new SP();
+                sprisk.sp_SMS_TOTAL_SNAP_CFIELD(DateTime.Parse("31.05.2022"));
+                //sp.sp_SMS_TOTAL_SNAP_CFIELD(); // (DateTime.Parse("31.05.2022"));
                 Console.WriteLine("Ok");
             },
             TaskCreationOptions.LongRunning);
 
-
             task.RunSynchronously();
 
-            cl_Send_Report send_report = new cl_Send_Report("LIGA_SNAP", 1);
+
+            //cl_Send_Report send_report = new cl_Send_Report("LIGA_SNAP", 1);
 
 
             //task.Start();

@@ -8,3 +8,5 @@ C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.pdb
 C:\Users\Людмила\source\repos\robot\robot\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Людмила\source\repos\robot\robot\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.csproj.CopyComplete
+C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.Properties.Resources.resources
+C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.csproj.GenerateResource.cache
