@@ -38,7 +38,7 @@ namespace robot.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=10.50.50.20;Initial Catalog=Risk;Persist Security Info=True;User ID=L" +
-            "yudmilaNesmachnaya;Password=vP1Ch57Q7mPD")]
+            "yudmilaNesmachnaya")]
         public string RiskConnectionString {
             get {
                 return ((string)(this["RiskConnectionString"]));

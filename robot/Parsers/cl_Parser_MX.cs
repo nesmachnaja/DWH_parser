@@ -15,6 +15,7 @@ namespace robot.Parsers
         SPRisk sprisk = new SPRisk();
         string report;
         string pathFile;
+        int success = 0;
 
         public void StartParsing()
         {
@@ -127,7 +128,7 @@ namespace robot.Parsers
                 logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, true, report);
                 Console.WriteLine(report);
 
-                MX_Total_CESS_forming(reestr_date);
+                success = MX_Total_CESS_forming(reestr_date);
 
             }
             catch (Exception exc)
@@ -144,12 +145,15 @@ namespace robot.Parsers
 
             ex.Quit();
 
-            cl_Send_Report send_report = new cl_Send_Report("MX_CESS", 1);
-            Console.WriteLine("Report was sended.");
+            if (success == 1)
+            {
+                cl_Send_Report send_report = new cl_Send_Report("MX_CESS", 1);
+                Console.WriteLine("Report was sended.");
+            }
 
         }
 
-        private void MX_Total_CESS_forming(DateTime reestr_date)
+        private int MX_Total_CESS_forming(DateTime reestr_date)
         {
             object result;
             int indefinites = 0;
@@ -169,12 +173,16 @@ namespace robot.Parsers
                 report = indefinites == 1 ? "TOTAL_CESS was formed. Indefinite loan_ids were found." : "TOTAL_CESS was formed successfully.";
                 logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, true, report);
                 Console.WriteLine(report);
+
+                return 1;
             }
             catch (Exception exc)
             {
                 logAdapter.InsertRow("cl_Parser_MX", "MX_Totoal_CESS_forming", "MX", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return 0;
             }
         }
 
