@@ -234,10 +234,8 @@ namespace robot
             
             Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
             Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
-            Range range = sheet.get_Range("A1", last);
             lastUsedRow = last.Row; // Последняя строка в документе
-            int lastUsedColumn = last.Column;
-            cl_BIH_SNAP BIH_SNAP = new cl_BIH_SNAP();
+            BIH_SNAP_rawDataTable bih_snap = new BIH_SNAP_rawDataTable();
 
             int i = 2; // Строка начала периода
 
@@ -246,64 +244,70 @@ namespace robot
                 string fileName = ex.Workbooks.Item[1].Name;
                 fileName = fileName.Substring(fileName.IndexOf("_") + 1, 10); //.ToString("yyyy-MM-dd");
 
-                DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
+                reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
                 //BIH_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
-                BIH_SNAP.Reestr_date = reestr_date;       //current date
+                //BIH_SNAP.Reestr_date = reestr_date;       //current date
 
                 BIH_SNAP_rawTableAdapter ad_BIH_SNAP_raw = new BIH_SNAP_rawTableAdapter();
-                ad_BIH_SNAP_raw.DeletePeriod(BIH_SNAP.Reestr_date.ToString("yyyy-MM-dd"));
+                ad_BIH_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
 
                 while (i <= lastUsedRow)
                 {
-                    BIH_SNAP.Loan = (sheet.Cells[i, 1] as Range).Value;
-                    BIH_SNAP.Client = (sheet.Cells[i, 2] as Range).Value;
-                    BIH_SNAP.Status = (sheet.Cells[i, 3] as Range).Value;
-                    BIH_SNAP.Loan_disbursment_date = DateTime.Parse((sheet.Cells[i, 4] as Range).Value);
-                    BIH_SNAP.Product = (sheet.Cells[i, 5] as Range).Value;
-                    BIH_SNAP.DPD = (int)(sheet.Cells[i, 6] as Range).Value;
-                    BIH_SNAP.Matured_principle = (double)(sheet.Cells[i, 7] as Range).Value;
-                    BIH_SNAP.Outstanding_principle = (double)(sheet.Cells[i, 8] as Range).Value;
-                    BIH_SNAP.Principal_balance = (double)(sheet.Cells[i, 9] as Range).Value;
-                    BIH_SNAP.Monthly_fee = (double)(sheet.Cells[i, 10] as Range).Value;
-                    BIH_SNAP.Guarantor_fee = (double)(sheet.Cells[i, 11] as Range).Value;
-                    BIH_SNAP.Penalty_fee = (double)(sheet.Cells[i, 12] as Range).Value;
-                    BIH_SNAP.Penalty_interest = (double)(sheet.Cells[i, 13] as Range).Value;
-                    BIH_SNAP.Interest_balance = (double)(sheet.Cells[i, 14] as Range).Value;
-                    BIH_SNAP.Credit_amount = (double)(sheet.Cells[i, 15] as Range).Value;
-                    BIH_SNAP.Available_limit = (double)(sheet.Cells[i, 16] as Range).Value;
+                    BIH_SNAP_rawRow bih_snap_raw = bih_snap.NewBIH_SNAP_rawRow();
 
-                    try
-                    {
-                        ad_BIH_SNAP_raw.InsertRow(BIH_SNAP.Reestr_date.ToString("yyyy-MM-dd"), BIH_SNAP.Loan, BIH_SNAP.Client, BIH_SNAP.Status, BIH_SNAP.Loan_disbursment_date.ToString("yyyy-MM-dd"),
-                            BIH_SNAP.Product, BIH_SNAP.DPD, BIH_SNAP.Matured_principle, BIH_SNAP.Outstanding_principle, BIH_SNAP.Principal_balance, BIH_SNAP.Monthly_fee,
-                            BIH_SNAP.Guarantor_fee, BIH_SNAP.Penalty_fee, BIH_SNAP.Penalty_interest, BIH_SNAP.Interest_balance, BIH_SNAP.Credit_amount, BIH_SNAP.Available_limit);
-                        Console.WriteLine((i - 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
-                    }
-                    catch (Exception exc)
-                    {
-                        logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
-                        Console.WriteLine("Error");
-                        Console.WriteLine("Error_desc: " + exc.Message.ToString());
-                        ex.Quit();
+                    bih_snap_raw["Reestr_date"] = reestr_date;
 
-                        return;
-                    }
+                    bih_snap_raw["Loan"] = (sheet.Cells[i, 1] as Range).Value;
+                    bih_snap_raw["Client"] = (sheet.Cells[i, 2] as Range).Value;
+                    bih_snap_raw["Status"] = (sheet.Cells[i, 3] as Range).Value;
+                    bih_snap_raw["Loan_disbursment_date"] = DateTime.Parse((sheet.Cells[i, 4] as Range).Value);
+                    bih_snap_raw["Product"] = (sheet.Cells[i, 5] as Range).Value;
+                    bih_snap_raw["DPD"] = (int)(sheet.Cells[i, 6] as Range).Value;
+                    bih_snap_raw["Matured_principle"] = (double)(sheet.Cells[i, 7] as Range).Value;
+                    bih_snap_raw["Outstanding_principle"] = (double)(sheet.Cells[i, 8] as Range).Value;
+                    bih_snap_raw["Principal_balance"] = (double)(sheet.Cells[i, 9] as Range).Value;
+                    bih_snap_raw["Monthly_fee"] = (double)(sheet.Cells[i, 10] as Range).Value;
+                    bih_snap_raw["Guarantor_fee"] = (double)(sheet.Cells[i, 11] as Range).Value;
+                    bih_snap_raw["Penalty_fee"] = (double)(sheet.Cells[i, 12] as Range).Value;
+                    bih_snap_raw["Penalty_interest"] = (double)(sheet.Cells[i, 13] as Range).Value;
+                    bih_snap_raw["Interest_balance"] = (double)(sheet.Cells[i, 14] as Range).Value;
+                    bih_snap_raw["Credit_amount"] = (double)(sheet.Cells[i, 15] as Range).Value;
+                    bih_snap_raw["Available_limit"] = (double)(sheet.Cells[i, 16] as Range).Value;
+
+                    bih_snap.AddBIH_SNAP_rawRow(bih_snap_raw);
+                    bih_snap.AcceptChanges();
+
+                    Console.WriteLine((i - 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
 
                     i++;
                 }
 
-                //SP sp = new SP();
-                sp.sp_BIH2_portfolio_snapshot(BIH_SNAP.Reestr_date);
+                try
+                {
+                    sp.sp_BIH_SNAP_raw(bih_snap);    
+                }
+                catch (Exception exc)
+                {
+                    logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
+                    Console.WriteLine("Error");
+                    Console.WriteLine("Error_desc: " + exc.Message.ToString());
+                    ex.Quit();
+
+                    return;
+                }
+
+
+                report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
+                Console.WriteLine(report);
+                logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
+                
+                sp.sp_BIH2_portfolio_snapshot(reestr_date);
                 report = "[DWH_Risk].[dbo].[BIH2_portfolio_snapshot] was formed.";
                 Console.WriteLine(report);
 
-                sp.sp_BIH_TOTAL_SNAP(BIH_SNAP.Reestr_date);
+                sp.sp_BIH_TOTAL_SNAP(reestr_date);
                 report = "[DWH_Risk].[dbo].[TOTAL_SNAP] was formed.";
                 Console.WriteLine(report);
-
-                Console.WriteLine("Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.");
-                report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
-                logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
 
                 sp.sp_BIH_TOTAL_SNAP_CFIELD();
                 report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
@@ -313,7 +317,6 @@ namespace robot
             }
             catch (Exception exc)
             {
-                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
@@ -325,7 +328,7 @@ namespace robot
 
             ex.Quit();
 
-            TransportSnapToBosnia(BIH_SNAP.Reestr_date);
+            TransportSnapToBosnia(reestr_date);
 
             Console.WriteLine("Do you want to transport Snap to Risk? Y - Yes, N - No");
             string reply = Console.ReadKey().Key.ToString();
@@ -333,14 +336,12 @@ namespace robot
 
             if (reply.Equals("Y"))
             {
-                TransportSnapToRisk(BIH_SNAP.Reestr_date);
-                TransportSnapCFToRisk(BIH_SNAP.Reestr_date);
+                TransportSnapToRisk(reestr_date);
+                TransportSnapCFToRisk(reestr_date);
             }
 
-            //Console.ReadKey();
-
-            //report                                                           ----TO_DO
-
+            cl_Send_Report send_report = new cl_Send_Report("BIH_SNAP", 1);
+            Console.WriteLine("Report was sended.");
         }
 
         private void TransportSnapToBosnia(DateTime snapdate)
