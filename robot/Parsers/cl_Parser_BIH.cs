@@ -20,6 +20,7 @@ namespace robot
         string report;
         string pathFile;
         DateTime reestr_date;
+        int success = 0;
 
         public void StartParsing()
         {
@@ -109,20 +110,22 @@ namespace robot
 
             if (reply.Equals("Y"))
             {
-                TransportDCAToRisk(reestr_date);
+                success = TransportDCAToRisk();
             }
 
-            cl_Send_Report send_report = new cl_Send_Report("BIH_DCA", 1);
-            Console.WriteLine("Report was sended.");
-
+            if (success == 1)
+            {
+                cl_Send_Report send_report = new cl_Send_Report("BIH_DCA", 1);
+                Console.WriteLine("Report was sended.");
+            }
         }
 
-        private void TransportDCAToRisk(DateTime t_date)
+        private int TransportDCAToRisk()
         {
             Task task = new Task(() =>
             {
                 SPRisk sprisk = new SPRisk();
-                sprisk.sp_BIH_TOTAL_DCA(t_date);
+                sprisk.sp_BIH_TOTAL_DCA(reestr_date);
             },
             TaskCreationOptions.LongRunning);
 
@@ -133,7 +136,8 @@ namespace robot
                 Console.WriteLine("DCA was transported to [Risk].[dbo].[BIH2_DCA], [Risk].[dbo].[TOTAL_DCA]");
                 report = "DCA was transported to [Risk].[dbo].[BIH2_DCA], [Risk].[dbo].[TOTAL_DCA]";
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportDCAToRisk", "BIH", DateTime.Now, true, report);
-                //report into log
+
+                return 1;
             }
             catch (Exception exc)
             {
@@ -141,7 +145,7 @@ namespace robot
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
-                return;
+                return 0;
             }
 
         }
@@ -336,12 +340,15 @@ namespace robot
 
             if (reply.Equals("Y"))
             {
-                TransportSnapToRisk(reestr_date);
-                TransportSnapCFToRisk(reestr_date);
+                TransportSnapToRisk();
+                success = TransportSnapCFToRisk();
             }
 
-            cl_Send_Report send_report = new cl_Send_Report("BIH_SNAP", 1);
-            Console.WriteLine("Report was sended.");
+            if (success == 1)
+            {
+                cl_Send_Report send_report = new cl_Send_Report("BIH_SNAP", 1);
+                Console.WriteLine("Report was sended.");
+            }
         }
 
         private void TransportSnapToBosnia(DateTime snapdate)
@@ -379,12 +386,12 @@ namespace robot
             //Console.ReadKey();
         }
 
-        private void TransportSnapToRisk(DateTime snapdate)
+        private void TransportSnapToRisk()
         {
             Task task_snap = new Task(() =>
             {
                 SPRisk sprisk = new SPRisk();
-                sprisk.sp_BIH_TOTAL_SNAP(snapdate);
+                sprisk.sp_BIH_TOTAL_SNAP(reestr_date);
             },
             TaskCreationOptions.LongRunning);
 
@@ -408,12 +415,12 @@ namespace robot
             //Console.ReadKey();
         }
 
-        private void TransportSnapCFToRisk(DateTime snapdate)
+        private int TransportSnapCFToRisk()
         {
             Task task_snapCF = new Task(() =>
             {
                 SPRisk sprisk = new SPRisk();
-                sprisk.sp_BIH_TOTAL_SNAP_CFIELD(snapdate);
+                sprisk.sp_BIH_TOTAL_SNAP_CFIELD(reestr_date);
             },
             TaskCreationOptions.LongRunning);
 
@@ -426,15 +433,17 @@ namespace robot
                 report = "Snap_CField was transported to [Risk].[dbo].[TOTAL_SNAP_CFIELD]";
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToRisk", "BIH", DateTime.Now, true, report);
 
+                return 1;
             }
             catch (Exception exc)
             {
                 logAdapter.InsertRow("cl_Parser_BIH", "TransportSnapToRisk", "BIH", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return 0;
             }
 
-            //Console.ReadKey();
         }
     }
 }

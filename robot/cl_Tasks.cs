@@ -18,7 +18,7 @@ namespace robot
             {
                 SPRisk sprisk = new SPRisk();
                 //SP sp = new SP();
-                sprisk.sp_SMS_TOTAL_SNAP_CFIELD(DateTime.Parse("31.05.2022"));
+                sprisk.sp_MD_TOTAL_SNAP(); //(DateTime.Parse("31.05.2022"));
                 //sp.sp_SMS_TOTAL_SNAP_CFIELD(); // (DateTime.Parse("31.05.2022"));
                 Console.WriteLine("Ok");
             },

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using robot.DataSet1TableAdapters;
 using robot.RiskTableAdapters;
-using robot.Structures;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,8 +17,10 @@ namespace robot.Parsers
         COUNTRY_LogTableAdapter logAdapter;
         SP sp = new SP();
         SPRisk sprisk = new SPRisk();
+        DateTime reestr_date;
         string report;
         string pathFile;
+        int success = 0;
 
         public void StartParsing()
         {
@@ -69,7 +70,6 @@ namespace robot.Parsers
             Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
             lastUsedRow = last.Row; // Последняя строка в документе
             LIGA_SNAP_rawDataTable liga_snap = new LIGA_SNAP_rawDataTable();
-            DateTime reestr_date;
 
             int i = 2; // Строка начала периода
             int firstNull = 0;
@@ -150,7 +150,7 @@ namespace robot.Parsers
 
             ex.Quit();
 
-            TotalSnapForming(reestr_date);
+            TotalSnapForming();
             TotalSnapCFForming();
 
             Console.WriteLine("Do you want to transport Snap to Risk? Y - Yes, N - No");
@@ -159,13 +159,15 @@ namespace robot.Parsers
 
             if (reply.Equals("Y"))
             {
-                TransportSnapToRisk(reestr_date);
-                TransportSnapCFToRisk(reestr_date);
+                TransportSnapToRisk();
+                success = TransportSnapCFToRisk();
             }
 
-            cl_Send_Report send_report = new cl_Send_Report("LIGA_SNAP", 1);
-            Console.WriteLine("Report was sended.");
-
+            if (success == 1)
+            {
+                cl_Send_Report send_report = new cl_Send_Report("LIGA_SNAP", 1);
+                Console.WriteLine("Report was sended.");
+            }
         }
 
         private void TotalSnapCFForming()
@@ -188,7 +190,7 @@ namespace robot.Parsers
             }
         }
 
-        private void TotalSnapForming(DateTime reestr_date)
+        private void TotalSnapForming()
         {
             try
             {
@@ -226,11 +228,11 @@ namespace robot.Parsers
             return firstNull;
         }
 
-        private void TransportSnapToRisk(DateTime snapdate)
+        private int TransportSnapToRisk()
         {
             Task task_liga_snap = new Task(() =>
             {
-                sprisk.sp_LIGA_TOTAL_SNAP(snapdate);
+                sprisk.sp_LIGA_TOTAL_SNAP(reestr_date);
             },
             TaskCreationOptions.LongRunning);
 
@@ -241,6 +243,8 @@ namespace robot.Parsers
                 report = "Snap was transported to [Risk].[dbo].[LIGA_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
                 Console.WriteLine(report);
                 logAdapter.InsertRow("cl_Parser_LIGA", "TransportSnapToRisk", "LIGA", DateTime.Now, true, report);
+
+                return 1;
             }
             catch (Exception exc)
             {
@@ -248,15 +252,15 @@ namespace robot.Parsers
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
-                return;
+                return 0;
             }
         }
 
-        private void TransportSnapCFToRisk(DateTime snapdate)
+        private int TransportSnapCFToRisk()
         {
             Task task_liga_snap = new Task(() =>
             {
-                sprisk.sp_LIGA_TOTAL_SNAP_CFIELD(snapdate);
+                sprisk.sp_LIGA_TOTAL_SNAP_CFIELD(reestr_date);
             },
             TaskCreationOptions.LongRunning);
 
@@ -267,6 +271,8 @@ namespace robot.Parsers
                 report = "Snap_CF was transported to [Risk].[dbo].[TOTAL_SNAP_CFIELD].";
                 Console.WriteLine(report);
                 logAdapter.InsertRow("cl_Parser_LIGA", "TransportSnapCFToRisk", "LIGA", DateTime.Now, true, report);
+
+                return 1;
             }
             catch (Exception exc)
             {
@@ -274,7 +280,7 @@ namespace robot.Parsers
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
-                return;
+                return 0;
             }
         }
 

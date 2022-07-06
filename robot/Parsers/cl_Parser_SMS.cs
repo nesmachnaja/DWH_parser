@@ -1,7 +1,6 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using robot.DataSet1TableAdapters;
 using robot.RiskTableAdapters;
-using robot.Structures;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -116,7 +115,7 @@ namespace robot.Parsers
                     sms_cess_row["Rest_all"] = (double)(sheet.Cells[i, 12] as Range).Value;
                     sms_cess_row["Value"] = (double)(sheet.Cells[i, 13] as Range).Value;
                     sms_cess_row["CC"] = (double)(sheet.Cells[i, 14] as Range).Value;
-                    sms_cess_row["Retdate"] = (DateTime?)(sheet.Cells[i, 15] as Range).Value;
+                    //sms_cess_row["Retdate"] = (DateTime?)(sheet.Cells[i, 15] as Range).Value == null ? (DateTime?)DBNull.Value : (DateTime?)(sheet.Cells[i, 15] as Range).Value;
 
                     sms_cess_row["brand"] = brand;
 
@@ -360,14 +359,17 @@ namespace robot.Parsers
 
             ex.Quit();
 
+            TotalSnapForming();
+            TotalSnapCFForming();
+
             Console.WriteLine("Do you want to transport Snap to Risk? Y - Yes, N - No");
             string reply = Console.ReadKey().Key.ToString();
 
 
             if (reply.Equals("Y"))
             {
-                TransportSnapToRisk(reestr_date);
-                success = TransportSnapCFToRisk(reestr_date);
+                TransportSnapToRisk();
+                success = TransportSnapCFToRisk();
             }
 
             if (success == 1)
@@ -378,12 +380,52 @@ namespace robot.Parsers
 
         }
 
-        private void TransportSnapToRisk(DateTime snapdate)
+        private void TotalSnapCFForming()
+        {
+            try
+            {
+                sp.sp_SMS_TOTAL_SNAP_CFIELD();
+
+                report = "[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFForming", "SMS", DateTime.Now, true, report);
+                Console.WriteLine(report);
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFForming", "SMS", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return;
+            }
+        }
+
+        private void TotalSnapForming()
+        {
+            try
+            {
+                sp.sp_SMS_TOTAL_SNAP(reestr_date);
+
+                report = "[dbo].[TOTAL_SNAP] was formed.";
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapForming", "SMS", DateTime.Now, true, report);
+                Console.WriteLine(report);
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapForming", "SMS", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return;
+            }
+        }
+
+        private void TransportSnapToRisk()
         {
             Task task_snap = new Task(() =>
             {
                 SPRisk sprisk = new SPRisk();
-                sprisk.sp_SMS_TOTAL_SNAP(snapdate);
+                sprisk.sp_SMS_TOTAL_SNAP(reestr_date);
             },
             TaskCreationOptions.LongRunning);
 
@@ -410,12 +452,12 @@ namespace robot.Parsers
 
         }
 
-        private int TransportSnapCFToRisk(DateTime snapdate)
+        private int TransportSnapCFToRisk()
         {
             Task task_snap_cf = new Task(() =>
             {
                 SPRisk sprisk = new SPRisk();
-                sprisk.sp_SMS_TOTAL_SNAP_CFIELD(snapdate);
+                sprisk.sp_SMS_TOTAL_SNAP_CFIELD(reestr_date);
             },
             TaskCreationOptions.LongRunning);
 

@@ -37,7 +37,7 @@ namespace robot
                 case "md":
                     {
                         cl_Parser_MD Parser = new cl_Parser_MD();
-                        Parser.OpenFile();
+                        Parser.StartParsing();
                         break;
                     }
                 case "mkd":
