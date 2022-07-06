@@ -99,7 +99,7 @@ namespace robot.Parsers
                     row["Otherdebt"] = (decimal)(sheet.Cells[i, 7] as Range).Value;
                     row["Price_amount"] = (decimal)(sheet.Cells[i, 8] as Range).Value;
                     row["Price_rate"] = (double)(sheet.Cells[i, 9] as Range).Value;
-                    row["DPD"] = (int)(sheet.Cells[i, 10] as Range).Value;
+                    row["DPD"] = (int)(sheet.Cells[i, 11] as Range).Value;
 
                     mx_cess.AddMX_CESS_rawRow(row);
                     mx_cess.AcceptChanges();

@@ -12,7 +12,7 @@ namespace robot
     {
         static void Main(string[] args)
         {
-            cl_Tasks tasks = new cl_Tasks();
+            //cl_Tasks tasks = new cl_Tasks();
 
             Console.WriteLine("Appoint a country: ");
             string country = Console.ReadLine();
@@ -37,7 +37,7 @@ namespace robot
                 case "md":
                     {
                         cl_Parser_MD Parser = new cl_Parser_MD();
-                        Parser.OpenFile();
+                        Parser.StartParsing();
                         break;
                     }
                 case "mkd":

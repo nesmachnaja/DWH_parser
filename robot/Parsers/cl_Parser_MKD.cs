@@ -13,8 +13,10 @@ namespace robot
         COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
         SP sp = new SP();
         SPRisk sprisk = new SPRisk();
+        DateTime reestr_date;
         string report;
         string pathFile;
+        int success = 0;
 
         public void StartParsing()
         {
@@ -63,48 +65,51 @@ namespace robot
 
             Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
             Excel.Range last = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
-            Excel.Range range = sheet.get_Range("A1", last);
             int lastUsedRow = last.Row; // Последняя строка в документе
-            int lastUsedColumn = last.Column;
-            cl_MKD_DCA MKD_DCA = new cl_MKD_DCA();
+            MKD_DCA_rawDataTable mkd_dca = new MKD_DCA_rawDataTable();
 
 
             int i = 2; // Строка начала периода
 
             try
             {
-                DateTime reestr_date = (DateTime)(sheet.Cells[i, 2] as Excel.Range).Value;
-                MKD_DCA.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
+                reestr_date = (DateTime)(sheet.Cells[i, 2] as Excel.Range).Value;
+                reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
 
                 MKD_DCA_rawTableAdapter ad_MKD_DCA_raw = new MKD_DCA_rawTableAdapter();
-                ad_MKD_DCA_raw.DeletePeriod(MKD_DCA.Reestr_date.ToString("yyyy-MM-dd"));
+                ad_MKD_DCA_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
 
                 while (i <= lastUsedRow)
                 {
-                    MKD_DCA.LN = (int)(sheet.Cells[i, 1] as Excel.Range).Value;
-                    MKD_DCA.Payment_date = (sheet.Cells[i, 2] as Excel.Range).Value;
-                    MKD_DCA.DCA_name = (sheet.Cells[i, 3] as Excel.Range).Value;
-                    MKD_DCA.Payment_amount = (double)(sheet.Cells[i, 4] as Excel.Range).Value;
-                    MKD_DCA.DCA_comission_amount = (double)(sheet.Cells[i, 5] as Excel.Range).Value;
+                    MKD_DCA_rawRow mkd_dca_row = mkd_dca.NewMKD_DCA_rawRow();
 
-                    try
-                    {
-                        ad_MKD_DCA_raw.InsertRow(MKD_DCA.LN, MKD_DCA.Payment_date.ToString("yyyy-MM-dd"), MKD_DCA.DCA_name, MKD_DCA.Payment_amount, MKD_DCA.DCA_comission_amount, MKD_DCA.Reestr_date.ToString("yyyy-MM-dd"));
-                        Console.WriteLine((i - 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
-                    }
-                    catch (Exception exc)
-                    {
-                        logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
-                        Console.WriteLine("Error");
-                        ex.Quit();
-                    }
+                    mkd_dca_row["reestr_date"] = reestr_date;
+
+                    mkd_dca_row["LN"] = (int)(sheet.Cells[i, 1] as Excel.Range).Value;
+                    mkd_dca_row["Payment_date"] = (sheet.Cells[i, 2] as Excel.Range).Value;
+                    mkd_dca_row["DCA_name"] = (sheet.Cells[i, 3] as Excel.Range).Value;
+                    mkd_dca_row["Payment_amount"] = (double)(sheet.Cells[i, 4] as Excel.Range).Value;
+                    mkd_dca_row["DCA_comission_amount"] = (double)(sheet.Cells[i, 5] as Excel.Range).Value;
+
+                    mkd_dca.AddMKD_DCA_rawRow(mkd_dca_row);
+                    mkd_dca.AcceptChanges();
+
+                    Console.WriteLine((i - 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
 
                     i++;
                 }
 
-                SP sp = new SP();
-                sp.sp_MKD_TOTAL_DCA(MKD_DCA.Reestr_date);
-                Console.WriteLine("Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.");
+                try
+                {
+                    sp.sp_MKD_DCA_raw(mkd_dca);
+                }
+                catch (Exception exc)
+                {
+                    logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
+                    Console.WriteLine("Error");
+                    ex.Quit();
+                }
+
             }
             catch (Exception exc)
             {
@@ -117,46 +122,69 @@ namespace robot
 
             ex.Quit();
 
-            //SP sp = new SP();
-            //sp.sp_MKD_TOTAL_DCA(MKD_DCA.Reestr_date);
 
             report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
             logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, true, report);
+            Console.WriteLine(report);
+
+            TotalDcaForming();
 
             Console.WriteLine("Do you want to transport DCA to Risk? Y - Yes, N - No");
             string reply = Console.ReadKey().Key.ToString();
-
+            
 
             if (reply.Equals("Y"))
             {
-                TransportDCAToRisk(MKD_DCA.Reestr_date);
+                success = TransportDCAToRisk();
             }
 
-            //Console.ReadKey();
-
-            //Xml                                                           ----TO_DO
+            if (success == 1)
+            {
+                cl_Send_Report send_report = new cl_Send_Report("MKD_DCA", 1);
+                Console.WriteLine("Report was sended.");
+            }
 
         }
 
-        private void TransportDCAToRisk(DateTime t_date)
+        private void TotalDcaForming()
         {
             try
             {
-                SPRisk sprisk = new SPRisk();
-                sprisk.sp_MKD_TOTAL_DCA(t_date);
-                Console.WriteLine("DCA was transported to [Risk].[dbo].[TOTAL_DCA]");
+                sp.sp_MKD_TOTAL_DCA(reestr_date);
+
+                report = "[DWH_Risk].[dbo].[TOTAL_DCA] was formed.";
+                logAdapter.InsertRow("cl_Parser_MKD", "TotalDcaForming", "MKD", DateTime.Now, false, report);
+                Console.WriteLine(report);
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_MKD", "TotalDcaForming", "MKD", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return;
+            }
+        }
+
+        private int TransportDCAToRisk()
+        {
+            try
+            {
+                sprisk.sp_MKD_TOTAL_DCA(reestr_date);
                 report = "DCA was transported to [Risk].[dbo].[TOTAL_DCA]";
                 logAdapter.InsertRow("cl_Parser_MKD", "TransportDCAToRisk", "MKD", DateTime.Now, true, report);
-                //report into log
+                Console.WriteLine(report);
+
+                return 1;
             }
             catch (Exception exc)
             {
                 logAdapter.InsertRow("cl_Parser_MKD", "TransportDCAToRisk", "MKD", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
-            }
 
-            Console.ReadKey();
+                return 0;
+            }
 
         }
 
@@ -168,7 +196,6 @@ namespace robot
             Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
             Excel.Range last = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
             int lastUsedRow = last.Row; // Последняя строка в документе
-            DateTime reestr_date;
 
             int i = 2; // Строка начала периода
 
