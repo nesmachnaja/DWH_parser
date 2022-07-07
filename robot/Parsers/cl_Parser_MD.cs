@@ -97,7 +97,7 @@ namespace robot.Parsers
                     md_dca_row["Total_paid"] = (double)(sheet.Cells[i, 6] as Range).Value;
                     md_dca_row["Fee"] = (double)(sheet.Cells[i, 7] as Range).Value;
                     md_dca_row["Fee_including_VAT"] = (double)(sheet.Cells[i, 8] as Range).Value;
-                    md_dca_row["Types"] = (sheet.Cells[i, 9] as Range).Value;
+                    //md_dca_row["Types"] = (sheet.Cells[i, 9] as Range).Value;
                     md_dca_row["Payment_date"] = DateTime.Parse((sheet.Cells[i, 10] as Range).Value.ToString().Replace("0:00:00", ""));
 
                     //if ((DateTime)md_dca_row["Payment_month"] != reestr_date)
@@ -115,8 +115,8 @@ namespace robot.Parsers
                     {
                         Console.WriteLine((lastUsedRow - i + 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
 
-                        md_dca.AddMD_DCA_rawRow(md_dca_row);
-                        md_dca.AcceptChanges();
+                        //md_dca.AddMD_DCA_rawRow(md_dca_row);
+                        //md_dca.AcceptChanges();
                     }
 
                     i--;
@@ -456,13 +456,37 @@ namespace robot.Parsers
 
         private static int SearchFirstNullRow(Worksheet sheet, int lastUsedRow)
         {
+            int midpoint = lastUsedRow / 2;
             int firstNull = 0;
-            for (int firstEmpty = lastUsedRow; firstEmpty > 0; firstEmpty--)
+
+            //int n = (int)sheet.Application.WorksheetFunction.CountA(sheet.Rows[midpoint]);
+            //int u = (int)sheet.Application.WorksheetFunction.CountA(sheet.Rows[5]);
+
+            if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[midpoint]) != 0
+                && sheet.Application.WorksheetFunction.CountA(sheet.Rows[midpoint]) >= sheet.Application.WorksheetFunction.CountA(sheet.Rows[5]) * 0.9)
             {
-                if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) != 0)
+                for (int firstEmpty = midpoint; firstEmpty < lastUsedRow; firstEmpty++)
                 {
-                    firstNull = firstEmpty + 1;
-                    break;
+                    if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) != 0
+                    && sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) >= sheet.Application.WorksheetFunction.CountA(sheet.Rows[5]) * 0.9)
+                    {
+                        firstNull = firstEmpty;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int firstEmpty = midpoint; firstEmpty > 0; firstEmpty--)
+                {
+                    //int a = (int)sheet.Application.WorksheetFunction.CountBlank(sheet.Rows[firstEmpty]);
+                    //int s = (int)sheet.Application.WorksheetFunction.CountBlank(sheet.Rows[5]);
+                    if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) != 0
+                    && sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) >= sheet.Application.WorksheetFunction.CountA(sheet.Rows[5]) * 0.9)
+                    {
+                        firstNull = firstEmpty + 1;
+                        break;
+                    }
                 }
             }
 
