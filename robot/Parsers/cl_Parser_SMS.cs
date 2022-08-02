@@ -83,7 +83,7 @@ namespace robot.Parsers
             {
                 string fileName = ex.Workbooks.Item[1].Name;
 
-                if (fileName.Contains("SMS")) brand = "SMS";
+                if (fileName.Contains("SMS")) brand = "SMSFinance";
                 if (fileName.Contains("VIV")) brand = "Vivus";
 
                 fileName = fileName.Replace("ces", "").Replace("prosh", "").Replace("SMS", "").Replace("VIV", "").Replace(".xlsx", "").Insert(2, ".").Insert(5, "."); //.ToString("yyyy-MM-dd");
@@ -274,7 +274,7 @@ namespace robot.Parsers
 
                 SMS_SNAP_rawDataTable sms_snap = new SMS_SNAP_rawDataTable();
 
-                if (fileName.ToLower().Contains("sms")) brand = "SMS";
+                if (fileName.ToLower().Contains("sms")) brand = "SMSFinance";
                 if (fileName.ToLower().Contains("viv")) brand = "Vivus";
 
                 fileName = "01." + fileName.Replace("portf_", "").Replace("smsfin_", "").Replace("vivus_", "").Replace(".xlsx", "").Insert(2, "."); //.Insert(5, "."); //.ToString("yyyy-MM-dd");
