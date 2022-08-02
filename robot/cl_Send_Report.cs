@@ -38,7 +38,7 @@ namespace robot
             List<MailAddress> to_address_list = new List<MailAddress>();
 
             COUNTRY_contactsTableAdapter contacts = new COUNTRY_contactsTableAdapter();
-            DataTable contact_data = contacts.GetCountryContacts(_country);
+            DataTable contact_data = contacts.GetCountryContacts(_country, _country_file);
             foreach (DataRow email in contact_data.Rows)
                 to_address_list.Add(new MailAddress(email.ItemArray[2].ToString(), ""));
 

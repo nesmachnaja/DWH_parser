@@ -373,7 +373,7 @@ namespace robot.Parsers
 
             Task task_total_snap = new Task(() =>
             {
-                sprisk.sp_MD_TOTAL_SNAP();
+                sprisk.sp_MD_TOTAL_SNAP(reestr_date);
             },
             TaskCreationOptions.LongRunning);
 

@@ -107,6 +107,7 @@ namespace robot
                 {
                     logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
                     Console.WriteLine("Error");
+                    Console.WriteLine("Error_desc: " + exc.Message.ToString());
                     ex.Quit();
                 }
 
@@ -116,6 +117,7 @@ namespace robot
                 //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
                 ex.Quit();
                 return;
             }
@@ -248,6 +250,7 @@ namespace robot
                     COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                     logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, false, exc.Message);
                     Console.WriteLine("Error");
+                    Console.WriteLine("Error_desc: " + exc.Message.ToString());
                     ex.Quit();
 
                     return;
@@ -264,6 +267,7 @@ namespace robot
             {
                 logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
                 ex.Quit();
 
                 return;

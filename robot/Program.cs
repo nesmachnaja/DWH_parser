@@ -12,6 +12,8 @@ namespace robot
     {
         static void Main(string[] args)
         {
+            //cl_Send_Report send_report = new cl_Send_Report("test", 1);
+
             //cl_Tasks tasks = new cl_Tasks();
 
             Console.WriteLine("Appoint a country: ");
