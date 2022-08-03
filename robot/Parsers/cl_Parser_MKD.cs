@@ -143,7 +143,7 @@ namespace robot
             if (success == 1)
             {
                 cl_Send_Report send_report = new cl_Send_Report("MKD_DCA", 1);
-                Console.WriteLine("Report was sended.");
+                //Console.WriteLine("Report was sended.");
             }
 
         }
@@ -289,7 +289,7 @@ namespace robot
             }
 
             cl_Send_Report send_report = new cl_Send_Report("MKD_SNAP", 1);
-            Console.WriteLine("Report was sended.");
+            //Console.WriteLine("Report was sended.");
 
         }
 

@@ -167,7 +167,7 @@ namespace robot.Parsers
             if (success == 1)
             {
                 cl_Send_Report send_report = new cl_Send_Report("LIGA_SNAP", 1);
-                Console.WriteLine("Report was sended.");
+                //Console.WriteLine("Report was sended.");
             }
         }
 
@@ -380,7 +380,7 @@ namespace robot.Parsers
                 if (success == 1)
                 {
                     cl_Send_Report send_report = new cl_Send_Report("LIGA_CESS", 1);
-                    Console.WriteLine("Report was sended.");
+                    //Console.WriteLine("Report was sended.");
                 }
 
             }
@@ -398,11 +398,11 @@ namespace robot.Parsers
 
             ex.Quit();
 
-            if (success == 1)
-            {
-                cl_Send_Report send_report = new cl_Send_Report("LIGA_CESS", 1);
-                Console.WriteLine("Report was sended.");
-            }
+            //if (success == 1)
+            //{
+            //    cl_Send_Report send_report = new cl_Send_Report("LIGA_CESS", 1);
+            //    //Console.WriteLine("Report was sended.");
+            //}
 
         }
 
