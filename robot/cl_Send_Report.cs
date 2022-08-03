@@ -19,12 +19,13 @@ namespace robot
         string _country;
         string _country_file;
         int _report_type;
+        List<MailAddress> to_address_list = new List<MailAddress>();
 
         public cl_Send_Report(string country_file, int report_type)
         {
             _report_type = report_type;
-            //_country = country_file.Substring(0,country_file.IndexOf("_")).ToLower();
-            _country = "test";
+            _country = country_file.Substring(0,country_file.IndexOf("_")).ToLower();
+            //_country = "test";
             _country_file = country_file;
 
             GetContactList();
@@ -35,12 +36,13 @@ namespace robot
         {
             //string country = account["country"].ToString();
             var from_address = new MailAddress(account["email"].ToString(), "ETL_bot");
-            List<MailAddress> to_address_list = new List<MailAddress>();
 
             COUNTRY_contactsTableAdapter contacts = new COUNTRY_contactsTableAdapter();
             DataTable contact_data = contacts.GetCountryContacts(_country, _country_file);
             foreach (DataRow email in contact_data.Rows)
+            {
                 to_address_list.Add(new MailAddress(email.ItemArray[2].ToString(), ""));
+            }
 
             string from_password = account["password"].ToString();
 
@@ -86,6 +88,8 @@ namespace robot
                         account_param = (JToken)account["transport"];
                         SendEmail(account_param);
                         //cl_Send_Report Report = new cl_Send_Report(account_param);
+
+                        PrintReport();
                     }
             }
             catch (FileNotFoundException ex)
@@ -94,6 +98,13 @@ namespace robot
                 Console.ReadLine();
                 return;
             }
+        }
+
+        private void PrintReport()
+        {
+            Console.WriteLine("Report was sended to:");
+            foreach (MailAddress email in to_address_list)
+                Console.WriteLine(email.Address.ToString());
         }
     }
 }
