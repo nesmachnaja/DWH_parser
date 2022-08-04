@@ -51,7 +51,7 @@ namespace robot
             message_row = report_data.GetMessageParameters(_report_type).Rows[0];
 
             string subject = message_row.ItemArray[1].ToString();
-            string body = message_row.ItemArray[2].ToString().Insert(18, _country_file);
+            string body = _country_file == "MD_SNAP" ? message_row.ItemArray[2].ToString().Insert(18, _country_file).Replace("File","Files").Replace("was","were") : message_row.ItemArray[2].ToString().Insert(18, _country_file);
 
             var smtp = new SmtpClient
             {

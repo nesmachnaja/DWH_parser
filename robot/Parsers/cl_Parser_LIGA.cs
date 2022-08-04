@@ -320,20 +320,20 @@ namespace robot.Parsers
 
                     row["Reestr_date"] = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
 
-                    row["a_id"] = (double)(sheet.Cells[i, 1] as Range).Value;
+                    row["a_id"] = (sheet.Cells[i, 1] as Range).Value;
                     row["cess_date"] = (DateTime)(sheet.Cells[i, 2] as Range).Value;
-                    row["contract_id"] = (decimal)(sheet.Cells[i, 3] as Range).Value;
-                    row["client_id"] = (decimal)(sheet.Cells[i, 4] as Range).Value;
-                    row["loan_date"] = (decimal)(sheet.Cells[i, 5] as Range).Value;
-                    row["loan_amount"] = (decimal)(sheet.Cells[i, 11] as Range).Value;
-                    row["rate"] = (decimal)(sheet.Cells[i, 12] as Range).Value;
-                    row["product"] = (decimal)(sheet.Cells[i, 10] as Range).Value;
+                    row["contract_id"] = (sheet.Cells[i, 3] as Range).Value;
+                    row["client_id"] = (sheet.Cells[i, 4] as Range).Value;
+                    row["loan_date"] = (DateTime)(sheet.Cells[i, 5] as Range).Value;
+                    row["loan_amount"] = (double)(sheet.Cells[i, 11] as Range).Value;
+                    row["rate"] = (double)(sheet.Cells[i, 12] as Range).Value;
+                    row["product"] = (sheet.Cells[i, 10] as Range).Value;
                     row["client_cycle"] = (double)(sheet.Cells[i, 13] as Range).Value;
-                    row["principal"] = (int)(sheet.Cells[i, 14] as Range).Value;
-                    row["interest"] = (int)(sheet.Cells[i, 15] as Range).Value;
+                    row["principal"] = (double)(sheet.Cells[i, 14] as Range).Value;
+                    row["interest"] = (double)(sheet.Cells[i, 15] as Range).Value;
                     row["DPD"] = (int)(sheet.Cells[i, 18] as Range).Value;
-                    row["status"] = (int)(sheet.Cells[i, 20] as Range).Value;
-                    row["last_payment_date"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;
+                    row["status"] = (sheet.Cells[i, 20] as Range).Value;
+                    //row["last_payment_date"] = null; //(int)(sheet.Cells[i, 11] as Range).Value;
                     row["last_payment_amount"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;
                     row["sum_payments"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;
                     row["recovery_amount"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;

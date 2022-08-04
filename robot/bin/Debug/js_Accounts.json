@@ -3,7 +3,7 @@
     {
       "name": "al",
       "transport": {
-        "country": "SMS",
+        "country": "AL",
         "type": "imap",
         "server": "mx-1.2pp.dev",
         "login": "AL_RISK@2pp.dev",
@@ -93,6 +93,19 @@
         "login": "MX_RISK@2pp.dev",
         "email": "MX_RISK@2pp.dev",
         "password": "Yp76dE$Lvm",
+        "fileNameMask": ""
+      }
+    },
+
+    {
+      "name": "sms",
+      "transport": {
+        "country": "SMS",
+        "type": "imap",
+        "server": "mx-1.2pp.dev",
+        "login": "report_dwh@2pp.dev",
+        "email": "report_dwh@2pp.dev",
+        "password": "y{M2g47Set",
         "fileNameMask": ""
       }
 
