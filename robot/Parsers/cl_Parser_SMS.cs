@@ -171,6 +171,17 @@ namespace robot.Parsers
             {
                 success = TransportToRisk();
             }
+            else
+            {
+                Console.WriteLine("Do you want to continue? Y - Yes, N - No");
+                reply = Console.ReadKey().Key.ToString();
+
+                if (reply.Equals("Y"))
+                {
+                    StartParsing();
+                    return;
+                }
+            }
 
             if (success == 1)
             {
@@ -370,6 +381,17 @@ namespace robot.Parsers
             {
                 TransportSnapToRisk();
                 success = TransportSnapCFToRisk();
+            }
+            else
+            {
+                Console.WriteLine("Do you want to continue? Y - Yes, N - No");
+                reply = Console.ReadKey().Key.ToString();
+
+                if (reply.Equals("Y"))
+                {
+                    StartParsing();
+                    return;
+                }
             }
 
             if (success == 1)

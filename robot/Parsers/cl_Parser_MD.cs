@@ -309,6 +309,17 @@ namespace robot.Parsers
                 TransportTotalSnapToRisk();
                 success = TransportSnapCFToRisk();
             }
+            else
+            {
+                Console.WriteLine("Do you want to continue? Y - Yes, N - No");
+                reply = Console.ReadKey().Key.ToString();
+
+                if (reply.Equals("Y"))
+                {
+                    StartParsing();
+                    return;
+                }
+            }
 
             if (success == 1)
             {
