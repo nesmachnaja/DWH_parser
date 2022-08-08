@@ -92,9 +92,6 @@ namespace robot.Parsers
                 reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
                 //SMS_CESS.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
 
-                SMS_CESS_rawTableAdapter ad_SMS_CESS_raw = new SMS_CESS_rawTableAdapter();
-                ad_SMS_CESS_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), brand);
-
                 while (i < firstNull)
                 {
                     SMS_CESS_rawRow sms_cess_row = sms_cess.NewSMS_CESS_rawRow();
@@ -127,25 +124,39 @@ namespace robot.Parsers
                     i++;
                 }
 
-                try
+                if (sms_cess.Rows.Count > 0)
                 {
-                    sp.sp_SMS_CESS_raw(sms_cess);
+                    SMS_CESS_rawTableAdapter ad_SMS_CESS_raw = new SMS_CESS_rawTableAdapter();
+                    ad_SMS_CESS_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), brand);
+
+
+                    try
+                    {
+                        sp.sp_SMS_CESS_raw(sms_cess);
+                    }
+                    catch (Exception exc)
+                    {
+                        logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_descr: " + exc.Message);
+                        ex.Quit();
+
+                        return;
+                    }
                 }
-                catch (Exception exc)
+                else
                 {
-                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, false, exc.Message);
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, false, report);
                     Console.WriteLine("Error");
-                    Console.WriteLine("Error_descr: " + exc.Message);
+                    Console.WriteLine("Error_descr: " + report);
                     ex.Quit();
 
                     return;
                 }
-
-                //Console.WriteLine("Loading is ready. " + (firstNull - 1).ToString() + " rows were processed.");
             }
             catch (Exception exc)
             {
-                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_descr: " + exc.Message);
@@ -294,9 +305,6 @@ namespace robot.Parsers
                 reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
                 //SMS_SNAP.Reestr_date = reestr_date;       //current date
 
-                SMS_SNAP_rawTableAdapter ad_SMS_SNAP_raw = new SMS_SNAP_rawTableAdapter();
-                ad_SMS_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), brand);
-
                 while (i < firstNull)
                 {
                     SMS_SNAP_rawRow sms_snap_row = sms_snap.NewSMS_SNAP_rawRow();
@@ -330,32 +338,47 @@ namespace robot.Parsers
 
                 }
 
-                Task task_sms_snap_raw = new Task(() =>
+                if (sms_snap.Rows.Count > 0)
                 {
-                    sp.sp_SMS_SNAP_raw(sms_snap);
-                },
-                TaskCreationOptions.LongRunning);
+                    SMS_SNAP_rawTableAdapter ad_SMS_SNAP_raw = new SMS_SNAP_rawTableAdapter();
+                    ad_SMS_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), brand);
 
-                try
-                {
-                    task_sms_snap_raw.RunSynchronously();
-                    //sp.sp_SMS_SNAP_raw(sms_snap);
+                    Task task_sms_snap_raw = new Task(() =>
+                    {
+                        sp.sp_SMS_SNAP_raw(sms_snap);
+                    },
+                    TaskCreationOptions.LongRunning);
+
+                    try
+                    {
+                        task_sms_snap_raw.RunSynchronously();
+                        //sp.sp_SMS_SNAP_raw(sms_snap);
+                    }
+                    catch (Exception exc)
+                    {
+                        logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_descr: " + exc.Message);
+                        ex.Quit();
+
+                        return;
+                    }
+
+
+                    report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
+                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, true, report);
+                    Console.WriteLine(report);
                 }
-                catch (Exception exc)
+                else
                 {
-                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, false, exc.Message);
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, false, report);
                     Console.WriteLine("Error");
-                    Console.WriteLine("Error_descr: " + exc.Message);
+                    Console.WriteLine("Error_descr: " + report);
                     ex.Quit();
 
                     return;
                 }
-
-
-                report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
-                logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, true, report);
-                Console.WriteLine(report);
-
             }
             catch (Exception exc)
             {

@@ -175,9 +175,6 @@ namespace robot
             {
                 string debt_collector = (sheet.Cells[i, 5] as Range).Value;
 
-                BIH_DCA_rawTableAdapter ad_BIH_DCA_raw = new BIH_DCA_rawTableAdapter();
-                ad_BIH_DCA_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), debt_collector);
-
                 while (i < firstNull)
                 {
                     BIH_DCA_rawRow bih_dca_row = bih_dca.NewBIH_DCA_rawRow();
@@ -201,21 +198,36 @@ namespace robot
                     i++;
                 }
 
+                if (bih_dca.Rows.Count > 0)
+                {
+                    BIH_DCA_rawTableAdapter ad_BIH_DCA_raw = new BIH_DCA_rawTableAdapter();
+                    ad_BIH_DCA_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), debt_collector);
 
-                try
-                {
-                    sp.sp_BIH_DCA_raw(bih_dca);
+
+                    try
+                    {
+                        sp.sp_BIH_DCA_raw(bih_dca);
+                    }
+                    catch (Exception exc)
+                    {
+                        logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_desc: " + exc.Message.ToString());
+                        sheet.Application.Quit();
+
+                        return;
+                    }
                 }
-                catch (Exception exc)
+                else
                 {
-                    logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, exc.Message);
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA_current_sheet", "BIH", DateTime.Now, false, report);
                     Console.WriteLine("Error");
-                    Console.WriteLine("Error_desc: " + exc.Message.ToString());
+                    Console.WriteLine("Error_desc: " + report);
                     sheet.Application.Quit();
 
                     return;
                 }
-
 
             }
             catch (Exception exc)
@@ -252,9 +264,6 @@ namespace robot
                 //BIH_SNAP.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
                 //BIH_SNAP.Reestr_date = reestr_date;       //current date
 
-                BIH_SNAP_rawTableAdapter ad_BIH_SNAP_raw = new BIH_SNAP_rawTableAdapter();
-                ad_BIH_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
-
                 while (i <= lastUsedRow)
                 {
                     BIH_SNAP_rawRow bih_snap_raw = bih_snap.NewBIH_SNAP_rawRow();
@@ -286,37 +295,52 @@ namespace robot
                     i++;
                 }
 
-                try
+                if (bih_snap.Rows.Count > 0)
                 {
-                    sp.sp_BIH_SNAP_raw(bih_snap);    
+                    BIH_SNAP_rawTableAdapter ad_BIH_SNAP_raw = new BIH_SNAP_rawTableAdapter();
+                    ad_BIH_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
+
+                    try
+                    {
+                        sp.sp_BIH_SNAP_raw(bih_snap);
+                    }
+                    catch (Exception exc)
+                    {
+                        logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_desc: " + exc.Message.ToString());
+                        ex.Quit();
+
+                        return;
+                    }
+
+
+                    report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
+                    Console.WriteLine(report);
+                    logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
+
+                    sp.sp_BIH2_portfolio_snapshot(reestr_date);
+                    report = "[DWH_Risk].[dbo].[BIH2_portfolio_snapshot] was formed.";
+                    Console.WriteLine(report);
+
+                    sp.sp_BIH_TOTAL_SNAP(reestr_date);
+                    report = "[DWH_Risk].[dbo].[TOTAL_SNAP] was formed.";
+                    Console.WriteLine(report);
+
+                    sp.sp_BIH_TOTAL_SNAP_CFIELD();
+                    report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                    Console.WriteLine(report);
+                    logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
                 }
-                catch (Exception exc)
+                else
                 {
-                    logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, exc.Message);
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, false, report);
                     Console.WriteLine("Error");
-                    Console.WriteLine("Error_desc: " + exc.Message.ToString());
-                    ex.Quit();
+                    Console.WriteLine("Error_desc: " + report);
 
                     return;
                 }
-
-
-                report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
-                Console.WriteLine(report);
-                logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
-                
-                sp.sp_BIH2_portfolio_snapshot(reestr_date);
-                report = "[DWH_Risk].[dbo].[BIH2_portfolio_snapshot] was formed.";
-                Console.WriteLine(report);
-
-                sp.sp_BIH_TOTAL_SNAP(reestr_date);
-                report = "[DWH_Risk].[dbo].[TOTAL_SNAP] was formed.";
-                Console.WriteLine(report);
-
-                sp.sp_BIH_TOTAL_SNAP_CFIELD();
-                report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
-                Console.WriteLine(report);
-                logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
 
             }
             catch (Exception exc)
