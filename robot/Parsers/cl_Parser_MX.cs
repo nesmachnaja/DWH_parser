@@ -81,9 +81,6 @@ namespace robot.Parsers
                                                                                                                          //MX_CESS.Reestr_date = reestr_date;       //current date
                 MX_CESS_rawDataTable mx_cess = new MX_CESS_rawDataTable();
 
-                MX_CESS_rawTableAdapter ad_MX_CESS_raw = new MX_CESS_rawTableAdapter();
-                ad_MX_CESS_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
-
                 while (i < firstNull)
                 {
                     MX_CESS_rawRow row = mx_cess.NewMX_CESS_rawRow();
@@ -93,7 +90,7 @@ namespace robot.Parsers
                     row["Loan_id"] = (double)(sheet.Cells[i, 1] as Range).Value;
                     row["Cession_date"] = (DateTime)(sheet.Cells[i, 2] as Range).Value;
                     row["Principal"] = (decimal)(sheet.Cells[i, 3] as Range).Value;
-                    row["Interest"] = (decimal)(sheet.Cells[i, 4] as Range).Value;
+                    row["Interest"] = (sheet.Cells[i, 4] as Range).Text.ToString() != "#ЗНАЧ!" ? (decimal)(sheet.Cells[i, 4] as Range).Value : 0;
                     row["Fee"] = (decimal)(sheet.Cells[i, 5] as Range).Value;
                     row["Penalty"] = (decimal)(sheet.Cells[i, 6] as Range).Value;
                     row["Otherdebt"] = (decimal)(sheet.Cells[i, 7] as Range).Value;
@@ -109,26 +106,44 @@ namespace robot.Parsers
                     i++;
                 }
 
-                try
+                if (mx_cess.Rows.Count > 0)
                 {
-                    sprisk.sp_MX_CESS_raw(mx_cess);
+                    MX_CESS_rawTableAdapter ad_MX_CESS_raw = new MX_CESS_rawTableAdapter();
+                    ad_MX_CESS_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
+
+
+                    try
+                    {
+                        sprisk.sp_MX_CESS_raw(mx_cess);
+                    }
+                    catch (Exception exc)
+                    {
+                        logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_descr: " + exc.Message);
+                        ex.Quit();
+                        //Console.ReadKey();
+
+                        return;
+                    }
+
+                    report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
+                    logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, true, report);
+                    Console.WriteLine(report);
+
+                    success = MX_Total_CESS_forming(reestr_date);
                 }
-                catch (Exception exc)
+                else
                 {
-                    logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, false, exc.Message);
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, false, report);
                     Console.WriteLine("Error");
-                    Console.WriteLine("Error_descr: " + exc.Message);
+                    Console.WriteLine("Error_descr: " + report);
                     ex.Quit();
-                    //Console.ReadKey();
+                    Console.ReadKey();
 
                     return;
                 }
-
-                report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
-                logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, true, report);
-                Console.WriteLine(report);
-
-                success = MX_Total_CESS_forming(reestr_date);
 
             }
             catch (Exception exc)

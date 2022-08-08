@@ -58,7 +58,8 @@ namespace robot.Parsers
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing); //открываем файл
 
-            if (pathFile.ToLower().Contains("портфель")) parse_LIGA_SNAP(ex);
+            if (pathFile.ToLower().Contains("портфель") 
+                && !pathFile.ToLower().Contains("банкроты")) parse_LIGA_SNAP(ex);
             if (pathFile.ToLower().Contains("банкроты")) parse_LIGA_CESS(ex);
         }
 
@@ -85,9 +86,6 @@ namespace robot.Parsers
                 reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
                 reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
                 //LIGA_SNAP.Reestr_date = reestr_date;       //current date
-
-                LIGA_SNAP_rawTableAdapter ad_LIGA_SNAP_raw = new LIGA_SNAP_rawTableAdapter();
-                ad_LIGA_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
 
                 while (i < firstNull)
                 {
@@ -118,24 +116,39 @@ namespace robot.Parsers
                     i++;
                 }
 
-                try
+                if (liga_snap.Rows.Count > 0)
                 {
-                    sp.sp_LIGA_SNAP_raw(liga_snap);
+                    LIGA_SNAP_rawTableAdapter ad_LIGA_SNAP_raw = new LIGA_SNAP_rawTableAdapter();
+                    ad_LIGA_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
+
+                    try
+                    {
+                        sp.sp_LIGA_SNAP_raw(liga_snap);
+                    }
+                    catch (Exception exc)
+                    {
+                        logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_SNAP", "LIGA", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_descr: " + exc.Message);
+                        ex.Quit();
+
+                        return;
+                    }
+
+                    report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
+                    Console.WriteLine(report);
+                    logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_SNAP", "LIGA", DateTime.Now, true, report);
                 }
-                catch (Exception exc)
+                else
                 {
-                    logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_SNAP", "LIGA", DateTime.Now, false, exc.Message);
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_SNAP", "LIGA", DateTime.Now, false, report);
                     Console.WriteLine("Error");
-                    Console.WriteLine("Error_descr: " + exc.Message);
+                    Console.WriteLine("Error_descr: " + report);
                     ex.Quit();
 
                     return;
                 }
-
-                report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
-                Console.WriteLine(report);
-                logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_SNAP", "LIGA", DateTime.Now, true, report);
-
 
             }
             catch (Exception exc)
@@ -311,9 +324,6 @@ namespace robot.Parsers
                                                                                                                  //LIGA_CESS.Reestr_date = reestr_date;       //current date
                 LIGA_CESS_rawDataTable LIGA_cess = new LIGA_CESS_rawDataTable();
 
-                LIGA_CESS_rawTableAdapter ad_LIGA_CESS_raw = new LIGA_CESS_rawTableAdapter();
-                ad_LIGA_CESS_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
-
                 while (i < firstNull)
                 {
                     LIGA_CESS_rawRow row = LIGA_cess.NewLIGA_CESS_rawRow();
@@ -346,43 +356,59 @@ namespace robot.Parsers
                     i++;
                 }
 
-                try
+                if (LIGA_cess.Rows.Count > 0)
                 {
-                    sp.sp_LIGA_CESS_raw(LIGA_cess);
+                    LIGA_CESS_rawTableAdapter ad_LIGA_CESS_raw = new LIGA_CESS_rawTableAdapter();
+                    ad_LIGA_CESS_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
+
+                    try
+                    {
+                        sp.sp_LIGA_CESS_raw(LIGA_cess);
+                    }
+                    catch (Exception exc)
+                    {
+                        logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_descr: " + exc.Message);
+                        ex.Quit();
+                        //Console.ReadKey();
+
+                        return;
+                    }
+
+                    report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
+                    logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, true, report);
+                    Console.WriteLine(report);
+
+                    LIGA2_cessions_forming(reestr_date);
+                    LIGA_Total_CESS_forming(reestr_date);
+
+                    Console.WriteLine("Do you want to transport snap to Risk? Y - Yes, N - No");
+                    string reply = Console.ReadKey().Key.ToString();
+
+
+                    if (reply.Equals("Y"))
+                    {
+                        success = TransportToRisk();
+                    }
+
+                    if (success == 1)
+                    {
+                        cl_Send_Report send_report = new cl_Send_Report("LIGA_CESS", 1);
+                        //Console.WriteLine("Report was sended.");
+                    }
                 }
-                catch (Exception exc)
+                else
                 {
-                    logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, false, exc.Message);
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, false, report);
                     Console.WriteLine("Error");
-                    Console.WriteLine("Error_descr: " + exc.Message);
+                    Console.WriteLine("Error_descr: " + report);
                     ex.Quit();
-                    //Console.ReadKey();
+                    Console.ReadKey();
 
                     return;
                 }
-
-                report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
-                logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, true, report);
-                Console.WriteLine(report);
-
-                LIGA2_cessions_forming(reestr_date);
-                LIGA_Total_CESS_forming(reestr_date);
-
-                Console.WriteLine("Do you want to transport snap to Risk? Y - Yes, N - No");
-                string reply = Console.ReadKey().Key.ToString();
-
-
-                if (reply.Equals("Y"))
-                {
-                    success = TransportToRisk();
-                }
-
-                if (success == 1)
-                {
-                    cl_Send_Report send_report = new cl_Send_Report("LIGA_CESS", 1);
-                    //Console.WriteLine("Report was sended.");
-                }
-
             }
             catch (Exception exc)
             {

@@ -80,9 +80,6 @@ namespace robot.Parsers
                 reestr_date = (DateTime)(sheet.Cells[i, 2] as Range).Value;
                 //MD_DCA.Reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
 
-                MD_DCA_rawTableAdapter ad_MD_DCA_raw = new MD_DCA_rawTableAdapter();
-                ad_MD_DCA_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
-
                 while (i > 0)
                 {
                     MD_DCA_rawRow md_dca_row = md_dca.NewMD_DCA_rawRow();
@@ -123,24 +120,38 @@ namespace robot.Parsers
 
                 }
 
-
-                try
+                if (md_dca.Rows.Count > 0)
                 {
-                    sp.sp_MD_DCA_raw(md_dca);
+                    MD_DCA_rawTableAdapter ad_MD_DCA_raw = new MD_DCA_rawTableAdapter();
+                    ad_MD_DCA_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
 
-                    report = "Loading is ready. " + (lastUsedRow - i).ToString() + " rows were processed.";
-                    logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, true, report);
-                    Console.WriteLine(report);
+                    try
+                    {
+                        sp.sp_MD_DCA_raw(md_dca);
+
+                        report = "Loading is ready. " + (lastUsedRow - i).ToString() + " rows were processed.";
+                        logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, true, report);
+                        Console.WriteLine(report);
+                    }
+                    catch (Exception exc)
+                    {
+                        logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                        return;
+                    }
                 }
-                catch (Exception exc)
+                else
                 {
-                    logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, false, exc.Message);
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, false, report);
                     Console.WriteLine("Error");
-                    Console.WriteLine("Error_desc: " + exc.Message.ToString());
+                    Console.WriteLine("Error_descr: " + report);
+                    ex.Quit();
 
                     return;
                 }
-
             }
             catch (Exception exc)
             {
@@ -237,9 +248,6 @@ namespace robot.Parsers
 
                 string source_type = ex.Workbooks.Item[1].Name.Replace(".xlsx", "");
 
-                MD_SNAP_rawTableAdapter ad_MD_SNAP_raw = new MD_SNAP_rawTableAdapter();
-                ad_MD_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), source_type);
-
                 while (i < firstNull)
                 {
                     MD_SNAP_rawRow md_snap_row = md_snap.NewMD_SNAP_rawRow();
@@ -266,25 +274,40 @@ namespace robot.Parsers
                     i++;
                 }
 
-                try
+                if (md_snap.Rows.Count > 0)
                 {
-                    sp.sp_MD_SNAP_raw(md_snap);
-                    ad_MD_SNAP_raw.UpdateInitialsAndClients();
+                    MD_SNAP_rawTableAdapter ad_MD_SNAP_raw = new MD_SNAP_rawTableAdapter();
+                    ad_MD_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), source_type);
 
-                    report = "Loading is ready. " + (firstNull - startPosition - 1).ToString() + " rows were processed.";
-                    logAdapter.InsertRow("cl_Parser_MD", "parse_MD_SNAP", "MD", DateTime.Now, true, report);
-                    Console.WriteLine(report);
+                    try
+                    {
+                        sp.sp_MD_SNAP_raw(md_snap);
+                        ad_MD_SNAP_raw.UpdateInitialsAndClients();
+
+                        report = "Loading is ready. " + (firstNull - startPosition - 1).ToString() + " rows were processed.";
+                        logAdapter.InsertRow("cl_Parser_MD", "parse_MD_SNAP", "MD", DateTime.Now, true, report);
+                        Console.WriteLine(report);
+                    }
+                    catch (Exception exc)
+                    {
+                        logAdapter.InsertRow("cl_Parser_MD", "parse_MD_SNAP", "MD", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_descr: " + exc.Message.ToString());
+                        ex.Quit();
+
+                        return;
+                    }
                 }
-                catch (Exception exc)
+                else
                 {
-                    logAdapter.InsertRow("cl_Parser_MD", "parse_MD_SNAP", "MD", DateTime.Now, false, exc.Message);
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_MD", "parse_MD_SNAP", "MD", DateTime.Now, false, report);
                     Console.WriteLine("Error");
-                    Console.WriteLine("Error_descr: " + exc.Message.ToString());
+                    Console.WriteLine("Error_descr: " + report);
                     ex.Quit();
 
                     return;
                 }
-
             }
             catch (Exception exc)
             {
@@ -476,10 +499,10 @@ namespace robot.Parsers
             if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[midpoint]) != 0
                 && sheet.Application.WorksheetFunction.CountA(sheet.Rows[midpoint]) >= sheet.Application.WorksheetFunction.CountA(sheet.Rows[5]) * 0.9)
             {
-                for (int firstEmpty = midpoint; firstEmpty < lastUsedRow; firstEmpty++)
+                for (int firstEmpty = midpoint; firstEmpty <= lastUsedRow + 1; firstEmpty++)
                 {
-                    if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) != 0
-                    && sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) >= sheet.Application.WorksheetFunction.CountA(sheet.Rows[5]) * 0.9)
+                    if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) == 0
+                    || sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) < sheet.Application.WorksheetFunction.CountA(sheet.Rows[5]) * 0.9)
                     {
                         firstNull = firstEmpty;
                         break;

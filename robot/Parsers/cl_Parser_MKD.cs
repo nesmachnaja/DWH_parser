@@ -76,9 +76,6 @@ namespace robot
                 reestr_date = (DateTime)(sheet.Cells[i, 2] as Excel.Range).Value;
                 reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
 
-                MKD_DCA_rawTableAdapter ad_MKD_DCA_raw = new MKD_DCA_rawTableAdapter();
-                ad_MKD_DCA_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
-
                 while (i <= lastUsedRow)
                 {
                     MKD_DCA_rawRow mkd_dca_row = mkd_dca.NewMKD_DCA_rawRow();
@@ -99,22 +96,35 @@ namespace robot
                     i++;
                 }
 
-                try
+                if (mkd_dca.Rows.Count > 0)
                 {
-                    sp.sp_MKD_DCA_raw(mkd_dca);
-                }
-                catch (Exception exc)
-                {
-                    logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
-                    Console.WriteLine("Error");
-                    Console.WriteLine("Error_desc: " + exc.Message.ToString());
-                    ex.Quit();
-                }
+                    MKD_DCA_rawTableAdapter ad_MKD_DCA_raw = new MKD_DCA_rawTableAdapter();
+                    ad_MKD_DCA_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
 
+                    try
+                    {
+                        sp.sp_MKD_DCA_raw(mkd_dca);
+                    }
+                    catch (Exception exc)
+                    {
+                        logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_desc: " + exc.Message.ToString());
+                        ex.Quit();
+                    }
+                }
+                else
+                {
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, report);
+                    Console.WriteLine("Error");
+                    Console.WriteLine("Error_desc: " + report);
+                    ex.Quit();
+                    return;
+                }
             }
             catch (Exception exc)
             {
-                //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
                 logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
@@ -211,9 +221,6 @@ namespace robot
 
                 MKD_SNAP_rawDataTable mkd_snap = new MKD_SNAP_rawDataTable();
 
-                MKD_SNAP_rawTableAdapter ad_MKD_SNAP_raw = new MKD_SNAP_rawTableAdapter();
-                ad_MKD_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
-
                 while (i <= lastUsedRow)
                 {
                     MKD_SNAP_rawRow mkd_snap_row = mkd_snap.NewMKD_SNAP_rawRow();
@@ -241,27 +248,42 @@ namespace robot
                     i++;
                 }
 
-                try
+                if (mkd_snap.Rows.Count > 0)
                 {
-                    sp.sp_MKD_SNAP_raw(mkd_snap);
+                    MKD_SNAP_rawTableAdapter ad_MKD_SNAP_raw = new MKD_SNAP_rawTableAdapter();
+                    ad_MKD_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
+
+                    try
+                    {
+                        sp.sp_MKD_SNAP_raw(mkd_snap);
+                    }
+                    catch (Exception exc)
+                    {
+                        COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
+                        logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, false, exc.Message);
+                        Console.WriteLine("Error");
+                        Console.WriteLine("Error_desc: " + exc.Message.ToString());
+                        ex.Quit();
+
+                        return;
+                    }
+
+                    report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
+                    Console.WriteLine(report);
+                    logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
+
+                    TotalSnapForming();
                 }
-                catch (Exception exc)
+                else
                 {
-                    COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-                    logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, false, exc.Message);
+                    report = "File was empty. There is no one row.";
+                    logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, false, report);
                     Console.WriteLine("Error");
-                    Console.WriteLine("Error_desc: " + exc.Message.ToString());
+                    Console.WriteLine("Error_desc: " + report);
                     ex.Quit();
 
                     return;
                 }
-
-                report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
-                Console.WriteLine(report);
-                logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
-                
-                TotalSnapForming();
-
             }
             catch (Exception exc)
             {
