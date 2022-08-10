@@ -432,15 +432,16 @@ namespace robot.Parsers
 
         private int TransportSnapCFToRisk()
         {
-            Task task_snap_cf = new Task(() =>
-            {
-                sprisk.sp_MD_TOTAL_SNAP_CFIELD();
-            },
-            TaskCreationOptions.LongRunning);
+            //Task task_snap_cf = new Task(() =>
+            //{
+            //    sprisk.sp_MD_TOTAL_SNAP_CFIELD();
+            //},
+            //TaskCreationOptions.LongRunning);
 
             try
             {
-                task_snap_cf.RunSynchronously();
+                //task_snap_cf.RunSynchronously();
+                cl_Tasks tasks = new cl_Tasks("exec Risk.dbo.sp_MD_TOTAL_SNAP_CFIELD");
 
                 report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportSnapCFToRisk", "MD", DateTime.Now, true, report);
