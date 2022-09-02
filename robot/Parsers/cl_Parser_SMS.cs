@@ -11,17 +11,17 @@ using static robot.DataSet1;
 
 namespace robot.Parsers
 {
-    class cl_Parser_SMS
+    class cl_Parser_SMS : cl_Parser
     {
-        private int lastUsedRow;
-        COUNTRY_LogTableAdapter logAdapter;
-        SP sp = new SP();
-        SPRisk sprisk = new SPRisk();
-        string report;
-        string pathFile;
-        string brand = "";
-        DateTime reestr_date;
-        int success = 0;
+        //private int lastUsedRow;
+        //COUNTRY_LogTableAdapter logAdapter;
+        //SP sp = new SP();
+        //SPRisk sprisk = new SPRisk();
+        //string report;
+        //string pathFile;
+        //string brand = "";
+        //DateTime reestr_date;
+        //int success = 0;
 
         public void StartParsing()
         {

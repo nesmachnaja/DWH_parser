@@ -8,14 +8,14 @@ using static robot.Risk;
 
 namespace robot.Parsers
 {
-    class cl_Parser_MX
+    class cl_Parser_MX : cl_Parser
     {
-        COUNTRY_LogTableAdapter logAdapter;
-        SP sp = new SP();
-        SPRisk sprisk = new SPRisk();
-        string report;
-        string pathFile;
-        int success = 0;
+        //COUNTRY_LogTableAdapter logAdapter;
+        //SP sp = new SP();
+        //SPRisk sprisk = new SPRisk();
+        //string report;
+        //string pathFile;
+        //int success = 0;
 
         public void StartParsing()
         {

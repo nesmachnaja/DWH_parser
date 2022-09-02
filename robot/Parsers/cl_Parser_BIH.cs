@@ -7,20 +7,21 @@ using robot.RiskTableAdapters;
 using robot.Total_BosniaTableAdapters;
 using System.Threading.Tasks;
 using static robot.DataSet1;
+using robot.Parsers;
 
 namespace robot
 {
-    class cl_Parser_BIH
+    class cl_Parser_BIH : cl_Parser
     {
-        private int lastUsedRow;
+        //private int lastUsedRow;
+        //COUNTRY_LogTableAdapter logAdapter;
+        //SP sp = new SP();
+        //SPRisk sprisk = new SPRisk();
+        //string report;
+        //string pathFile;
+        //DateTime reestr_date;
+        //int success = 0;
         BIH_DCA_rawDataTable bih_dca = new BIH_DCA_rawDataTable();
-        COUNTRY_LogTableAdapter logAdapter;
-        SP sp = new SP();
-        SPRisk sprisk = new SPRisk();
-        string report;
-        string pathFile;
-        DateTime reestr_date;
-        int success = 0;
 
         public void StartParsing()
         {

@@ -5,18 +5,19 @@ using robot.DataSet1TableAdapters;
 using robot.RiskTableAdapters;
 using static robot.DataSet1;
 using System.Threading.Tasks;
+using robot.Parsers;
 
 namespace robot
 {
-    class cl_Parser_MKD
+    class cl_Parser_MKD : cl_Parser
     {
-        COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-        SP sp = new SP();
-        SPRisk sprisk = new SPRisk();
-        DateTime reestr_date;
-        string report;
-        string pathFile;
-        int success = 0;
+        //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
+        //SP sp = new SP();
+        //SPRisk sprisk = new SPRisk();
+        //DateTime reestr_date;
+        //string report;
+        //string pathFile;
+        //int success = 0;
 
         public void StartParsing()
         {
