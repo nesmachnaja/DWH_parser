@@ -15,9 +15,9 @@ namespace robot
 {
     class cl_Tasks
     {
-        static JObject connections;
-        string database_name = "Risk";
-        string connectionString = "";
+        //static JObject connections;
+        string database_name;
+        //string connectionString = "";
 
         public cl_Tasks(string procedure_calling)
         {
@@ -27,9 +27,10 @@ namespace robot
             //command.CommandTimeout = 300;
             //command.ExecuteNonQuery();
 
-            GetConnectionString();
-            SqlConnection connection = new SqlConnection(connectionString);
             database_name = procedure_calling.Replace("exec ", "").Substring(0, procedure_calling.IndexOf(".") - 5);
+            cl_Connection_String connection_string = new cl_Connection_String(database_name);
+            //GetConnectionString();
+            SqlConnection connection = new SqlConnection(connection_string.connectionString);
 
             Task task = new Task(() =>
             {
@@ -68,27 +69,27 @@ namespace robot
             //SPRisk sprisk = new SPRisk();
         }
 
-        private void GetConnectionString()
-        {
-            try
-            {
-                connections = JObject.Parse(File.ReadAllText(@"js_Connections.json"));
-                JToken connection_param;
-                foreach (JObject connection in connections["connections"])
-                    if (connection["name"].ToString().Equals(database_name))
-                    {
-                        connection_param = connection["parameters"];
-                        connectionString = connection_param["connectionString"].ToString();
+        //private void GetConnectionString()
+        //{
+        //    try
+        //    {
+        //        connections = JObject.Parse(File.ReadAllText(@"js_Connections.json"));
+        //        JToken connection_param;
+        //        foreach (JObject connection in connections["connections"])
+        //            if (connection["name"].ToString().Equals(database_name))
+        //            {
+        //                connection_param = connection["parameters"];
+        //                connectionString = connection_param["connectionString"].ToString();
 
-                        return;
-                    }
-            }
-            catch (FileNotFoundException ex)
-            {
-                Console.WriteLine("Configuration file wasnt found.");
-                Console.ReadLine();
-                return;
-            }
-        }
+        //                return;
+        //            }
+        //    }
+        //    catch (FileNotFoundException ex)
+        //    {
+        //        Console.WriteLine("Configuration file wasnt found.");
+        //        Console.ReadLine();
+        //        return;
+        //    }
+        //}
     }
 }

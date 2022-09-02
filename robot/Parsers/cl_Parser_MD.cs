@@ -11,16 +11,16 @@ using static robot.DataSet1;
 
 namespace robot.Parsers
 {
-    class cl_Parser_MD
+    class cl_Parser_MD : cl_Parser
     {
-        COUNTRY_LogTableAdapter logAdapter;
-        SPRisk sprisk = new SPRisk();
-        SP sp = new SP();
-        int lastUsedRow;
-        string report;
-        string pathFile;
-        DateTime reestr_date;
-        int success = 0;
+        //COUNTRY_LogTableAdapter logAdapter;
+        //SPRisk sprisk = new SPRisk();
+        //SP sp = new SP();
+        //int lastUsedRow;
+        //string report;
+        //string pathFile;
+        //DateTime reestr_date;
+        //int success = 0;
 
         public void StartParsing()
         {
