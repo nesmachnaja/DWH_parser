@@ -13,14 +13,6 @@ namespace robot
 {
     class cl_Parser_BIH : cl_Parser
     {
-        //private int lastUsedRow;
-        //COUNTRY_LogTableAdapter logAdapter;
-        //SP sp = new SP();
-        //SPRisk sprisk = new SPRisk();
-        //string report;
-        //string pathFile;
-        //DateTime reestr_date;
-        //int success = 0;
         BIH_DCA_rawDataTable bih_dca = new BIH_DCA_rawDataTable();
 
         public void StartParsing()
@@ -116,8 +108,8 @@ namespace robot
 
             if (success == 1)
             {
+                //cl_PQR_Forming pqr = new cl_PQR_Forming("BIH");
                 cl_Send_Report send_report = new cl_Send_Report("BIH_DCA", 1);
-                //Console.WriteLine("Report was sended.");
             }
         }
 
@@ -328,10 +320,10 @@ namespace robot
                     report = "[DWH_Risk].[dbo].[TOTAL_SNAP] was formed.";
                     Console.WriteLine(report);
 
-                    sp.sp_BIH_TOTAL_SNAP_CFIELD();
-                    report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
-                    Console.WriteLine(report);
-                    logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
+                    TotalSnapCFieldForming();
+                    //report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                    //Console.WriteLine(report);
+                    //logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
                 }
                 else
                 {
@@ -411,6 +403,25 @@ namespace robot
             //Console.ReadKey();
         }
 
+        private void TotalSnapCFieldForming()
+        {
+            try
+            {
+                cl_Tasks tasks = new cl_Tasks("exec DWH_Risk.dbo.sp_BIH_TOTAL_SNAP_CFIELD");
+
+                report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                Console.WriteLine(report);
+                logAdapter.InsertRow("cl_Parser_BIH", "TotalSnapCFieldForming", "BIH", DateTime.Now, true, report);
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_BIH", "TotalSnapCFieldForming", "BIH", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+            }
+
+        }
+        
         private void TransportSnapToRisk()
         {
             Task task_snap = new Task(() =>

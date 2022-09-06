@@ -2,9 +2,10 @@
 <xs:schema id="Risk" targetNamespace="http://tempuri.org/Risk.xsd" xmlns:mstns="http://tempuri.org/Risk.xsd" xmlns="http://tempuri.org/Risk.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
   <xs:annotation>
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
-      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="SPRisk" GeneratorFunctionsComponentClassName="SPRisk" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" UserFunctionsComponentName="SPRisk" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="1" FunctionsComponentName="SPRisk" GeneratorFunctionsComponentClassName="SPRisk" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" UserFunctionsComponentName="SPRisk" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
           <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="RiskConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="RiskConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.robot.Properties.Settings.GlobalReference.Default.RiskConnectionString" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="msdbConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="msdbConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.robot.Properties.Settings.GlobalReference.Default.msdbConnectionString" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="MX_CESS_rawTableAdapter" GeneratorDataComponentClassName="MX_CESS_rawTableAdapter" Name="MX_CESS_raw" UserDataComponentName="MX_CESS_rawTableAdapter">
@@ -81,6 +82,37 @@
                 </InsertCommand>
               </DbSource>
             </Sources>
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="WorkingJobsTableAdapter" GeneratorDataComponentClassName="WorkingJobsTableAdapter" Name="WorkingJobs" UserDataComponentName="WorkingJobsTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="msdbConnectionString (Settings)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>select jobs.[name] job_name, act.* 
+from msdb.dbo.sysjobactivity act
+join msdb.dbo.sysjobs jobs on act.job_id = jobs.job_id
+where cast(start_execution_date as date) = cast(getdate() as date)
+and stop_execution_date is null</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="job_name" DataSetColumn="job_name" />
+              <Mapping SourceColumn="session_id" DataSetColumn="session_id" />
+              <Mapping SourceColumn="job_id" DataSetColumn="job_id" />
+              <Mapping SourceColumn="run_requested_date" DataSetColumn="run_requested_date" />
+              <Mapping SourceColumn="run_requested_source" DataSetColumn="run_requested_source" />
+              <Mapping SourceColumn="queued_date" DataSetColumn="queued_date" />
+              <Mapping SourceColumn="start_execution_date" DataSetColumn="start_execution_date" />
+              <Mapping SourceColumn="last_executed_step_id" DataSetColumn="last_executed_step_id" />
+              <Mapping SourceColumn="last_executed_step_date" DataSetColumn="last_executed_step_date" />
+              <Mapping SourceColumn="stop_execution_date" DataSetColumn="stop_execution_date" />
+              <Mapping SourceColumn="job_history_id" DataSetColumn="job_history_id" />
+              <Mapping SourceColumn="next_scheduled_run_date" DataSetColumn="next_scheduled_run_date" />
+            </Mappings>
+            <Sources />
           </TableAdapter>
         </Tables>
         <Sources>
@@ -299,7 +331,7 @@
   <xs:element name="Risk" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="Risk" msprop:Generator_UserDSName="Risk">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="MX_CESS_raw" msprop:Generator_TableClassName="MX_CESS_rawDataTable" msprop:Generator_TableVarName="tableMX_CESS_raw" msprop:Generator_TablePropName="MX_CESS_raw" msprop:Generator_RowDeletingName="MX_CESS_rawRowDeleting" msprop:Generator_RowChangingName="MX_CESS_rawRowChanging" msprop:Generator_RowEvHandlerName="MX_CESS_rawRowChangeEventHandler" msprop:Generator_RowDeletedName="MX_CESS_rawRowDeleted" msprop:Generator_UserTableName="MX_CESS_raw" msprop:Generator_RowChangedName="MX_CESS_rawRowChanged" msprop:Generator_RowEvArgName="MX_CESS_rawRowChangeEvent" msprop:Generator_RowClassName="MX_CESS_rawRow">
+        <xs:element name="MX_CESS_raw" msprop:Generator_TableClassName="MX_CESS_rawDataTable" msprop:Generator_TableVarName="tableMX_CESS_raw" msprop:Generator_RowChangedName="MX_CESS_rawRowChanged" msprop:Generator_TablePropName="MX_CESS_raw" msprop:Generator_RowDeletingName="MX_CESS_rawRowDeleting" msprop:Generator_RowChangingName="MX_CESS_rawRowChanging" msprop:Generator_RowEvHandlerName="MX_CESS_rawRowChangeEventHandler" msprop:Generator_RowDeletedName="MX_CESS_rawRowDeleted" msprop:Generator_RowClassName="MX_CESS_rawRow" msprop:Generator_UserTableName="MX_CESS_raw" msprop:Generator_RowEvArgName="MX_CESS_rawRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="reestr_date" msprop:Generator_ColumnVarNameInTable="columnreestr_date" msprop:Generator_ColumnPropNameInRow="reestr_date" msprop:Generator_ColumnPropNameInTable="reestr_dateColumn" msprop:Generator_UserColumnName="reestr_date" type="xs:dateTime" minOccurs="0" />
@@ -316,7 +348,42 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="WorkingJobs" msprop:Generator_TableClassName="WorkingJobsDataTable" msprop:Generator_TableVarName="tableWorkingJobs" msprop:Generator_TablePropName="WorkingJobs" msprop:Generator_RowDeletingName="WorkingJobsRowDeleting" msprop:Generator_RowChangingName="WorkingJobsRowChanging" msprop:Generator_RowEvHandlerName="WorkingJobsRowChangeEventHandler" msprop:Generator_RowDeletedName="WorkingJobsRowDeleted" msprop:Generator_UserTableName="WorkingJobs" msprop:Generator_RowChangedName="WorkingJobsRowChanged" msprop:Generator_RowEvArgName="WorkingJobsRowChangeEvent" msprop:Generator_RowClassName="WorkingJobsRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="job_name" msprop:Generator_ColumnVarNameInTable="columnjob_name" msprop:Generator_ColumnPropNameInRow="job_name" msprop:Generator_ColumnPropNameInTable="job_nameColumn" msprop:Generator_UserColumnName="job_name">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="128" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="session_id" msprop:Generator_ColumnVarNameInTable="columnsession_id" msprop:Generator_ColumnPropNameInRow="session_id" msprop:Generator_ColumnPropNameInTable="session_idColumn" msprop:Generator_UserColumnName="session_id" type="xs:int" />
+              <xs:element name="job_id" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnjob_id" msprop:Generator_ColumnPropNameInRow="job_id" msprop:Generator_ColumnPropNameInTable="job_idColumn" msprop:Generator_UserColumnName="job_id" type="xs:string" />
+              <xs:element name="run_requested_date" msprop:Generator_ColumnVarNameInTable="columnrun_requested_date" msprop:Generator_ColumnPropNameInRow="run_requested_date" msprop:Generator_ColumnPropNameInTable="run_requested_dateColumn" msprop:Generator_UserColumnName="run_requested_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="run_requested_source" msprop:Generator_ColumnVarNameInTable="columnrun_requested_source" msprop:Generator_ColumnPropNameInRow="run_requested_source" msprop:Generator_ColumnPropNameInTable="run_requested_sourceColumn" msprop:Generator_UserColumnName="run_requested_source" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="128" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="queued_date" msprop:Generator_ColumnVarNameInTable="columnqueued_date" msprop:Generator_ColumnPropNameInRow="queued_date" msprop:Generator_ColumnPropNameInTable="queued_dateColumn" msprop:Generator_UserColumnName="queued_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="start_execution_date" msprop:Generator_ColumnVarNameInTable="columnstart_execution_date" msprop:Generator_ColumnPropNameInRow="start_execution_date" msprop:Generator_ColumnPropNameInTable="start_execution_dateColumn" msprop:Generator_UserColumnName="start_execution_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="last_executed_step_id" msprop:Generator_ColumnVarNameInTable="columnlast_executed_step_id" msprop:Generator_ColumnPropNameInRow="last_executed_step_id" msprop:Generator_ColumnPropNameInTable="last_executed_step_idColumn" msprop:Generator_UserColumnName="last_executed_step_id" type="xs:int" minOccurs="0" />
+              <xs:element name="last_executed_step_date" msprop:Generator_ColumnVarNameInTable="columnlast_executed_step_date" msprop:Generator_ColumnPropNameInRow="last_executed_step_date" msprop:Generator_ColumnPropNameInTable="last_executed_step_dateColumn" msprop:Generator_UserColumnName="last_executed_step_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="stop_execution_date" msprop:Generator_ColumnVarNameInTable="columnstop_execution_date" msprop:Generator_ColumnPropNameInRow="stop_execution_date" msprop:Generator_ColumnPropNameInTable="stop_execution_dateColumn" msprop:Generator_UserColumnName="stop_execution_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="job_history_id" msprop:Generator_ColumnVarNameInTable="columnjob_history_id" msprop:Generator_ColumnPropNameInRow="job_history_id" msprop:Generator_ColumnPropNameInTable="job_history_idColumn" msprop:Generator_UserColumnName="job_history_id" type="xs:int" minOccurs="0" />
+              <xs:element name="next_scheduled_run_date" msprop:Generator_ColumnVarNameInTable="columnnext_scheduled_run_date" msprop:Generator_ColumnPropNameInRow="next_scheduled_run_date" msprop:Generator_ColumnPropNameInTable="next_scheduled_run_dateColumn" msprop:Generator_UserColumnName="next_scheduled_run_date" type="xs:dateTime" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:WorkingJobs" />
+      <xs:field xpath="mstns:session_id" />
+      <xs:field xpath="mstns:job_id" />
+    </xs:unique>
   </xs:element>
 </xs:schema>
