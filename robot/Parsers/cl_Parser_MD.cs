@@ -377,15 +377,16 @@ namespace robot.Parsers
                 return;
             }
 
-            Task task_md3_sn = new Task(() =>
-            {
-                sprisk.sp_MD3_portfolio_snapshot(reestr_date);
-            },
-            TaskCreationOptions.LongRunning);
+            //Task task_md3_sn = new Task(() =>
+            //{
+            //    sprisk.sp_MD3_portfolio_snapshot(reestr_date);
+            //},
+            //TaskCreationOptions.LongRunning);
 
             try
             {
-                task_md3_sn.RunSynchronously();
+                //task_md3_sn.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MD3_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 report = "IL-block was calculated in [Risk].[dbo].[MD3_portfolio_snapshot]";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportMDSnapToRisk", "MD", DateTime.Now, true, report);
@@ -491,6 +492,10 @@ namespace robot.Parsers
 
         private static int SearchFirstNullRow(Worksheet sheet, int lastUsedRow)
         {
+            if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[lastUsedRow]) != 0
+                && sheet.Application.WorksheetFunction.CountA(sheet.Rows[lastUsedRow]) >= sheet.Application.WorksheetFunction.CountA(sheet.Rows[5]) * 0.9) 
+                return lastUsedRow;
+
             int midpoint = lastUsedRow / 2;
             int firstNull = 0;
 
