@@ -162,8 +162,8 @@ namespace robot.Parsers
 
             if (success == 1)
             {
-                cl_Send_Report send_report = new cl_Send_Report("MX_CESS", 1);
-                //Console.WriteLine("Report was sended.");
+                //cl_Send_Report send_report = new cl_Send_Report("MX_CESS", 1);
+                Console.WriteLine("Report was sended.");
             }
 
         }

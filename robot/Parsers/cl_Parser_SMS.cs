@@ -429,7 +429,7 @@ namespace robot.Parsers
         {
             try
             {
-                sp.sp_SMS_TOTAL_SNAP_CFIELD();
+                cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_TOTAL_SNAP_CFIELD");
 
                 report = "[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFForming", "SMS", DateTime.Now, true, report);
@@ -467,16 +467,16 @@ namespace robot.Parsers
 
         private void TransportSnapToRisk()
         {
-            Task task_snap = new Task(() =>
-            {
-                SPRisk sprisk = new SPRisk();
-                sprisk.sp_SMS_TOTAL_SNAP(reestr_date);
-            },
-            TaskCreationOptions.LongRunning);
+            //Task task_snap = new Task(() =>
+            //{
+            //    SPRisk sprisk = new SPRisk();
+            //    sprisk.sp_SMS_TOTAL_SNAP(reestr_date);
+            //},
+            //TaskCreationOptions.LongRunning);
 
             try
             {
-                task_snap.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_SMS_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 Console.WriteLine("Snap was transported to [Risk].[dbo].[SMS_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].");
                 report = "Snap was transported to [Risk].[dbo].[SMS_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
@@ -499,16 +499,17 @@ namespace robot.Parsers
 
         private int TransportSnapCFToRisk()
         {
-            Task task_snap_cf = new Task(() =>
-            {
-                SPRisk sprisk = new SPRisk();
-                sprisk.sp_SMS_TOTAL_SNAP_CFIELD(reestr_date);
-            },
-            TaskCreationOptions.LongRunning);
+            //Task task_snap_cf = new Task(() =>
+            //{
+            //    SPRisk sprisk = new SPRisk();
+            //    sprisk.sp_SMS_TOTAL_SNAP_CFIELD(reestr_date);
+            //},
+            //TaskCreationOptions.LongRunning);
 
             try
             {
-                task_snap_cf.RunSynchronously();
+                //task_snap_cf.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_SMS_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
                 report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
