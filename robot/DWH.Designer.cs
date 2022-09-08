@@ -5491,6 +5491,8 @@ namespace robot {
             
             private global::System.Data.DataColumn columnrecovery_amount;
             
+            private global::System.Data.DataColumn columnfile_type;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public LIGA_CESS_rawDataTable() {
@@ -5670,6 +5672,14 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn file_typeColumn {
+                get {
+                    return this.columnfile_type;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -5723,7 +5733,8 @@ namespace robot {
                         System.DateTime last_payment_date, 
                         double last_payment_amount, 
                         double sum_payments, 
-                        double recovery_amount) {
+                        double recovery_amount, 
+                        string file_type) {
                 LIGA_CESS_rawRow rowLIGA_CESS_rawRow = ((LIGA_CESS_rawRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         reestr_date,
@@ -5743,7 +5754,8 @@ namespace robot {
                         last_payment_date,
                         last_payment_amount,
                         sum_payments,
-                        recovery_amount};
+                        recovery_amount,
+                        file_type};
                 rowLIGA_CESS_rawRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowLIGA_CESS_rawRow);
                 return rowLIGA_CESS_rawRow;
@@ -5784,6 +5796,7 @@ namespace robot {
                 this.columnlast_payment_amount = base.Columns["last_payment_amount"];
                 this.columnsum_payments = base.Columns["sum_payments"];
                 this.columnrecovery_amount = base.Columns["recovery_amount"];
+                this.columnfile_type = base.Columns["file_type"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5825,9 +5838,12 @@ namespace robot {
                 base.Columns.Add(this.columnsum_payments);
                 this.columnrecovery_amount = new global::System.Data.DataColumn("recovery_amount", typeof(double), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnrecovery_amount);
+                this.columnfile_type = new global::System.Data.DataColumn("file_type", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnfile_type);
                 this.columna_id.MaxLength = 255;
                 this.columnproduct.MaxLength = 255;
                 this.columnstatus.MaxLength = 255;
+                this.columnfile_type.MaxLength = 100;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -10016,6 +10032,22 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string file_type {
+                get {
+                    try {
+                        return ((string)(this[this.tableLIGA_CESS_raw.file_typeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'file_type\' в таблице \'LIGA_CESS_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableLIGA_CESS_raw.file_typeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool Isreestr_dateNull() {
                 return this.IsNull(this.tableLIGA_CESS_raw.reestr_dateColumn);
             }
@@ -10228,6 +10260,18 @@ namespace robot {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void Setrecovery_amountNull() {
                 this[this.tableLIGA_CESS_raw.recovery_amountColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool Isfile_typeNull() {
+                return this.IsNull(this.tableLIGA_CESS_raw.file_typeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Setfile_typeNull() {
+                this[this.tableLIGA_CESS_raw.file_typeColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -16475,10 +16519,11 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
             tableMapping.ColumnMappings.Add("last_payment_amount", "last_payment_amount");
             tableMapping.ColumnMappings.Add("sum_payments", "sum_payments");
             tableMapping.ColumnMappings.Add("recovery_amount", "recovery_amount");
+            tableMapping.ColumnMappings.Add("file_type", "file_type");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[LIGA_CESS_raw] ([reestr_date], [a_id], [cess_date], [contract_id], [client_id], [loan_date], [loan_amount], [rate], [product], [client_cycle], [principal], [interest], [DPD], [status], [last_payment_date], [last_payment_amount], [sum_payments], [recovery_amount]) VALUES (@reestr_date, @a_id, @cess_date, @contract_id, @client_id, @loan_date, @loan_amount, @rate, @product, @client_cycle, @principal, @interest, @DPD, @status, @last_payment_date, @last_payment_amount, @sum_payments, @recovery_amount)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[LIGA_CESS_raw] ([reestr_date], [a_id], [cess_date], [contract_id], [client_id], [loan_date], [loan_amount], [rate], [product], [client_cycle], [principal], [interest], [DPD], [status], [last_payment_date], [last_payment_amount], [sum_payments], [recovery_amount], [file_type]) VALUES (@reestr_date, @a_id, @cess_date, @contract_id, @client_id, @loan_date, @loan_amount, @rate, @product, @client_cycle, @principal, @interest, @DPD, @status, @last_payment_date, @last_payment_amount, @sum_payments, @recovery_amount, @file_type)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reestr_date", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@a_id", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "a_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -16498,6 +16543,7 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@last_payment_amount", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "last_payment_amount", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@sum_payments", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "sum_payments", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@recovery_amount", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "recovery_amount", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@file_type", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "file_type", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -16517,9 +16563,11 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "delete from dbo.LIGA_CESS_raw where reestr_date = @date";
+            this._commandCollection[1].CommandText = "delete from dbo.LIGA_CESS_raw where reestr_date = @date and file_type = @file_typ" +
+                "e";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@date", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@file_type", global::System.Data.SqlDbType.NVarChar, 100, global::System.Data.ParameterDirection.Input, 0, 0, "file_type", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -16597,7 +16645,8 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
                     global::System.Nullable<global::System.DateTime> last_payment_date, 
                     global::System.Nullable<double> last_payment_amount, 
                     global::System.Nullable<double> sum_payments, 
-                    global::System.Nullable<double> recovery_amount) {
+                    global::System.Nullable<double> recovery_amount, 
+                    string file_type) {
             if ((reestr_date.HasValue == true)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((System.DateTime)(reestr_date.Value));
             }
@@ -16706,6 +16755,12 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
             else {
                 this.Adapter.InsertCommand.Parameters[17].Value = global::System.DBNull.Value;
             }
+            if ((file_type == null)) {
+                this.Adapter.InsertCommand.Parameters[18].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[18].Value = ((string)(file_type));
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -16726,13 +16781,19 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, false)]
-        public virtual int DeletePeriod(string date) {
+        public virtual int DeletePeriod(string date, string file_type) {
             global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[1];
             if ((date == null)) {
                 command.Parameters[0].Value = global::System.DBNull.Value;
             }
             else {
                 command.Parameters[0].Value = ((string)(date));
+            }
+            if ((file_type == null)) {
+                command.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[1].Value = ((string)(file_type));
             }
             global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
             if (((command.Connection.State & global::System.Data.ConnectionState.Open) 

@@ -22,6 +22,10 @@ namespace robot.Parsers
         //string pathFile;
         //int success = 0;
 
+        LIGA_CESS_rawDataTable LIGA_cess = new LIGA_CESS_rawDataTable();
+        string file_type = "";
+        DateTime cession_date;
+
         public void StartParsing()
         {
             logAdapter = new COUNTRY_LogTableAdapter();
@@ -59,8 +63,8 @@ namespace robot.Parsers
                 Type.Missing, Type.Missing); //открываем файл
 
             if (pathFile.ToLower().Contains("портфель") 
-                && !pathFile.ToLower().Contains("банкроты")) parse_LIGA_SNAP(ex);
-            if (pathFile.ToLower().Contains("банкроты")) parse_LIGA_CESS(ex);
+                && !pathFile.ToLower().Contains("банкроты") && !pathFile.ToLower().Contains("цессии")) parse_LIGA_SNAP(ex);
+            if (pathFile.ToLower().Contains("банкроты") || pathFile.ToLower().Contains("цессии")) parse_LIGA_CESS(ex);
         }
 
         private void parse_LIGA_SNAP(Application ex)
@@ -175,6 +179,17 @@ namespace robot.Parsers
             {
                 TransportSnapToRisk();
                 success = TransportSnapCFToRisk();
+            }
+            else
+            {
+                Console.WriteLine("Do you want to continue? Y - Yes, N - No");
+                reply = Console.ReadKey().Key.ToString();
+
+                if (reply.Equals("Y"))
+                {
+                    StartParsing();
+                    return;
+                }
             }
 
             if (success == 1)
@@ -304,31 +319,121 @@ namespace robot.Parsers
             report = "Loading started.";
             logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, true, report);
 
-            Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
+
+            string fileName = ex.Workbooks.Item[1].Name;
+
+            fileName = fileName.Contains("Банкроты") ? fileName.Replace("Банкроты Лига Денег_", "").Substring(0, 10) : fileName.Substring(fileName.IndexOf("от ") + 3, 10); //.ToString("yyyy-MM-dd");
+            file_type = ex.Workbooks.Item[1].Name.Contains("Банкроты") ? "Bankrupts" : "Cessions"; //.ToString("yyyy-MM-dd");
+
+            reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
+            cession_date = reestr_date;
+            reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
+            
+            int row_count = 0;
+
+            if (file_type == "Bankrupts")
+            {
+                for (int j = 1; j <= 2; j++)
+                {
+                    Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(j);
+                    Console.WriteLine("Sheet #" + j.ToString());
+                    row_count += parse_LIGA_CESS_bankrupts(sheet);
+                }
+            }
+            else if (file_type == "Cessions")
+            {
+                Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
+                row_count += parse_LIGA_CESS_cessions(sheet);
+            }
+
+            if (LIGA_cess.Rows.Count > 0)
+            {
+                LIGA_CESS_rawTableAdapter ad_LIGA_CESS_raw = new LIGA_CESS_rawTableAdapter();
+                ad_LIGA_CESS_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"),file_type);
+
+                try
+                {
+                    sp.sp_LIGA_CESS_raw(LIGA_cess);
+                }
+                catch (Exception exc)
+                {
+                    logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, false, exc.Message);
+                    Console.WriteLine("Error");
+                    Console.WriteLine("Error_descr: " + exc.Message);
+                    ex.Quit();
+                    //Console.ReadKey();
+
+                    return;
+                }
+
+                report = "Loading is ready. " + (row_count).ToString() + " rows were processed.";
+                logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, true, report);
+                Console.WriteLine(report);
+
+                LIGA2_cessions_forming(reestr_date);
+                LIGA_Total_CESS_forming(reestr_date);
+                TotalSnapCFForming();
+
+                Console.WriteLine("Do you want to transport snap to Risk? Y - Yes, N - No");
+                string reply = Console.ReadKey().Key.ToString();
+
+
+                if (reply.Equals("Y"))
+                {
+                    success = TransportToRisk();
+                    success += TransportSnapCFToRisk();
+                }
+                else
+                {
+                    Console.WriteLine("Do you want to continue? Y - Yes, N - No");
+                    reply = Console.ReadKey().Key.ToString();
+
+                    if (reply.Equals("Y"))
+                    {
+                        StartParsing();
+                        return;
+                    }
+                }
+
+                if (success == 2)
+                {
+                    cl_Send_Report send_report = new cl_Send_Report("LIGA_CESS", 1);
+                    //Console.WriteLine("Report was sended.");
+                }
+            }
+            else
+            {
+                report = "File was empty. There is no one row.";
+                logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, false, report);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_descr: " + report);
+                ex.Quit();
+                Console.ReadKey();
+
+                return;
+            }
+
+            ex.Quit();
+
+        }
+
+
+        private int parse_LIGA_CESS_bankrupts(Worksheet sheet)
+        {
             Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
             int lastUsedRow = last.Row; // Последняя строка в документе
 
             int firstNull = SearchFirstNullRow(sheet, lastUsedRow);
-            //int firstNull = 12;
 
             int i = 2; // Строка начала периода
 
             try
             {
-                string fileName = ex.Workbooks.Item[1].Name;
-
-                fileName = fileName.Replace("Банкроты Лига Денег_", "").Substring(0, 10); //.ToString("yyyy-MM-dd");
-
-                DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
-                reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
-                                                                                                                 //LIGA_CESS.Reestr_date = reestr_date;       //current date
-                LIGA_CESS_rawDataTable LIGA_cess = new LIGA_CESS_rawDataTable();
-
                 while (i < firstNull)
                 {
                     LIGA_CESS_rawRow row = LIGA_cess.NewLIGA_CESS_rawRow();
 
-                    row["Reestr_date"] = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
+                    row["Reestr_date"] = reestr_date;     //eomonth
 
                     row["a_id"] = (sheet.Cells[i, 1] as Range).Value;
                     row["cess_date"] = (DateTime)(sheet.Cells[i, 2] as Range).Value;
@@ -347,6 +452,7 @@ namespace robot.Parsers
                     row["last_payment_amount"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;
                     row["sum_payments"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;
                     row["recovery_amount"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;
+                    row["file_type"] = file_type; //(int)(sheet.Cells[i, 11] as Range).Value;
 
                     LIGA_cess.AddLIGA_CESS_rawRow(row);
                     LIGA_cess.AcceptChanges();
@@ -355,59 +461,62 @@ namespace robot.Parsers
 
                     i++;
                 }
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_descr: " + exc.Message);
+                sheet.Application.Quit();
+                Console.ReadKey();
 
-                if (LIGA_cess.Rows.Count > 0)
+                return 0;
+            }
+
+            return firstNull - 2;
+        }
+        
+        private int parse_LIGA_CESS_cessions(Worksheet sheet)
+        {
+            Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
+            int lastUsedRow = last.Row; // Последняя строка в документе
+
+            int firstNull = SearchFirstNullRow(sheet, lastUsedRow);
+
+            int i = 2; // Строка начала периода
+
+            try
+            {
+                while (i < firstNull)
                 {
-                    LIGA_CESS_rawTableAdapter ad_LIGA_CESS_raw = new LIGA_CESS_rawTableAdapter();
-                    ad_LIGA_CESS_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
+                    LIGA_CESS_rawRow row = LIGA_cess.NewLIGA_CESS_rawRow();
 
-                    try
-                    {
-                        sp.sp_LIGA_CESS_raw(LIGA_cess);
-                    }
-                    catch (Exception exc)
-                    {
-                        logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, false, exc.Message);
-                        Console.WriteLine("Error");
-                        Console.WriteLine("Error_descr: " + exc.Message);
-                        ex.Quit();
-                        //Console.ReadKey();
+                    row["Reestr_date"] = reestr_date;     //eomonth
 
-                        return;
-                    }
+                    row["a_id"] = (sheet.Cells[i, 1] as Range).Value;
+                    row["cess_date"] = cession_date;
+                    row["contract_id"] = (sheet.Cells[i, 3] as Range).Value;
+                    row["client_id"] = (sheet.Cells[i, 2] as Range).Value;
+                    row["loan_date"] = (DateTime)(sheet.Cells[i, 16] as Range).Value;
+                    row["loan_amount"] = (double)(sheet.Cells[i, 20] as Range).Value;
+                    row["rate"] = (double)(sheet.Cells[i, 21] as Range).Value;
+                    row["product"] = (sheet.Cells[i, 24] as Range).Value;
+                    row["client_cycle"] = (double)(sheet.Cells[i, 25] as Range).Value;
+                    row["principal"] = (double)(sheet.Cells[i, 26] as Range).Value;
+                    row["interest"] = (double)(sheet.Cells[i, 27] as Range).Value;
+                    row["DPD"] = (int)(sheet.Cells[i, 31] as Range).Value;
+                    row["status"] = "";
+                    row["last_payment_amount"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;
+                    row["sum_payments"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;
+                    row["recovery_amount"] = (int)(sheet.Cells[i, 46] as Range).Value;
+                    row["file_type"] = file_type;
 
-                    report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
-                    logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, true, report);
-                    Console.WriteLine(report);
+                    LIGA_cess.AddLIGA_CESS_rawRow(row);
+                    LIGA_cess.AcceptChanges();
 
-                    LIGA2_cessions_forming(reestr_date);
-                    LIGA_Total_CESS_forming(reestr_date);
+                    Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
 
-                    Console.WriteLine("Do you want to transport snap to Risk? Y - Yes, N - No");
-                    string reply = Console.ReadKey().Key.ToString();
-
-
-                    if (reply.Equals("Y"))
-                    {
-                        success = TransportToRisk();
-                    }
-
-                    if (success == 1)
-                    {
-                        cl_Send_Report send_report = new cl_Send_Report("LIGA_CESS", 1);
-                        //Console.WriteLine("Report was sended.");
-                    }
-                }
-                else
-                {
-                    report = "File was empty. There is no one row.";
-                    logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, false, report);
-                    Console.WriteLine("Error");
-                    Console.WriteLine("Error_descr: " + report);
-                    ex.Quit();
-                    Console.ReadKey();
-
-                    return;
+                    i++;
                 }
             }
             catch (Exception exc)
@@ -415,21 +524,13 @@ namespace robot.Parsers
                 logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_descr: " + exc.Message);
-                ex.Quit();
+                sheet.Application.Quit();
                 Console.ReadKey();
 
-                return;
+                return 0;
             }
 
-
-            ex.Quit();
-
-            //if (success == 1)
-            //{
-            //    cl_Send_Report send_report = new cl_Send_Report("LIGA_CESS", 1);
-            //    //Console.WriteLine("Report was sended.");
-            //}
-
+            return firstNull - 2;
         }
 
         private void LIGA2_cessions_forming(DateTime reestr_date)
