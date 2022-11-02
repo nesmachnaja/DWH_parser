@@ -17,10 +17,17 @@ namespace robot
         string _country;
         string _connection_string;
         WorkingJobsTableAdapter jobs = new WorkingJobsTableAdapter();
+        cl_Tasks task;
 
         public cl_PQR_Forming (string country)
         {
             _country = country;
+
+            if (_country == "mkd") 
+            { 
+                task = new cl_Tasks("exec Risk.dbo.sp_MKD2_LGD");
+                return;
+            }
 
             WorkingJobsDataTable working_jobs = jobs.GetData();
             if (working_jobs.Count == 0 || working_jobs.Select(row => row.job_name.Equals("Robot_PQR_LGD")).ElementAt(0) == false)
@@ -54,6 +61,7 @@ namespace robot
             cl_Tasks task = new cl_Tasks("exec msdb.dbo.sp_update_jobstep @job_id = '35E49CD6-ABF2-40B2-BA1B-439EAA480D5D', @step_id = 1, @command = 'exec sp_Report_PQR_cube @country = ''" + _country + "'''");
             task = new cl_Tasks("exec msdb.dbo.sp_update_jobstep @job_id = '35E49CD6-ABF2-40B2-BA1B-439EAA480D5D', @step_id = 2, @command = 'exec sp_Report_LGD91_cube @country = ''" + _country + "'''");
             task = new cl_Tasks("exec msdb.dbo.sp_update_jobstep @job_id = '35E49CD6-ABF2-40B2-BA1B-439EAA480D5D', @step_id = 3, @command = 'exec sp_Report_LGD181_cube @country = ''" + _country + "'''");
+            task = new cl_Tasks("exec msdb.dbo.sp_update_jobstep @job_id = '35E49CD6-ABF2-40B2-BA1B-439EAA480D5D', @step_id = 3, @command = 'exec sp_Report_LGD365_cube @country = ''" + _country + "'''");
 
 
             Server server = new Server(server_name);

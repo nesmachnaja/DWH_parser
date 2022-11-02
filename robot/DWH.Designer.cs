@@ -3052,6 +3052,8 @@ namespace robot {
             
             private global::System.Data.DataColumn columnbrand;
             
+            private global::System.Data.DataColumn columncess_id;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public SMS_CESS_rawDataTable() {
@@ -3223,6 +3225,14 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn cess_idColumn {
+                get {
+                    return this.columncess_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -3275,7 +3285,8 @@ namespace robot {
                         double value, 
                         double CC, 
                         System.DateTime retdate, 
-                        string brand) {
+                        string brand, 
+                        int cess_id) {
                 SMS_CESS_rawRow rowSMS_CESS_rawRow = ((SMS_CESS_rawRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         reestr_date,
@@ -3294,7 +3305,8 @@ namespace robot {
                         value,
                         CC,
                         retdate,
-                        brand};
+                        brand,
+                        cess_id};
                 rowSMS_CESS_rawRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowSMS_CESS_rawRow);
                 return rowSMS_CESS_rawRow;
@@ -3334,6 +3346,7 @@ namespace robot {
                 this.columnCC = base.Columns["CC"];
                 this.columnretdate = base.Columns["retdate"];
                 this.columnbrand = base.Columns["brand"];
+                this.columncess_id = base.Columns["cess_id"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3373,6 +3386,8 @@ namespace robot {
                 base.Columns.Add(this.columnretdate);
                 this.columnbrand = new global::System.Data.DataColumn("brand", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnbrand);
+                this.columncess_id = new global::System.Data.DataColumn("cess_id", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncess_id);
                 this.columnmobile.MaxLength = 255;
                 this.columnbrand.MaxLength = 100;
             }
@@ -4409,6 +4424,8 @@ namespace robot {
             
             private global::System.Data.DataColumn columnbrand;
             
+            private global::System.Data.DataColumn columnCC;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public SMS_SNAP_rawDataTable() {
@@ -4580,6 +4597,14 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn CCColumn {
+                get {
+                    return this.columnCC;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -4632,7 +4657,8 @@ namespace robot {
                         double final_interest, 
                         string prod, 
                         string status, 
-                        string brand) {
+                        string brand, 
+                        int CC) {
                 SMS_SNAP_rawRow rowSMS_SNAP_rawRow = ((SMS_SNAP_rawRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         reestr_date,
@@ -4651,7 +4677,8 @@ namespace robot {
                         final_interest,
                         prod,
                         status,
-                        brand};
+                        brand,
+                        CC};
                 rowSMS_SNAP_rawRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowSMS_SNAP_rawRow);
                 return rowSMS_SNAP_rawRow;
@@ -4691,6 +4718,7 @@ namespace robot {
                 this.columnprod = base.Columns["prod"];
                 this.columnstatus = base.Columns["status"];
                 this.columnbrand = base.Columns["brand"];
+                this.columnCC = base.Columns["CC"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4730,6 +4758,8 @@ namespace robot {
                 base.Columns.Add(this.columnstatus);
                 this.columnbrand = new global::System.Data.DataColumn("brand", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnbrand);
+                this.columnCC = new global::System.Data.DataColumn("CC", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCC);
                 this.columnid_loan.MaxLength = 100;
                 this.columnphone.MaxLength = 100;
                 this.columnid_client.MaxLength = 100;
@@ -8008,6 +8038,22 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public int cess_id {
+                get {
+                    try {
+                        return ((int)(this[this.tableSMS_CESS_raw.cess_idColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'cess_id\' в таблице \'SMS_CESS_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSMS_CESS_raw.cess_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool Isreestr_dateNull() {
                 return this.IsNull(this.tableSMS_CESS_raw.reestr_dateColumn);
             }
@@ -8208,6 +8254,18 @@ namespace robot {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetbrandNull() {
                 this[this.tableSMS_CESS_raw.brandColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool Iscess_idNull() {
+                return this.IsNull(this.tableSMS_CESS_raw.cess_idColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Setcess_idNull() {
+                this[this.tableSMS_CESS_raw.cess_idColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -9314,6 +9372,22 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public int CC {
+                get {
+                    try {
+                        return ((int)(this[this.tableSMS_SNAP_raw.CCColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'CC\' в таблице \'SMS_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSMS_SNAP_raw.CCColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool Isreestr_dateNull() {
                 return this.IsNull(this.tableSMS_SNAP_raw.reestr_dateColumn);
             }
@@ -9514,6 +9588,18 @@ namespace robot {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetbrandNull() {
                 this[this.tableSMS_SNAP_raw.brandColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsCCNull() {
+                return this.IsNull(this.tableSMS_SNAP_raw.CCColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetCCNull() {
+                this[this.tableSMS_SNAP_raw.CCColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -13620,10 +13706,11 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
             tableMapping.ColumnMappings.Add("CC", "CC");
             tableMapping.ColumnMappings.Add("retdate", "retdate");
             tableMapping.ColumnMappings.Add("brand", "brand");
+            tableMapping.ColumnMappings.Add("cess_id", "cess_id");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [SMS_CESS_raw] ([reestr_date], [cess_date], [mobile], [loan_id], [issue_date], [client_id], [DPD], [OD], [perc_sroch], [perc_prosr], [com_transfer], [penalty], [rest_all], [value], [CC], [retdate], [brand]) VALUES (@reestr_date, @cess_date, @mobile, @loan_id, @issue_date, @client_id, @DPD, @OD, @perc_sroch, @perc_prosr, @com_transfer, @penalty, @rest_all, @value, @CC, @retdate, @brand)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [SMS_CESS_raw] ([reestr_date], [cess_date], [mobile], [loan_id], [issue_date], [client_id], [DPD], [OD], [perc_sroch], [perc_prosr], [com_transfer], [penalty], [rest_all], [value], [CC], [retdate], [brand], [cess_id]) VALUES (@reestr_date, @cess_date, @mobile, @loan_id, @issue_date, @client_id, @DPD, @OD, @perc_sroch, @perc_prosr, @com_transfer, @penalty, @rest_all, @value, @CC, @retdate, @brand, @cess_id)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reestr_date", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@cess_date", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "cess_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -13642,6 +13729,7 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CC", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CC", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@retdate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "retdate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@brand", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "brand", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@cess_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "cess_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -13762,7 +13850,8 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
                     global::System.Nullable<double> value, 
                     global::System.Nullable<double> CC, 
                     global::System.Nullable<global::System.DateTime> retdate, 
-                    string brand) {
+                    string brand, 
+                    global::System.Nullable<int> cess_id) {
             if ((reestr_date.HasValue == true)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((System.DateTime)(reestr_date.Value));
             }
@@ -13864,6 +13953,12 @@ VALUES (@reestr_date,@Loan,@Client,@Status,@Loan_disbursment_date,@Product,@DPD,
             }
             else {
                 this.Adapter.InsertCommand.Parameters[16].Value = ((string)(brand));
+            }
+            if ((cess_id.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[17].Value = ((int)(cess_id.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[17].Value = global::System.DBNull.Value;
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -15205,10 +15300,11 @@ where sn.b_id is null or sn.initial_id is null";
             tableMapping.ColumnMappings.Add("prod", "prod");
             tableMapping.ColumnMappings.Add("status", "status");
             tableMapping.ColumnMappings.Add("brand", "brand");
+            tableMapping.ColumnMappings.Add("CC", "CC");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [SMS_SNAP_raw] ([reestr_date], [id_loan], [phone], [od], [com], [pen_balance], [od_com], [day_delay], [date_start], [id_client], [interest], [product], [ces], [final_interest], [prod], [status], [brand]) VALUES (@reestr_date, @id_loan, @phone, @od, @com, @pen_balance, @od_com, @day_delay, @date_start, @id_client, @interest, @product, @ces, @final_interest, @prod, @status, @brand)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [SMS_SNAP_raw] ([reestr_date], [id_loan], [phone], [od], [com], [pen_balance], [od_com], [day_delay], [date_start], [id_client], [interest], [product], [ces], [final_interest], [prod], [status], [brand], [CC]) VALUES (@reestr_date, @id_loan, @phone, @od, @com, @pen_balance, @od_com, @day_delay, @date_start, @id_client, @interest, @product, @ces, @final_interest, @prod, @status, @brand, @CC)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reestr_date", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@id_loan", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id_loan", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -15227,6 +15323,7 @@ where sn.b_id is null or sn.initial_id is null";
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@prod", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "prod", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@status", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "status", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@brand", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "brand", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CC", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CC", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -15242,9 +15339,7 @@ where sn.b_id is null or sn.initial_id is null";
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[3];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT reestr_date, id_loan, phone, od, com, pen_balance, od_com, day_delay, date" +
-                "_start, id_client, interest, product, ces, final_interest, prod, status, brand F" +
-                "ROM SMS_SNAP_raw";
+            this._commandCollection[0].CommandText = "SELECT * FROM SMS_SNAP_raw";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
@@ -15349,7 +15444,8 @@ where sn.b_id is null or sn.initial_id is null";
                     global::System.Nullable<double> final_interest, 
                     string prod, 
                     string status, 
-                    string brand) {
+                    string brand, 
+                    global::System.Nullable<int> CC) {
             if ((reestr_date.HasValue == true)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((System.DateTime)(reestr_date.Value));
             }
@@ -15451,6 +15547,12 @@ where sn.b_id is null or sn.initial_id is null";
             }
             else {
                 this.Adapter.InsertCommand.Parameters[16].Value = ((string)(brand));
+            }
+            if ((CC.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[17].Value = ((int)(CC.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[17].Value = global::System.DBNull.Value;
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
