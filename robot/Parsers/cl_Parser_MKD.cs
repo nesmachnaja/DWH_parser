@@ -319,30 +319,53 @@ namespace robot
         private void TotalSnapForming()                     //to do: insert into try-catch
         {
             sp.sp_MKD2_portfolio_snapshot();
-            sp.sp_MKD_TOTAL_SNAP();
 
-            report = "[DWH_Risk].[dbo].[MKD2_portfolio_snapshot], [DWH_Risk].[dbo].[TOTAL_SNAP] were formed.";
-            Console.WriteLine(report);
-            logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
+            try
+            {
+                cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD_TOTAL_SNAP");
 
-            sp.sp_MKD_TOTAL_SNAP_CFIELD();
+                report = "[DWH_Risk].[dbo].[MKD2_portfolio_snapshot], [DWH_Risk].[dbo].[TOTAL_SNAP] were formed.";
+                Console.WriteLine(report);
+                logAdapter.InsertRow("cl_Parser_MKD", "TotalSnapForming", "MKD", DateTime.Now, true, report);
+            }
+            catch (Exception ex)
+            {
+                report = ex.Message;
+                Console.WriteLine(report);
+                logAdapter.InsertRow("cl_Parser_MKD", "TotalSnapForming", "MKD", DateTime.Now, false, report);
+            }
 
-            report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
-            Console.WriteLine(report);
-            logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
+            try
+            {
+                cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD_TOTAL_SNAP_CFIELD");
+
+                report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                Console.WriteLine(report);
+                logAdapter.InsertRow("cl_Parser_MKD", "TotalSnapForming", "MKD", DateTime.Now, true, report);
+            }
+            catch (Exception ex)
+            {
+                report = ex.Message;
+                Console.WriteLine(report);
+                logAdapter.InsertRow("cl_Parser_MKD", "TotalSnapForming", "MKD", DateTime.Now, false, report);
+            }
+
+            //sp.sp_MKD_TOTAL_SNAP_CFIELD();
+
         }
 
         private void TransportSnapToRisk(DateTime snapdate)
         {
-            Task task_snap = new Task(() =>
-            {
-                sprisk.sp_MKD_TOTAL_SNAP(snapdate);
-            },
-            TaskCreationOptions.LongRunning);
+            //Task task_snap = new Task(() =>
+            //{
+            //    sprisk.sp_MKD_TOTAL_SNAP(snapdate);
+            //},
+            //TaskCreationOptions.LongRunning);
 
             try
             {
-                task_snap.RunSynchronously();
+                //task_snap.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_SNAP @date = '" + snapdate.ToString("yyyy-MM-dd") + "'");
 
                 report = "Snap was transported to [Risk].[dbo].[MKD2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
                 Console.WriteLine(report);
@@ -362,15 +385,16 @@ namespace robot
 
         private void TransportSnapCFToRisk(DateTime snapdate)
         {
-            Task task_snap_cf = new Task(() =>
-            {
-                sprisk.sp_MKD_TOTAL_SNAP_CFIELD(snapdate);
-            },
-            TaskCreationOptions.LongRunning);
+            //Task task_snap_cf = new Task(() =>
+            //{
+            //    sprisk.sp_MKD_TOTAL_SNAP_CFIELD(snapdate);
+            //},
+            //TaskCreationOptions.LongRunning);
 
             try
             {
-                task_snap_cf.RunSynchronously();
+                //task_snap_cf.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_SNAP_CFIELD @date = '" + snapdate.ToString("yyyy-MM-dd") + "'");
 
                 report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 Console.WriteLine(report);

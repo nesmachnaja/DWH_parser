@@ -91,8 +91,8 @@ namespace robot.Parsers
                     row["Cession_date"] = (DateTime)(sheet.Cells[i, 2] as Range).Value;
                     row["Principal"] = (decimal)(sheet.Cells[i, 3] as Range).Value;
                     row["Interest"] = (sheet.Cells[i, 4] as Range).Text.ToString() != "#ЗНАЧ!" ? (decimal)(sheet.Cells[i, 4] as Range).Value : 0;
-                    row["Fee"] = (decimal)(sheet.Cells[i, 5] as Range).Value;
-                    row["Penalty"] = (decimal)(sheet.Cells[i, 6] as Range).Value;
+                    row["Fee"] = !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("$") ? (decimal)(sheet.Cells[i, 5] as Range).Value : 0;
+                    row["Penalty"] = !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("$") ? (decimal)(sheet.Cells[i, 6] as Range).Value : 0;
                     row["Otherdebt"] = (decimal)(sheet.Cells[i, 7] as Range).Value;
                     row["Price_amount"] = (decimal)(sheet.Cells[i, 8] as Range).Value;
                     row["Price_rate"] = (double)(sheet.Cells[i, 9] as Range).Value;
@@ -132,6 +132,7 @@ namespace robot.Parsers
                     Console.WriteLine(report);
 
                     success = MX_Total_CESS_forming(reestr_date);
+                    success += MX_Total_Snap_Cfield_forming();
                 }
                 else
                 {
@@ -160,7 +161,7 @@ namespace robot.Parsers
 
             ex.Quit();
 
-            if (success == 1)
+            if (success == 2)
             {
                 //cl_Send_Report send_report = new cl_Send_Report("MX_CESS", 1);
                 Console.WriteLine("Report was sended.");
@@ -173,20 +174,21 @@ namespace robot.Parsers
             object result;
             int indefinites = 0;
 
-            Task task_cess = new Task(() =>
-            {
-                SPRisk sprisk = new SPRisk();
-                result = sprisk.sp_MX_TOTAL_CESS(reestr_date);
-                indefinites = int.Parse(result.ToString());
-            },
-            TaskCreationOptions.LongRunning);
+            //Task task_cess = new Task(() =>
+            //{
+            //    SPRisk sprisk = new SPRisk();
+            //    result = sprisk.sp_MX_TOTAL_CESS(reestr_date);
+            //    indefinites = int.Parse(result.ToString());
+            //},
+            //TaskCreationOptions.LongRunning);
 
             try
             {
-                task_cess.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_CESS @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task_cess.RunSynchronously();
 
                 report = indefinites == 1 ? "TOTAL_CESS was formed. Indefinite loan_ids were found." : "TOTAL_CESS was formed successfully.";
-                logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, true, report);
+                logAdapter.InsertRow("cl_Parser_MX", "MX_Totoal_CESS_forming", "MX", DateTime.Now, true, report);
                 Console.WriteLine(report);
 
                 return 1;
@@ -194,6 +196,29 @@ namespace robot.Parsers
             catch (Exception exc)
             {
                 logAdapter.InsertRow("cl_Parser_MX", "MX_Totoal_CESS_forming", "MX", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return 0;
+            }
+        }
+
+        private int MX_Total_Snap_Cfield_forming()
+        {
+            try
+            {
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_SNAP_CFIELD");
+                //task_cess.RunSynchronously();
+
+                report = "TOTAL_SNAP_CFIELD was formed successfully.";
+                logAdapter.InsertRow("cl_Parser_MX", "MX_Total_Snap_Cfield_forming", "MX", DateTime.Now, true, report);
+                Console.WriteLine(report);
+
+                return 1;
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_MX", "MX_Total_Snap_Cfield_forming", "MX", DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 

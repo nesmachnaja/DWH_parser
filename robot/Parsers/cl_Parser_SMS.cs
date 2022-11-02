@@ -22,6 +22,7 @@ namespace robot.Parsers
         //string brand = "";
         //DateTime reestr_date;
         //int success = 0;
+        int cess_id = 0;
 
         public void StartParsing()
         {
@@ -86,6 +87,9 @@ namespace robot.Parsers
                 if (fileName.Contains("SMS")) brand = "SMSFinance";
                 if (fileName.Contains("VIV")) brand = "Vivus";
 
+                if (fileName.Contains("prosh")) cess_id = 2;
+                if (fileName.Contains("ces")) cess_id = 1;
+
                 fileName = fileName.Replace("ces", "").Replace("prosh", "").Replace("SMS", "").Replace("VIV", "").Replace(".xlsx", "").Insert(2, ".").Insert(5, "."); //.ToString("yyyy-MM-dd");
 
                 reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
@@ -115,6 +119,7 @@ namespace robot.Parsers
                     //sms_cess_row["Retdate"] = (DateTime?)(sheet.Cells[i, 15] as Range).Value == null ? (DateTime?)DBNull.Value : (DateTime?)(sheet.Cells[i, 15] as Range).Value;
 
                     sms_cess_row["brand"] = brand;
+                    sms_cess_row["cess_id"] = cess_id;
 
                     sms_cess.AddSMS_CESS_rawRow(sms_cess_row);
                     sms_cess.AcceptChanges();
@@ -173,6 +178,7 @@ namespace robot.Parsers
             Console.WriteLine(report);
 
             TotalCessForming();
+            //TotalCessTransportToSmsfinance();
 
             Console.WriteLine("Do you want to transport snap to Risk? Y - Yes, N - No");
             string reply = Console.ReadKey().Key.ToString();
@@ -201,24 +207,44 @@ namespace robot.Parsers
             }
         }
 
+        //private void TotalCessTransportToSmsfinance()
+        //{
+        //    try
+        //    {
+        //        cl_Tasks task = new cl_Tasks("exec Total_Smsfinance.dbo.sp_TOTAL_CESS @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+
+        //        report = "Data was transported to Total_Smsfinance.dbo.TOTAL_CESS successfully.";
+        //        logAdapter.InsertRow("cl_Parser_SMS", "TotalCessTransportToSmsfinance", "SMS", DateTime.Now, true, report);
+        //        Console.WriteLine(report);
+        //    }
+        //    catch (Exception exc)
+        //    {
+        //        logAdapter.InsertRow("cl_Parser_SMS", "TotalCessTransportToSmsfinance", "SMS", DateTime.Now, false, exc.Message);
+        //        Console.WriteLine("Error");
+        //        Console.WriteLine("Error_descr: " + exc.Message);
+
+        //        return;
+        //    }
+        //}
+
         private void TotalCessForming()
         {
-            try
-            {
-                sp.sp_SMS_cession(reestr_date);
+            //try
+            //{
+            //    sp.sp_SMS_cession(reestr_date);
 
-                report = "Data was transported to SMS_cession successfully.";
-                logAdapter.InsertRow("cl_Parser_SMS", "TotalCessForming", "SMS", DateTime.Now, true, report);
-                Console.WriteLine(report);
-            }
-            catch (Exception exc)
-            {
-                logAdapter.InsertRow("cl_Parser_SMS", "TotalCessForming", "SMS", DateTime.Now, false, exc.Message);
-                Console.WriteLine("Error");
-                Console.WriteLine("Error_descr: " + exc.Message);
+            //    report = "Data was transported to SMS_cession successfully.";
+            //    logAdapter.InsertRow("cl_Parser_SMS", "TotalCessForming", "SMS", DateTime.Now, true, report);
+            //    Console.WriteLine(report);
+            //}
+            //catch (Exception exc)
+            //{
+            //    logAdapter.InsertRow("cl_Parser_SMS", "TotalCessForming", "SMS", DateTime.Now, false, exc.Message);
+            //    Console.WriteLine("Error");
+            //    Console.WriteLine("Error_descr: " + exc.Message);
 
-                return;
-            }
+            //    return;
+            //}
 
             try 
             {
@@ -326,6 +352,7 @@ namespace robot.Parsers
                     sms_snap_row["Final_interest"] = (double)(sheet.Cells[i, 13] as Range).Value;
                     sms_snap_row["Prod"] = (sheet.Cells[i, 14] as Range).Value;
                     sms_snap_row["Status"] = (sheet.Cells[i, 15] as Range).Value;
+                    sms_snap_row["CC"] = (sheet.Cells[i, 18] as Range).Value;
 
                     sms_snap_row["brand"] = brand;
 
@@ -449,7 +476,8 @@ namespace robot.Parsers
         {
             try
             {
-                sp.sp_SMS_TOTAL_SNAP(reestr_date);
+                cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //sp.sp_SMS_TOTAL_SNAP(reestr_date);
 
                 report = "[dbo].[TOTAL_SNAP] was formed.";
                 logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapForming", "SMS", DateTime.Now, true, report);

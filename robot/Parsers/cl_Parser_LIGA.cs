@@ -203,7 +203,8 @@ namespace robot.Parsers
         {
             try 
             {
-                sp.sp_LIGA_TOTAL_SNAP_CFIELD();
+                cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_LIGA_TOTAL_SNAP_CFIELD");
+                //sp.sp_LIGA_TOTAL_SNAP_CFIELD();
 
                 report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 Console.WriteLine(report);
@@ -287,15 +288,16 @@ namespace robot.Parsers
 
         private int TransportSnapCFToRisk()
         {
-            Task task_liga_snap = new Task(() =>
-            {
-                sprisk.sp_LIGA_TOTAL_SNAP_CFIELD(reestr_date);
-            },
-            TaskCreationOptions.LongRunning);
+            //Task task_liga_snap = new Task(() =>
+            //{
+            //    sprisk.sp_LIGA_TOTAL_SNAP_CFIELD(reestr_date);
+            //},
+            //TaskCreationOptions.LongRunning);
 
             try
             {
-                task_liga_snap.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_LIGA_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task_liga_snap.RunSynchronously();
 
                 report = "Snap_CF was transported to [Risk].[dbo].[TOTAL_SNAP_CFIELD].";
                 Console.WriteLine(report);
@@ -321,6 +323,7 @@ namespace robot.Parsers
 
 
             string fileName = ex.Workbooks.Item[1].Name;
+            int list_count = ex.Worksheets.Count;
 
             fileName = fileName.Contains("Банкроты") ? fileName.Replace("Банкроты Лига Денег_", "").Substring(0, 10) : fileName.Substring(fileName.IndexOf("от ") + 3, 10); //.ToString("yyyy-MM-dd");
             file_type = ex.Workbooks.Item[1].Name.Contains("Банкроты") ? "Bankrupts" : "Cessions"; //.ToString("yyyy-MM-dd");
@@ -333,7 +336,7 @@ namespace robot.Parsers
 
             if (file_type == "Bankrupts")
             {
-                for (int j = 1; j <= 2; j++)
+                for (int j = 1; j <= list_count; j++)
                 {
                     Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(j);
                     Console.WriteLine("Sheet #" + j.ToString());
@@ -370,7 +373,7 @@ namespace robot.Parsers
                 logAdapter.InsertRow("cl_Parser_LIGA", "parse_LIGA_CESS", "LIGA", DateTime.Now, true, report);
                 Console.WriteLine(report);
 
-                LIGA2_cessions_forming(reestr_date);
+                //LIGA2_cessions_forming(reestr_date);
                 LIGA_Total_CESS_forming(reestr_date);
                 TotalSnapCFForming();
 
