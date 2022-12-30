@@ -241,7 +241,7 @@ namespace robot
             report = "Loading started.";
             logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
             
-            Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
+            Worksheet sheet = (Worksheet)ex.Worksheets.get_Item("Report"); // берем первый лист;
             Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
             lastUsedRow = last.Row; // Последняя строка в документе
             BIH_SNAP_rawDataTable bih_snap = new BIH_SNAP_rawDataTable();
@@ -453,16 +453,17 @@ namespace robot
 
         private int TransportSnapCFToRisk()
         {
-            Task task_snapCF = new Task(() =>
-            {
-                SPRisk sprisk = new SPRisk();
-                sprisk.sp_BIH_TOTAL_SNAP_CFIELD(reestr_date);
-            },
-            TaskCreationOptions.LongRunning);
+            //Task task_snapCF = new Task(() =>
+            //{
+            //    SPRisk sprisk = new SPRisk();
+            //    sprisk.sp_BIH_TOTAL_SNAP_CFIELD(reestr_date);
+            //},
+            //TaskCreationOptions.LongRunning);
 
             try
-            { 
-                task_snapCF.RunSynchronously();
+            {
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_BIH_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task_snapCF.RunSynchronously();
 
                 //sprisk.sp_BIH_TOTAL_SNAP_CFIELD(snapdate);
                 Console.WriteLine("Snap_CField was transported to [Risk].[dbo].[TOTAL_SNAP_CFIELD]");

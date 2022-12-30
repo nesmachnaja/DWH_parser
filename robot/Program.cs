@@ -13,7 +13,7 @@ namespace robot
         static void Main(string[] args)
         {
             //cl_Send_Report send_report = new cl_Send_Report("SMS_SNAP", 1);
-            //cl_PQR_Forming pqr_test = new cl_PQR_Forming("bih");
+            //cl_PQR_Forming pqr_test = new cl_PQR_Forming("mexico_excel");
 
             //cl_Tasks tasks = new cl_Tasks("exec Risk.dbo.sp_MD_TOTAL_SNAP_CFIELD");
 
@@ -51,8 +51,9 @@ namespace robot
                     }
                 case "sms":
                     {
-                        cl_Parser_SMS Parser = new cl_Parser_SMS();
-                        Parser.StartParsing();
+                        /*cl_Parser_SMS Parser = new cl_Parser_SMS();
+                        Parser.StartParsing();*/
+                        cl_Loop_Files loop = new cl_Loop_Files(country);
                         break;
                     }
                 case "mx":

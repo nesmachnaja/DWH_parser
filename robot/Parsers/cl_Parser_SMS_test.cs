@@ -11,20 +11,11 @@ using static robot.DataSet1;
 
 namespace robot.Parsers
 {
-    class cl_Parser_SMS : cl_Parser
+    class cl_Parser_SMS_test : cl_Parser
     {
-        //private int lastUsedRow;
-        //COUNTRY_LogTableAdapter logAdapter;
-        //SP sp = new SP();
-        //SPRisk sprisk = new SPRisk();
-        //string report;
-        //string pathFile;
-        //string brand = "";
-        //DateTime reestr_date;
-        //int success = 0;
         int cess_id = 0;
 
-        public void StartParsing()
+        public void StartParsing(string path_file)
         {
             logAdapter = new COUNTRY_LogTableAdapter();
             int correctPath = 0;
@@ -33,7 +24,7 @@ namespace robot.Parsers
             {
                 try
                 {
-                    pathFile = GetPath();
+                    pathFile = path_file;
                     OpenFile(pathFile);
                     correctPath = 1;
                 }
@@ -44,12 +35,12 @@ namespace robot.Parsers
             }
         }
 
-        private static string GetPath()
+        /*private static string GetPath()
         {
             Console.WriteLine("Appoint file path: ");
             string pathFile = Console.ReadLine();
             return pathFile;
-        }
+        }*/
 
         public void OpenFile(string pathFile)
         {
@@ -62,6 +53,32 @@ namespace robot.Parsers
 
             if (pathFile.Contains("ces") || pathFile.Contains("prosh")) parse_SMS_CESS(ex);
             if (pathFile.Contains("portf")) parse_SNAP_SNAP(ex);
+        }
+        public void CessPostProcessing()
+        {
+            TotalCessForming();
+            success = TransportCessToRisk();
+
+            if (success == 1)
+            {
+                cl_Send_Report send_report = new cl_Send_Report("SMS_CESS", 1);
+            }
+        }
+
+        public void SnapPostProcessing()
+        {
+            TotalSnapForming();
+            TotalSnapCFForming();
+
+            TransportToSmsfinance();
+
+            TransportSnapToRisk();
+            success = TransportSnapCFToRisk();
+            
+            if (success == 1)
+            {
+                cl_Send_Report send_report = new cl_Send_Report("SMS_SNAP", 1);
+            }
         }
 
         private void parse_SMS_CESS(Application ex)
@@ -177,76 +194,11 @@ namespace robot.Parsers
             logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, true, report);
             Console.WriteLine(report);
 
-            TotalCessForming();
-            //TotalCessTransportToSmsfinance();
-
-            Console.WriteLine("Do you want to transport snap to Risk? Y - Yes, N - No");
-            string reply = Console.ReadKey().Key.ToString();
-
-
-            if (reply.Equals("Y"))
-            {
-                success = TransportToRisk();
-            }
-            else
-            {
-                Console.WriteLine("Do you want to continue? Y - Yes, N - No");
-                reply = Console.ReadKey().Key.ToString();
-
-                if (reply.Equals("Y"))
-                {
-                    StartParsing();
-                    return;
-                }
-            }
-
-            if (success == 1)
-            {
-                cl_Send_Report send_report = new cl_Send_Report("SMS_CESS", 1);
-                //Console.WriteLine("Report was sended.");
-            }
         }
-
-        //private void TotalCessTransportToSmsfinance()
-        //{
-        //    try
-        //    {
-        //        cl_Tasks task = new cl_Tasks("exec Total_Smsfinance.dbo.sp_TOTAL_CESS @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
-
-        //        report = "Data was transported to Total_Smsfinance.dbo.TOTAL_CESS successfully.";
-        //        logAdapter.InsertRow("cl_Parser_SMS", "TotalCessTransportToSmsfinance", "SMS", DateTime.Now, true, report);
-        //        Console.WriteLine(report);
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        logAdapter.InsertRow("cl_Parser_SMS", "TotalCessTransportToSmsfinance", "SMS", DateTime.Now, false, exc.Message);
-        //        Console.WriteLine("Error");
-        //        Console.WriteLine("Error_descr: " + exc.Message);
-
-        //        return;
-        //    }
-        //}
-
+     
         private void TotalCessForming()
         {
-            //try
-            //{
-            //    sp.sp_SMS_cession(reestr_date);
-
-            //    report = "Data was transported to SMS_cession successfully.";
-            //    logAdapter.InsertRow("cl_Parser_SMS", "TotalCessForming", "SMS", DateTime.Now, true, report);
-            //    Console.WriteLine(report);
-            //}
-            //catch (Exception exc)
-            //{
-            //    logAdapter.InsertRow("cl_Parser_SMS", "TotalCessForming", "SMS", DateTime.Now, false, exc.Message);
-            //    Console.WriteLine("Error");
-            //    Console.WriteLine("Error_descr: " + exc.Message);
-
-            //    return;
-            //}
-
-            try 
+            try
             {
                 sp.sp_SMS_TOTAL_CESS(reestr_date);
 
@@ -264,7 +216,7 @@ namespace robot.Parsers
             }
         }
 
-        private int TransportToRisk()
+        private int TransportCessToRisk()
         {
             try
             {
@@ -292,8 +244,8 @@ namespace robot.Parsers
             int firstNull = 0;
             for (int firstEmpty = lastUsedRow + 1; firstEmpty > 1; firstEmpty--)
             {
-                if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) != 0 )
-                    //&& sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) == sheet.Application.WorksheetFunction.CountA(sheet.Rows[1]))
+                if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) != 0)
+                //&& sheet.Application.WorksheetFunction.CountA(sheet.Rows[firstEmpty]) == sheet.Application.WorksheetFunction.CountA(sheet.Rows[1]))
                 {
                     firstNull = firstEmpty + 1;
                     break;
@@ -420,38 +372,6 @@ namespace robot.Parsers
 
             ex.Quit();
 
-            TotalSnapForming();
-            TotalSnapCFForming();
-
-            TransportToSmsfinance();
-
-            Console.WriteLine("Do you want to transport Snap to Risk? Y - Yes, N - No");
-            string reply = Console.ReadKey().Key.ToString();
-
-
-            if (reply.Equals("Y"))
-            {
-                TransportSnapToRisk();
-                success = TransportSnapCFToRisk();
-            }
-            else
-            {
-                Console.WriteLine("Do you want to continue? Y - Yes, N - No");
-                reply = Console.ReadKey().Key.ToString();
-
-                if (reply.Equals("Y"))
-                {
-                    StartParsing();
-                    return;
-                }
-            }
-
-            if (success == 1)
-            {
-                cl_Send_Report send_report = new cl_Send_Report("SMS_SNAP", 1);
-                //Console.WriteLine("Report was sended.");
-            }
-
         }
 
         private void TotalSnapCFForming()
@@ -517,13 +437,6 @@ namespace robot.Parsers
 
         private void TransportSnapToRisk()
         {
-            //Task task_snap = new Task(() =>
-            //{
-            //    SPRisk sprisk = new SPRisk();
-            //    sprisk.sp_SMS_TOTAL_SNAP(reestr_date);
-            //},
-            //TaskCreationOptions.LongRunning);
-
             try
             {
                 cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_SMS_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
@@ -531,8 +444,6 @@ namespace robot.Parsers
                 Console.WriteLine("Snap was transported to [Risk].[dbo].[SMS_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].");
                 report = "Snap was transported to [Risk].[dbo].[SMS_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
                 logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapToRisk", "SMS", DateTime.Now, true, report);
-
-                //report into log
             }
             catch (Exception exc)
             {
@@ -543,22 +454,12 @@ namespace robot.Parsers
                 return;
             }
 
-            //Console.ReadKey();
-
         }
 
         private int TransportSnapCFToRisk()
         {
-            //Task task_snap_cf = new Task(() =>
-            //{
-            //    SPRisk sprisk = new SPRisk();
-            //    sprisk.sp_SMS_TOTAL_SNAP_CFIELD(reestr_date);
-            //},
-            //TaskCreationOptions.LongRunning);
-
             try
             {
-                //task_snap_cf.RunSynchronously();
                 cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_SMS_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
@@ -575,8 +476,6 @@ namespace robot.Parsers
 
                 return 0;
             }
-
-            //Console.ReadKey();
 
         }
     }
