@@ -61,7 +61,7 @@ namespace robot
             cl_Tasks task = new cl_Tasks("exec msdb.dbo.sp_update_jobstep @job_id = '35E49CD6-ABF2-40B2-BA1B-439EAA480D5D', @step_id = 1, @command = 'exec sp_Report_PQR_cube @country = ''" + _country + "'''");
             task = new cl_Tasks("exec msdb.dbo.sp_update_jobstep @job_id = '35E49CD6-ABF2-40B2-BA1B-439EAA480D5D', @step_id = 2, @command = 'exec sp_Report_LGD91_cube @country = ''" + _country + "'''");
             task = new cl_Tasks("exec msdb.dbo.sp_update_jobstep @job_id = '35E49CD6-ABF2-40B2-BA1B-439EAA480D5D', @step_id = 3, @command = 'exec sp_Report_LGD181_cube @country = ''" + _country + "'''");
-            task = new cl_Tasks("exec msdb.dbo.sp_update_jobstep @job_id = '35E49CD6-ABF2-40B2-BA1B-439EAA480D5D', @step_id = 3, @command = 'exec sp_Report_LGD365_cube @country = ''" + _country + "'''");
+            task = new cl_Tasks("exec msdb.dbo.sp_update_jobstep @job_id = '35E49CD6-ABF2-40B2-BA1B-439EAA480D5D', @step_id = 4, @command = 'exec sp_Report_LGD365_cube @country = ''" + _country + "'''");
 
 
             Server server = new Server(server_name);

@@ -498,20 +498,20 @@ namespace robot.Parsers
 
                     row["a_id"] = (sheet.Cells[i, 1] as Range).Value;
                     row["cess_date"] = cession_date;
-                    row["contract_id"] = (sheet.Cells[i, 3] as Range).Value;
-                    row["client_id"] = (sheet.Cells[i, 2] as Range).Value;
-                    row["loan_date"] = (DateTime)(sheet.Cells[i, 16] as Range).Value;
-                    row["loan_amount"] = (double)(sheet.Cells[i, 20] as Range).Value;
-                    row["rate"] = (double)(sheet.Cells[i, 21] as Range).Value;
-                    row["product"] = (sheet.Cells[i, 24] as Range).Value;
-                    row["client_cycle"] = (double)(sheet.Cells[i, 25] as Range).Value;
-                    row["principal"] = (double)(sheet.Cells[i, 26] as Range).Value;
-                    row["interest"] = (double)(sheet.Cells[i, 27] as Range).Value;
-                    row["DPD"] = (int)(sheet.Cells[i, 31] as Range).Value;
+                    row["contract_id"] = (sheet.Cells[i, 4] as Range).Value;
+                    row["client_id"] = (sheet.Cells[i, 3] as Range).Value;
+                    row["loan_date"] = (DateTime)(sheet.Cells[i, 5] as Range).Value;
+                    row["loan_amount"] = (double)(sheet.Cells[i, 14] as Range).Value;
+                    row["rate"] = (double)(sheet.Cells[i, 15] as Range).Value;
+                    row["product"] = (sheet.Cells[i, 18] as Range).Value;
+                    row["client_cycle"] = (double)(sheet.Cells[i, 19] as Range).Value;
+                    row["principal"] = (double)(sheet.Cells[i, 20] as Range).Value;
+                    row["interest"] = (double)(sheet.Cells[i, 21] as Range).Value;
+                    row["DPD"] = (int)(sheet.Cells[i, 23] as Range).Value;
                     row["status"] = "";
                     row["last_payment_amount"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;
                     row["sum_payments"] = 0; //(int)(sheet.Cells[i, 11] as Range).Value;
-                    row["recovery_amount"] = (int)(sheet.Cells[i, 46] as Range).Value;
+                    row["recovery_amount"] = (int)(sheet.Cells[i, 29] as Range).Value;
                     row["file_type"] = file_type;
 
                     LIGA_cess.AddLIGA_CESS_rawRow(row);
