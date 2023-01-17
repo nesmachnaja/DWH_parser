@@ -91,9 +91,9 @@ namespace robot.Parsers
                     row["Cession_date"] = (DateTime)(sheet.Cells[i, 2] as Range).Value;
                     row["Principal"] = (decimal)(sheet.Cells[i, 3] as Range).Value;
                     row["Interest"] = (sheet.Cells[i, 4] as Range).Text.ToString() != "#ЗНАЧ!" ? (decimal)(sheet.Cells[i, 4] as Range).Value : 0;
-                    row["Fee"] = !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("$") ? (decimal)(sheet.Cells[i, 5] as Range).Value : 0;
+                    row["Fee"] = !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("$") && (sheet.Cells[i, 5] as Range).Text.ToString() != "" ? (decimal)(sheet.Cells[i, 5] as Range).Value : 0;
                     row["Penalty"] = !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("$") ? (decimal)(sheet.Cells[i, 6] as Range).Value : 0;
-                    row["Otherdebt"] = (decimal)(sheet.Cells[i, 7] as Range).Value;
+                    row["Otherdebt"] = !((sheet.Cells[i, 7] as Range).Text.ToString() == "") ? (decimal)(sheet.Cells[i, 7] as Range).Value : 0;
                     row["Price_amount"] = (decimal)(sheet.Cells[i, 8] as Range).Value;
                     row["Price_rate"] = (double)(sheet.Cells[i, 9] as Range).Value;
                     row["DPD"] = (int)(sheet.Cells[i, 11] as Range).Value;

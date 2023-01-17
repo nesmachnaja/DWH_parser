@@ -293,9 +293,16 @@ namespace robot
                     BIH_SNAP_rawTableAdapter ad_BIH_SNAP_raw = new BIH_SNAP_rawTableAdapter();
                     ad_BIH_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
 
-                    try
+                    Task task_snap = new Task(() =>
                     {
                         sp.sp_BIH_SNAP_raw(bih_snap);
+                    },
+                    TaskCreationOptions.LongRunning);
+
+                    try
+                    {
+                        task_snap.RunSynchronously();
+                        //sp.sp_BIH_SNAP_raw(bih_snap);
                     }
                     catch (Exception exc)
                     {
@@ -424,16 +431,18 @@ namespace robot
         
         private void TransportSnapToRisk()
         {
+            /*
             Task task_snap = new Task(() =>
             {
                 SPRisk sprisk = new SPRisk();
                 sprisk.sp_BIH_TOTAL_SNAP(reestr_date);
             },
-            TaskCreationOptions.LongRunning);
+            TaskCreationOptions.LongRunning);*/
 
             try
             {
-                task_snap.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_BIH_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task_snap.RunSynchronously();
 
                 //SPRisk sprisk = new sp();
                 //sprisk.sp_BIH_TOTAL_SNAP(snapdate);

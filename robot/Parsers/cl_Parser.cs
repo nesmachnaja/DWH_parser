@@ -1,4 +1,5 @@
-﻿using robot.DataSet1TableAdapters;
+﻿using Microsoft.Office.Interop.Excel;
+using robot.DataSet1TableAdapters;
 using robot.RiskTableAdapters;
 using System;
 using System.Collections.Generic;
@@ -19,5 +20,6 @@ namespace robot.Parsers
         public DateTime reestr_date;
         public int success = 0;
         public string brand = "";
+        //public Application ex = new Application();
     }
 }

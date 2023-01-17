@@ -54,6 +54,7 @@ namespace robot.Parsers
             if (pathFile.Contains("ces") || pathFile.Contains("prosh")) parse_SMS_CESS(ex);
             if (pathFile.Contains("portf")) parse_SNAP_SNAP(ex);
         }
+
         public void CessPostProcessing()
         {
             TotalCessForming();
@@ -94,7 +95,11 @@ namespace robot.Parsers
 
             int firstNull = SearchFirstNullRow(sheet, lastUsedRow);
 
-            SMS_CESS_rawDataTable sms_cess = new SMS_CESS_rawDataTable();
+            SMS_CESS_rawDataTable sms_cess_raw = new SMS_CESS_rawDataTable();
+            System.Data.DataTable sms_cess = new System.Data.DataTable();
+            for (int j = 0; j < sms_cess_raw.Columns.Count; j++)
+                sms_cess.Columns.Add(sms_cess_raw.Columns[j].ColumnName, sms_cess_raw.Columns[j].DataType);
+
             int i = 2; // Строка начала периода
 
             try
@@ -115,7 +120,8 @@ namespace robot.Parsers
 
                 while (i < firstNull)
                 {
-                    SMS_CESS_rawRow sms_cess_row = sms_cess.NewSMS_CESS_rawRow();
+                    System.Data.DataRow sms_cess_row = sms_cess.NewRow();
+                    //SMS_CESS_rawRow sms_cess_row = sms_cess.NewSMS_CESS_rawRow();
 
                     sms_cess_row["reestr_date"] = reestr_date;
 
@@ -138,7 +144,8 @@ namespace robot.Parsers
                     sms_cess_row["brand"] = brand;
                     sms_cess_row["cess_id"] = cess_id;
 
-                    sms_cess.AddSMS_CESS_rawRow(sms_cess_row);
+                    //sms_cess.AddSMS_CESS_rawRow(sms_cess_row);
+                    sms_cess.Rows.Add(sms_cess_row);
                     sms_cess.AcceptChanges();
 
                     Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
@@ -154,7 +161,8 @@ namespace robot.Parsers
 
                     try
                     {
-                        sp.sp_SMS_CESS_raw(sms_cess);
+                        cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_CESS_raw @SMS_CESS_raw = ", sms_cess);
+                        //sp.sp_SMS_CESS_raw(sms_cess);
                     }
                     catch (Exception exc)
                     {
@@ -272,7 +280,11 @@ namespace robot.Parsers
             {
                 string fileName = ex.Workbooks.Item[1].Name;
 
-                SMS_SNAP_rawDataTable sms_snap = new SMS_SNAP_rawDataTable();
+                SMS_SNAP_rawDataTable sms_snap_raw = new SMS_SNAP_rawDataTable();
+                System.Data.DataTable sms_snap = new System.Data.DataTable();
+                for (int j = 0; j < sms_snap_raw.Columns.Count; j++)
+                    sms_snap.Columns.Add(sms_snap_raw.Columns[j].ColumnName, sms_snap_raw.Columns[j].DataType);
+
 
                 if (fileName.ToLower().Contains("sms")) brand = "SMSFinance";
                 if (fileName.ToLower().Contains("viv")) brand = "Vivus";
@@ -285,7 +297,8 @@ namespace robot.Parsers
 
                 while (i < firstNull)
                 {
-                    SMS_SNAP_rawRow sms_snap_row = sms_snap.NewSMS_SNAP_rawRow();
+                    //SMS_SNAP_rawRow sms_snap_row = sms_snap.NewSMS_SNAP_rawRow();
+                    System.Data.DataRow sms_snap_row = sms_snap.NewRow();
 
                     sms_snap_row["reestr_date"] = reestr_date;
 
@@ -308,7 +321,8 @@ namespace robot.Parsers
 
                     sms_snap_row["brand"] = brand;
 
-                    sms_snap.AddSMS_SNAP_rawRow(sms_snap_row);
+                    //sms_snap.AddSMS_SNAP_rawRow(sms_snap_row);
+                    sms_snap.Rows.Add(sms_snap_row);
                     sms_snap.AcceptChanges();
 
                     Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
@@ -322,15 +336,17 @@ namespace robot.Parsers
                     SMS_SNAP_rawTableAdapter ad_SMS_SNAP_raw = new SMS_SNAP_rawTableAdapter();
                     ad_SMS_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), brand);
 
-                    Task task_sms_snap_raw = new Task(() =>
+                    /*Task task_sms_snap_raw = new Task(() =>
                     {
-                        sp.sp_SMS_SNAP_raw(sms_snap);
+                        cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_SNAP_raw @SMS_SNAP_raw = ", sms_snap);
+                        //sp.sp_SMS_SNAP_raw(sms_snap);
                     },
-                    TaskCreationOptions.LongRunning);
+                    TaskCreationOptions.LongRunning);*/
 
                     try
                     {
-                        task_sms_snap_raw.RunSynchronously();
+                        cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_SNAP_raw @SMS_SNAP_raw = ", sms_snap);
+                        //task_sms_snap_raw.RunSynchronously();
                         //sp.sp_SMS_SNAP_raw(sms_snap);
                     }
                     catch (Exception exc)

@@ -30,7 +30,7 @@ namespace robot
             }
 
             WorkingJobsDataTable working_jobs = jobs.GetData();
-            if (working_jobs.Count == 0 || working_jobs.Select(row => row.job_name.Equals("Robot_PQR_LGD")).ElementAt(0) == false)
+            if (working_jobs.Count == 0 || working_jobs.Select(row => row.job_name.Equals("Robot_PQR_LGD")).ElementAt(0) == false || working_jobs.Select(row => row.job_name.Contains("PQR")).ElementAt(0) == false)
             {
                 StartPQRJob();
             }

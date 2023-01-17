@@ -12,18 +12,9 @@ using System.Text.RegularExpressions;
 
 namespace robot.Parsers
 {
-    class cl_Parser_MD : cl_Parser
+    class cl_Parser_MD_test : cl_Parser
     {
-        //COUNTRY_LogTableAdapter logAdapter;
-        //SPRisk sprisk = new SPRisk();
-        //SP sp = new SP();
-        //int lastUsedRow;
-        //string report;
-        //string pathFile;
-        //DateTime reestr_date;
-        //int success = 0;
-
-        public void StartParsing()
+        public void StartParsing(string path_file)
         {
             logAdapter = new COUNTRY_LogTableAdapter();
             int correctPath = 0;
@@ -32,7 +23,7 @@ namespace robot.Parsers
             {
                 try
                 {
-                    pathFile = GetPath();
+                    pathFile = path_file;
                     OpenFile();
                     correctPath = 1;
                 }
@@ -44,21 +35,18 @@ namespace robot.Parsers
             }
         }
 
+        /*
         private static string GetPath()
         {
             Console.WriteLine("Appoint file path: ");
             string pathFile = Console.ReadLine();
             return pathFile;
-        }
+        }*/
 
         public void OpenFile()
         {
-            string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
-            /*Workbook workBook = ex.Workbooks.Open(fullPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                Type.Missing, Type.Missing); //открываем файл */
-            Application ex = new Application(); 
+            string fullPath = Path.GetFullPath(pathFile);
+            Application ex = new Application();
             ex.DisplayAlerts = false;
             Workbook workBook = ex.Workbooks.Open(fullPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
@@ -69,7 +57,32 @@ namespace robot.Parsers
             if (pathFile.Contains("SNAP") || pathFile.Contains("WO")) parse_MD_SNAP(ex);
         }
 
-        
+        public void DcaPostProcessing()
+        {
+            TotalDCAForming();
+                        
+            success = TransportDCAToRisk();
+            
+            if (success == 1)
+            {
+                cl_Send_Report send_report = new cl_Send_Report("MD_DCA", 1);
+                //Console.WriteLine("Report was sended.");
+            }
+        }
+
+        public void SnapPostProcessing()
+        {
+            TransportMDSnapToRisk();
+            TransportTotalSnapToRisk();
+            success = TransportSnapCFToRisk();
+
+            if (success == 1)
+            {
+                cl_Send_Report send_report = new cl_Send_Report("MD_SNAP", 1);
+                //Console.WriteLine("Report was sended.");
+            }
+        }
+
         public void parse_MD_DCA(Application ex)
         {
             report = "Loading started.";
@@ -78,7 +91,10 @@ namespace robot.Parsers
             Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(2); // берем первый лист;
             Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
             int lastUsedRow = last.Row; // Последняя строка в документе
-            MD_DCA_rawDataTable md_dca = new MD_DCA_rawDataTable();
+            MD_DCA_rawDataTable md_dca_raw = new MD_DCA_rawDataTable();
+            System.Data.DataTable md_dca = new System.Data.DataTable();
+            for (int j = 0; j < md_dca_raw.Columns.Count; j++)
+                md_dca.Columns.Add(md_dca_raw.Columns[j].ColumnName, md_dca_raw.Columns[j].DataType);
 
             int i = lastUsedRow; // Строка начала периода
 
@@ -89,7 +105,8 @@ namespace robot.Parsers
 
                 while (i > 0)
                 {
-                    MD_DCA_rawRow md_dca_row = md_dca.NewMD_DCA_rawRow();
+                    System.Data.DataRow md_dca_row = md_dca.NewRow();
+                    //MD_DCA_rawRow md_dca_row = md_dca.NewMD_DCA_rawRow();
 
                     md_dca_row["reestr_date"] = reestr_date;
 
@@ -105,7 +122,9 @@ namespace robot.Parsers
                     md_dca_row["Payment_date"] = DateTime.Parse((sheet.Cells[i, 10] as Range).Value.ToString().Replace("0:00:00", ""));
 
                     //if ((DateTime)md_dca_row["Payment_month"] != reestr_date)
-                    md_dca.AddMD_DCA_rawRow(md_dca_row);
+
+                    //md_dca.AddMD_DCA_rawRow(md_dca_row);
+                    md_dca.Rows.Add(md_dca_row);
                     md_dca.AcceptChanges();
 
 
@@ -134,7 +153,8 @@ namespace robot.Parsers
 
                     try
                     {
-                        sp.sp_MD_DCA_raw(md_dca);
+                        cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_MD_DCA_raw @MD_DCA_raw = ", md_dca);
+                        //sp.sp_MD_DCA_raw(md_dca);
 
                         report = "Loading is ready. " + (lastUsedRow - i).ToString() + " rows were processed.";
                         logAdapter.InsertRow("cl_Parser_MD", "parse_MD_DCA", "MD", DateTime.Now, true, report);
@@ -171,23 +191,6 @@ namespace robot.Parsers
             }
 
             ex.Quit();
-
-            TotalDCAForming();
-
-            Console.WriteLine("Do you want to transport DCA to Risk? Y - Yes, N - No");
-            string reply = Console.ReadKey().Key.ToString();
-
-
-            if (reply.Equals("Y"))
-            {
-                success = TransportDCAToRisk();
-            }
-
-            if (success == 1)
-            {
-                cl_Send_Report send_report = new cl_Send_Report("MD_DCA", 1);
-                //Console.WriteLine("Report was sended.");
-            }
 
         }
 
@@ -258,8 +261,8 @@ namespace robot.Parsers
             try
             {
                 string fileName = ex.Workbooks.Item[1].Name;
-                fileName = fileName.Replace("Moldova_SNAP ","").Replace("Moldova_WO ","").Replace("Moldova_WO_accumulated_","").Replace(".xlsx","").Replace("_"," "); //.ToString("yyyy-MM-dd");
-                
+                fileName = fileName.Replace("Moldova_SNAP ", "").Replace("Moldova_WO ", "").Replace("Moldova_WO_accumulated_", "").Replace(".xlsx", "").Replace("_", " "); //.ToString("yyyy-MM-dd");
+
                 string pattern = @"\d+\.\d+\.\d+";
                 Match result = Regex.Match(fileName, pattern);
                 fileName = result.ToString();
@@ -295,7 +298,7 @@ namespace robot.Parsers
                     md_snap.AcceptChanges();
 
                     Console.WriteLine((i - startPosition).ToString() + "/" + (firstNull - startPosition - 1).ToString() + " row uploaded");
-                    
+
                     i++;
                 }
 
@@ -360,47 +363,20 @@ namespace robot.Parsers
 
             ex.Quit();
 
-            Console.WriteLine("Do you want to transport snap to Risk? Y - Yes, N - No");
-            string reply = Console.ReadKey().Key.ToString();
-
-
-            if (reply.Equals("Y"))
-            {
-                TransportMDSnapToRisk();
-                TransportTotalSnapToRisk();
-                success = TransportSnapCFToRisk();
-            }
-            else
-            {
-                Console.WriteLine("Do you want to continue? Y - Yes, N - No");
-                reply = Console.ReadKey().Key.ToString();
-
-                if (reply.Equals("Y"))
-                {
-                    StartParsing();
-                    return;
-                }
-            }
-
-            if (success == 1)
-            {
-                cl_Send_Report send_report = new cl_Send_Report("MD_SNAP", 1);
-                //Console.WriteLine("Report was sended.");
-            }
-
         }
 
         private void TransportMDSnapToRisk()
         {
-            Task task_md2_sn = new Task(() =>
+            /*Task task_md2_sn = new Task(() =>
             {
                 sprisk.sp_MD2_portfolio_snapshot(reestr_date);
             },
-            TaskCreationOptions.LongRunning);
+            TaskCreationOptions.LongRunning);*/
 
             try
             {
-                task_md2_sn.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MD2_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task_md2_sn.RunSynchronously();
 
                 report = "Snap was transported to [Risk].[dbo].[MD2_portfolio_snapshot]";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportMDSnapToRisk", "MD", DateTime.Now, true, report);
@@ -444,15 +420,16 @@ namespace robot.Parsers
         private void TransportTotalSnapToRisk()
         {
 
-            Task task_total_snap = new Task(() =>
+            /*Task task_total_snap = new Task(() =>
             {
                 sprisk.sp_MD_TOTAL_SNAP(reestr_date);
             },
-            TaskCreationOptions.LongRunning);
+            TaskCreationOptions.LongRunning);*/
 
             try
             {
-                task_total_snap.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MD_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task_total_snap.RunSynchronously();
 
                 report = "[Risk].[dbo].[TOTAL_SNAP] was formed.";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportTotalSnapToRisk", "MD", DateTime.Now, true, report);
@@ -501,15 +478,16 @@ namespace robot.Parsers
 
         private int TransportDCAToRisk()
         {
-            Task task_md_dca = new Task(() =>
+            /*Task task_md_dca = new Task(() =>
             {
                 sprisk.sp_MD_TOTAL_DCA(reestr_date);
             },
-            TaskCreationOptions.LongRunning);
+            TaskCreationOptions.LongRunning);*/
 
             try
             {
-                task_md_dca.RunSynchronously();
+                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MD_TOTAL_DCA @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task_md_dca.RunSynchronously();
 
                 report = "DCA was transported to [Risk].[dbo].[MD2_DCA], [Risk].[dbo].[TOTAL_DCA]";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportDCAToRisk", "MD", DateTime.Now, true, report);
@@ -531,7 +509,7 @@ namespace robot.Parsers
         private static int SearchFirstNullRow(Worksheet sheet, int lastUsedRow)
         {
             if (sheet.Application.WorksheetFunction.CountA(sheet.Rows[lastUsedRow]) != 0
-                && sheet.Application.WorksheetFunction.CountA(sheet.Rows[lastUsedRow]) >= sheet.Application.WorksheetFunction.CountA(sheet.Rows[5]) * 0.9) 
+                && sheet.Application.WorksheetFunction.CountA(sheet.Rows[lastUsedRow]) >= sheet.Application.WorksheetFunction.CountA(sheet.Rows[5]) * 0.9)
                 return lastUsedRow;
 
             int midpoint = lastUsedRow / 2;
