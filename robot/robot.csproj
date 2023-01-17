@@ -239,6 +239,7 @@
     <Compile Include="Parsers\cl_Parser_MD.cs" />
     <Compile Include="Parsers\cl_Parser_MD_test.cs" />
     <Compile Include="Parsers\cl_Parser_MX.cs" />
+    <Compile Include="Parsers\cl_Parser_MX_test.cs" />
     <Compile Include="Parsers\cl_Parser_SMS.cs" />
     <Compile Include="Parsers\cl_Parser_SMS_test.cs" />
     <Compile Include="Risk.cs">

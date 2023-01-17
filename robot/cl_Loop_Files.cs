@@ -14,6 +14,7 @@ namespace robot
         string[] files;
         cl_Parser_SMS_test parse_sms;
         cl_Parser_MD_test parse_md;
+        cl_Parser_MX_test parse_mx;
 
         public cl_Loop_Files(string country)
         {
@@ -63,6 +64,21 @@ namespace robot
                 //Console.WriteLine(dca_num.ToString() + snap_num.ToString());
                 if (dca_num != 0) parse_md.DcaPostProcessing();
                 if (snap_num != 0) parse_md.SnapPostProcessing();
+            }
+            
+            if (country.ToLower() == "mx")
+            {
+                foreach (string file_path in files)
+                {
+                    string pattern = @"(Data_exchance_format.+$)|(cessions.+$)";
+                    Match result = Regex.Match(file_path, pattern);
+                    if (result.Value.ToString() != "")
+                    {
+                        parse_mx = new cl_Parser_MX_test();
+                        parse_mx.StartParsing(file_path);
+                        //Console.WriteLine(result.Value.ToString());
+                    }
+                }
             }
         }
     }
