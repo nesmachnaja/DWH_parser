@@ -101,7 +101,7 @@ namespace robot
                     DataTable dataTable = new DataTable();
                     dataTable = dt;
                     SqlParameter param = command.Parameters.AddWithValue(param_name, dataTable);
-                    param.TypeName = "dbo.tp_" + param_name;
+                    param.TypeName = "dbo.tp_" + param_name.Replace("@","");
                     command.CommandTimeout = 600;
                     command.ExecuteNonQuery();
 

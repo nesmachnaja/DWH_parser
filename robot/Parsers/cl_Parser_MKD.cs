@@ -153,7 +153,7 @@ namespace robot
 
             if (success == 1)
             {
-                cl_Send_Report send_report = new cl_Send_Report("MKD_DCA", 1);
+                send_report = new cl_Send_Report("MKD_DCA", 1);
                 //Console.WriteLine("Report was sended.");
             }
 
@@ -220,11 +220,15 @@ namespace robot
                 reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Excel.Range).Value;
                 reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);
 
-                MKD_SNAP_rawDataTable mkd_snap = new MKD_SNAP_rawDataTable();
+                MKD_SNAP_rawDataTable mkd_snap_raw = new MKD_SNAP_rawDataTable();
+                System.Data.DataTable mkd_snap = new System.Data.DataTable();
+                for (int j = 0; j < mkd_snap_raw.Columns.Count; j++)
+                    mkd_snap.Columns.Add(mkd_snap_raw.Columns[j].ColumnName, mkd_snap_raw.Columns[j].DataType);
 
                 while (i <= lastUsedRow)
                 {
-                    MKD_SNAP_rawRow mkd_snap_row = mkd_snap.NewMKD_SNAP_rawRow();
+                    //MKD_SNAP_rawRow mkd_snap_row = mkd_snap.NewMKD_SNAP_rawRow();
+                    System.Data.DataRow mkd_snap_row = mkd_snap.NewRow();
 
                     mkd_snap_row["reestr_date"] = reestr_date;
 
@@ -241,7 +245,8 @@ namespace robot
                     mkd_snap_row["Penalty_interest_balance"] = (double)(sheet.Cells[i, 11] as Excel.Range).Value;
                     mkd_snap_row["Interest_balance"] = (double)(sheet.Cells[i, 12] as Excel.Range).Value;
 
-                    mkd_snap.AddMKD_SNAP_rawRow(mkd_snap_row);
+                    //mkd_snap.AddMKD_SNAP_rawRow(mkd_snap_row);
+                    mkd_snap.Rows.Add(mkd_snap_row);
                     mkd_snap.AcceptChanges();
 
                     Console.WriteLine((i - 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
@@ -256,7 +261,8 @@ namespace robot
 
                     try
                     {
-                        sp.sp_MKD_SNAP_raw(mkd_snap);
+                        task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD_SNAP_raw @MKD_SNAP_raw = ", mkd_snap);
+                        //sp.sp_MKD_SNAP_raw(mkd_snap);
                     }
                     catch (Exception exc)
                     {
@@ -311,7 +317,7 @@ namespace robot
                 TransportSnapCFToRisk(reestr_date);
             }
 
-            cl_Send_Report send_report = new cl_Send_Report("MKD_SNAP", 1);
+            send_report = new cl_Send_Report("MKD_SNAP", 1);
             //Console.WriteLine("Report was sended.");
 
         }
@@ -322,7 +328,7 @@ namespace robot
 
             try
             {
-                cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD_TOTAL_SNAP");
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD_TOTAL_SNAP");
 
                 report = "[DWH_Risk].[dbo].[MKD2_portfolio_snapshot], [DWH_Risk].[dbo].[TOTAL_SNAP] were formed.";
                 Console.WriteLine(report);
@@ -337,7 +343,7 @@ namespace robot
 
             try
             {
-                cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD_TOTAL_SNAP_CFIELD");
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD_TOTAL_SNAP_CFIELD");
 
                 report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 Console.WriteLine(report);
@@ -365,7 +371,7 @@ namespace robot
             try
             {
                 //task_snap.RunSynchronously();
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_SNAP @date = '" + snapdate.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_SNAP @date = '" + snapdate.ToString("yyyy-MM-dd") + "'");
 
                 report = "Snap was transported to [Risk].[dbo].[MKD2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
                 Console.WriteLine(report);
@@ -394,7 +400,7 @@ namespace robot
             try
             {
                 //task_snap_cf.RunSynchronously();
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_SNAP_CFIELD @date = '" + snapdate.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_SNAP_CFIELD @date = '" + snapdate.ToString("yyyy-MM-dd") + "'");
 
                 report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 Console.WriteLine(report);

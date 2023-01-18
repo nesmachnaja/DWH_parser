@@ -194,7 +194,7 @@ namespace robot.Parsers
 
             if (success == 1)
             {
-                cl_Send_Report send_report = new cl_Send_Report("LIGA_SNAP", 1);
+                send_report = new cl_Send_Report("LIGA_SNAP", 1);
                 //Console.WriteLine("Report was sended.");
             }
         }
@@ -203,7 +203,7 @@ namespace robot.Parsers
         {
             try 
             {
-                cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_LIGA_TOTAL_SNAP_CFIELD");
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_LIGA_TOTAL_SNAP_CFIELD");
                 //sp.sp_LIGA_TOTAL_SNAP_CFIELD();
 
                 report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
@@ -296,7 +296,7 @@ namespace robot.Parsers
 
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_LIGA_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_LIGA_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //task_liga_snap.RunSynchronously();
 
                 report = "Snap_CF was transported to [Risk].[dbo].[TOTAL_SNAP_CFIELD].";
@@ -400,7 +400,7 @@ namespace robot.Parsers
 
                 if (success == 2)
                 {
-                    cl_Send_Report send_report = new cl_Send_Report("LIGA_CESS", 1);
+                    send_report = new cl_Send_Report("LIGA_CESS", 1);
                     //Console.WriteLine("Report was sended.");
                 }
             }
