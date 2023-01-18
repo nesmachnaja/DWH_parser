@@ -20,6 +20,8 @@ namespace robot.Parsers
         public DateTime reestr_date;
         public int success = 0;
         public string brand = "";
+        public cl_Tasks task;
+        public cl_Send_Report send_report;
         //public Application ex = new Application();
     }
 }

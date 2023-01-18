@@ -65,7 +65,7 @@ namespace robot.Parsers
             
             if (success == 1)
             {
-                cl_Send_Report send_report = new cl_Send_Report("MD_DCA", 1);
+                send_report = new cl_Send_Report("MD_DCA", 1);
                 //Console.WriteLine("Report was sended.");
             }
         }
@@ -78,7 +78,7 @@ namespace robot.Parsers
 
             if (success == 1)
             {
-                cl_Send_Report send_report = new cl_Send_Report("MD_SNAP", 1);
+                send_report = new cl_Send_Report("MD_SNAP", 1);
                 //Console.WriteLine("Report was sended.");
             }
         }
@@ -153,7 +153,7 @@ namespace robot.Parsers
 
                     try
                     {
-                        cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_MD_DCA_raw @MD_DCA_raw = ", md_dca);
+                        task = new cl_Tasks("exec DWH_Risk.dbo.sp_MD_DCA_raw @MD_DCA_raw = ", md_dca);
                         //sp.sp_MD_DCA_raw(md_dca);
 
                         report = "Loading is ready. " + (lastUsedRow - i).ToString() + " rows were processed.";
@@ -309,7 +309,7 @@ namespace robot.Parsers
 
                     try
                     {
-                        cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_MD_SNAP_raw @MD_SNAP_raw = ", md_snap);
+                        task = new cl_Tasks("exec DWH_Risk.dbo.sp_MD_SNAP_raw @MD_SNAP_raw = ", md_snap);
                         //sp.sp_MD_SNAP_raw(md_snap);
                         ad_MD_SNAP_raw.UpdateInitialsAndClients();
 
@@ -375,7 +375,7 @@ namespace robot.Parsers
 
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MD2_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MD2_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //task_md2_sn.RunSynchronously();
 
                 report = "Snap was transported to [Risk].[dbo].[MD2_portfolio_snapshot]";
@@ -400,7 +400,7 @@ namespace robot.Parsers
             try
             {
                 //task_md3_sn.RunSynchronously();
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MD3_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MD3_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 report = "IL-block was calculated in [Risk].[dbo].[MD3_portfolio_snapshot]";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportMDSnapToRisk", "MD", DateTime.Now, true, report);
@@ -428,7 +428,7 @@ namespace robot.Parsers
 
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MD_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MD_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //task_total_snap.RunSynchronously();
 
                 report = "[Risk].[dbo].[TOTAL_SNAP] was formed.";
@@ -457,7 +457,7 @@ namespace robot.Parsers
             try
             {
                 //task_snap_cf.RunSynchronously();
-                cl_Tasks tasks = new cl_Tasks("exec Risk.dbo.sp_MD_TOTAL_SNAP_CFIELD");
+                task = new cl_Tasks("exec Risk.dbo.sp_MD_TOTAL_SNAP_CFIELD");
 
                 report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportSnapCFToRisk", "MD", DateTime.Now, true, report);
@@ -486,7 +486,7 @@ namespace robot.Parsers
 
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MD_TOTAL_DCA @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MD_TOTAL_DCA @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //task_md_dca.RunSynchronously();
 
                 report = "DCA was transported to [Risk].[dbo].[MD2_DCA], [Risk].[dbo].[TOTAL_DCA]";

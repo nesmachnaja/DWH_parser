@@ -13,7 +13,9 @@ namespace robot
 {
     class cl_Parser_BIH : cl_Parser
     {
-        BIH_DCA_rawDataTable bih_dca = new BIH_DCA_rawDataTable();
+        BIH_DCA_rawDataTable bih_dca_raw = new BIH_DCA_rawDataTable();
+        System.Data.DataTable bih_dca = new System.Data.DataTable();
+        //cl_Tasks task;
 
         public void StartParsing()
         {
@@ -67,6 +69,9 @@ namespace robot
             fileName = "01." + fileName.Replace(".xlsx","").Replace("external_collection_","").Replace("_",".");
             reestr_date = DateTime.Parse(fileName).AddMonths(1).AddDays(-1);
 
+            for (int j = 0; j < bih_dca_raw.Columns.Count; j++)
+                bih_dca.Columns.Add(bih_dca_raw.Columns[j].ColumnName, bih_dca_raw.Columns[j].DataType);
+
             for (int j = 1; j <= 2; j++)
             {
                 Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(j); // берем первый лист;
@@ -80,8 +85,10 @@ namespace robot
 
             try
             {
-                sp.sp_BIH2_DCA(reestr_date);
-                sp.sp_BIH_TOTAL_DCA(reestr_date);
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_BIH2_DCA @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_BIH_TOTAL_DCA @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //sp.sp_BIH2_DCA(reestr_date);
+                //sp.sp_BIH_TOTAL_DCA(reestr_date);
                 report = "[DWH_Risk].[dbo].[BIH2_DCA] and [DWH_Risk].[dbo].[TOTAL_DCA] were formed.";
                 Console.WriteLine(report);
             }
@@ -109,7 +116,7 @@ namespace robot
             if (success == 1)
             {
                 //cl_PQR_Forming pqr = new cl_PQR_Forming("BIH");
-                cl_Send_Report send_report = new cl_Send_Report("BIH_DCA", 1);
+                send_report = new cl_Send_Report("BIH_DCA", 1);
             }
         }
 
@@ -170,7 +177,8 @@ namespace robot
 
                 while (i < firstNull)
                 {
-                    BIH_DCA_rawRow bih_dca_row = bih_dca.NewBIH_DCA_rawRow();
+                    System.Data.DataRow bih_dca_row = bih_dca.NewRow();
+                    //BIH_DCA_rawRow bih_dca_row = bih_dca.NewBIH_DCA_rawRow();
 
                     bih_dca_row["Reestr_date"] = reestr_date;
 
@@ -183,7 +191,8 @@ namespace robot
                     bih_dca_row["Percent"] = (double)(sheet.Cells[i, 7] as Range).Value;
                     bih_dca_row["Fee_amount"] = (double)(sheet.Cells[i, 8] as Range).Value;
 
-                    bih_dca.AddBIH_DCA_rawRow(bih_dca_row);
+                    //bih_dca.AddBIH_DCA_rawRow(bih_dca_row);
+                    bih_dca.Rows.Add(bih_dca_row);
                     bih_dca.AcceptChanges();
                     
                     Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
@@ -199,7 +208,8 @@ namespace robot
 
                     try
                     {
-                        sp.sp_BIH_DCA_raw(bih_dca);
+                        task = new cl_Tasks("exec DWH_Risk.dbo.sp_BIH_DCA_raw @BIH_DCA_raw = ", bih_dca);
+                        //sp.sp_BIH_DCA_raw(bih_dca);
                     }
                     catch (Exception exc)
                     {
@@ -244,7 +254,10 @@ namespace robot
             Worksheet sheet = (Worksheet)ex.Worksheets.get_Item("Report"); // берем первый лист;
             Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
             lastUsedRow = last.Row; // Последняя строка в документе
-            BIH_SNAP_rawDataTable bih_snap = new BIH_SNAP_rawDataTable();
+            BIH_SNAP_rawDataTable bih_snap_raw = new BIH_SNAP_rawDataTable();
+            System.Data.DataTable bih_snap = new System.Data.DataTable();
+            for (int j = 0; j < bih_snap_raw.Columns.Count; j++)
+                bih_snap.Columns.Add(bih_snap_raw.Columns[j].ColumnName, bih_snap_raw.Columns[j].DataType);
 
             int i = 2; // Строка начала периода
 
@@ -259,28 +272,30 @@ namespace robot
 
                 while (i <= lastUsedRow)
                 {
-                    BIH_SNAP_rawRow bih_snap_raw = bih_snap.NewBIH_SNAP_rawRow();
+                    //BIH_SNAP_rawRow bih_snap_raw = bih_snap.NewBIH_SNAP_rawRow();
+                    System.Data.DataRow bih_snap_row = bih_snap.NewRow();
 
-                    bih_snap_raw["Reestr_date"] = reestr_date;
+                    bih_snap_row["Reestr_date"] = reestr_date;
 
-                    bih_snap_raw["Loan"] = (sheet.Cells[i, 1] as Range).Value;
-                    bih_snap_raw["Client"] = (sheet.Cells[i, 2] as Range).Value;
-                    bih_snap_raw["Status"] = (sheet.Cells[i, 3] as Range).Value;
-                    bih_snap_raw["Loan_disbursment_date"] = DateTime.Parse((sheet.Cells[i, 4] as Range).Value);
-                    bih_snap_raw["Product"] = (sheet.Cells[i, 5] as Range).Value;
-                    bih_snap_raw["DPD"] = (int)(sheet.Cells[i, 6] as Range).Value;
-                    bih_snap_raw["Matured_principle"] = (double)(sheet.Cells[i, 7] as Range).Value;
-                    bih_snap_raw["Outstanding_principle"] = (double)(sheet.Cells[i, 8] as Range).Value;
-                    bih_snap_raw["Principal_balance"] = (double)(sheet.Cells[i, 9] as Range).Value;
-                    bih_snap_raw["Monthly_fee"] = (double)(sheet.Cells[i, 10] as Range).Value;
-                    bih_snap_raw["Guarantor_fee"] = (double)(sheet.Cells[i, 11] as Range).Value;
-                    bih_snap_raw["Penalty_fee"] = (double)(sheet.Cells[i, 12] as Range).Value;
-                    bih_snap_raw["Penalty_interest"] = (double)(sheet.Cells[i, 13] as Range).Value;
-                    bih_snap_raw["Interest_balance"] = (double)(sheet.Cells[i, 14] as Range).Value;
-                    bih_snap_raw["Credit_amount"] = (double)(sheet.Cells[i, 15] as Range).Value;
-                    bih_snap_raw["Available_limit"] = (double)(sheet.Cells[i, 16] as Range).Value;
+                    bih_snap_row["Loan"] = (sheet.Cells[i, 1] as Range).Value;
+                    bih_snap_row["Client"] = (sheet.Cells[i, 2] as Range).Value;
+                    bih_snap_row["Status"] = (sheet.Cells[i, 3] as Range).Value;
+                    bih_snap_row["Loan_disbursment_date"] = DateTime.Parse((sheet.Cells[i, 4] as Range).Value);
+                    bih_snap_row["Product"] = (sheet.Cells[i, 5] as Range).Value;
+                    bih_snap_row["DPD"] = (int)(sheet.Cells[i, 6] as Range).Value;
+                    bih_snap_row["Matured_principle"] = (double)(sheet.Cells[i, 7] as Range).Value;
+                    bih_snap_row["Outstanding_principle"] = (double)(sheet.Cells[i, 8] as Range).Value;
+                    bih_snap_row["Principal_balance"] = (double)(sheet.Cells[i, 9] as Range).Value;
+                    bih_snap_row["Monthly_fee"] = (double)(sheet.Cells[i, 10] as Range).Value;
+                    bih_snap_row["Guarantor_fee"] = (double)(sheet.Cells[i, 11] as Range).Value;
+                    bih_snap_row["Penalty_fee"] = (double)(sheet.Cells[i, 12] as Range).Value;
+                    bih_snap_row["Penalty_interest"] = (double)(sheet.Cells[i, 13] as Range).Value;
+                    bih_snap_row["Interest_balance"] = (double)(sheet.Cells[i, 14] as Range).Value;
+                    bih_snap_row["Credit_amount"] = (double)(sheet.Cells[i, 15] as Range).Value;
+                    bih_snap_row["Available_limit"] = (double)(sheet.Cells[i, 16] as Range).Value;
 
-                    bih_snap.AddBIH_SNAP_rawRow(bih_snap_raw);
+                    //bih_snap.AddBIH_SNAP_rawRow(bih_snap_raw);
+                    bih_snap.Rows.Add(bih_snap_row);
                     bih_snap.AcceptChanges();
 
                     Console.WriteLine((i - 1).ToString() + "/" + (lastUsedRow - 1).ToString() + " row uploaded");
@@ -293,15 +308,16 @@ namespace robot
                     BIH_SNAP_rawTableAdapter ad_BIH_SNAP_raw = new BIH_SNAP_rawTableAdapter();
                     ad_BIH_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"));
 
-                    Task task_snap = new Task(() =>
+                    /*Task task_snap = new Task(() =>
                     {
                         sp.sp_BIH_SNAP_raw(bih_snap);
                     },
-                    TaskCreationOptions.LongRunning);
+                    TaskCreationOptions.LongRunning);*/
 
                     try
                     {
-                        task_snap.RunSynchronously();
+                        task = new cl_Tasks("exec DWH_Risk.dbo.sp_BIH_SNAP_raw @BIH_SNAP_raw = ", bih_snap);
+                        //task_snap.RunSynchronously();
                         //sp.sp_BIH_SNAP_raw(bih_snap);
                     }
                     catch (Exception exc)
@@ -318,14 +334,8 @@ namespace robot
                     report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
                     Console.WriteLine(report);
                     logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_SNAP", "BIH", DateTime.Now, true, report);
-
-                    sp.sp_BIH2_portfolio_snapshot(reestr_date);
-                    report = "[DWH_Risk].[dbo].[BIH2_portfolio_snapshot] was formed.";
-                    Console.WriteLine(report);
-
-                    sp.sp_BIH_TOTAL_SNAP(reestr_date);
-                    report = "[DWH_Risk].[dbo].[TOTAL_SNAP] was formed.";
-                    Console.WriteLine(report);
+                    
+                    TotalSnapForming();
 
                     TotalSnapCFieldForming();
                     //report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
@@ -370,8 +380,41 @@ namespace robot
 
             if (success == 1)
             {
-                cl_Send_Report send_report = new cl_Send_Report("BIH_SNAP", 1);
+                send_report = new cl_Send_Report("BIH_SNAP", 1);
                 //Console.WriteLine("Report was sended.");
+            }
+        }
+
+        private void TotalSnapForming()
+        {
+            try
+            {
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_BIH2_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //sp.sp_BIH2_portfolio_snapshot(reestr_date);
+                report = "[DWH_Risk].[dbo].[BIH2_portfolio_snapshot] was formed.";
+                logAdapter.InsertRow("cl_Parser_BIH", "TotalSnapForming", "BIH", DateTime.Now, true, report);
+                Console.WriteLine(report);
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_BIH", "TotalSnapForming", "BIH", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+            }
+
+            try
+            {
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_BIH_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //sp.sp_BIH_TOTAL_SNAP(reestr_date);
+                report = "[DWH_Risk].[dbo].[TOTAL_SNAP] was formed.";
+                logAdapter.InsertRow("cl_Parser_BIH", "TotalSnapForming", "BIH", DateTime.Now, true, report);
+                Console.WriteLine(report);
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_BIH", "TotalSnapForming", "BIH", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
             }
         }
 
@@ -414,7 +457,7 @@ namespace robot
         {
             try
             {
-                cl_Tasks tasks = new cl_Tasks("exec DWH_Risk.dbo.sp_BIH_TOTAL_SNAP_CFIELD");
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_BIH_TOTAL_SNAP_CFIELD");
 
                 report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 Console.WriteLine(report);
@@ -441,7 +484,7 @@ namespace robot
 
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_BIH_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_BIH_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //task_snap.RunSynchronously();
 
                 //SPRisk sprisk = new sp();
@@ -471,7 +514,7 @@ namespace robot
 
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_BIH_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_BIH_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //task_snapCF.RunSynchronously();
 
                 //sprisk.sp_BIH_TOTAL_SNAP_CFIELD(snapdate);

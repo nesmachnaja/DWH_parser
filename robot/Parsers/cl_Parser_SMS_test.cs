@@ -62,7 +62,7 @@ namespace robot.Parsers
 
             if (success == 1)
             {
-                cl_Send_Report send_report = new cl_Send_Report("SMS_CESS", 1);
+                send_report = new cl_Send_Report("SMS_CESS", 1);
             }
         }
 
@@ -78,7 +78,7 @@ namespace robot.Parsers
             
             if (success == 1)
             {
-                cl_Send_Report send_report = new cl_Send_Report("SMS_SNAP", 1);
+                send_report = new cl_Send_Report("SMS_SNAP", 1);
             }
         }
 
@@ -161,7 +161,7 @@ namespace robot.Parsers
 
                     try
                     {
-                        cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_CESS_raw @SMS_CESS_raw = ", sms_cess);
+                        task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_CESS_raw @SMS_CESS_raw = ", sms_cess);
                         //sp.sp_SMS_CESS_raw(sms_cess);
                     }
                     catch (Exception exc)
@@ -338,14 +338,14 @@ namespace robot.Parsers
 
                     /*Task task_sms_snap_raw = new Task(() =>
                     {
-                        cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_SNAP_raw @SMS_SNAP_raw = ", sms_snap);
+                        task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_SNAP_raw @SMS_SNAP_raw = ", sms_snap);
                         //sp.sp_SMS_SNAP_raw(sms_snap);
                     },
                     TaskCreationOptions.LongRunning);*/
 
                     try
                     {
-                        cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_SNAP_raw @SMS_SNAP_raw = ", sms_snap);
+                        task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_SNAP_raw @SMS_SNAP_raw = ", sms_snap);
                         //task_sms_snap_raw.RunSynchronously();
                         //sp.sp_SMS_SNAP_raw(sms_snap);
                     }
@@ -394,7 +394,7 @@ namespace robot.Parsers
         {
             try
             {
-                cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_TOTAL_SNAP_CFIELD");
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_TOTAL_SNAP_CFIELD");
 
                 report = "[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFForming", "SMS", DateTime.Now, true, report);
@@ -414,7 +414,7 @@ namespace robot.Parsers
         {
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Total_Smsfinance.dbo.sp_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Total_Smsfinance.dbo.sp_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 report = "[dbo].[TOTAL_SNAP] was transported to Total_Smsfinance.";
                 logAdapter.InsertRow("cl_Parser_SMS", "TransportToSMSFinance", "SMS", DateTime.Now, true, report);
@@ -434,7 +434,7 @@ namespace robot.Parsers
         {
             try
             {
-                cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //sp.sp_SMS_TOTAL_SNAP(reestr_date);
 
                 report = "[dbo].[TOTAL_SNAP] was formed.";
@@ -455,7 +455,7 @@ namespace robot.Parsers
         {
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_SMS_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_SMS_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 Console.WriteLine("Snap was transported to [Risk].[dbo].[SMS_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].");
                 report = "Snap was transported to [Risk].[dbo].[SMS_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
@@ -476,7 +476,7 @@ namespace robot.Parsers
         {
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_SMS_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_SMS_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
                 report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";

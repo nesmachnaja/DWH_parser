@@ -85,11 +85,15 @@ namespace robot.Parsers
                 DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
                 reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
                                                                                                                  //MX_CESS.Reestr_date = reestr_date;       //current date
-                MX_CESS_rawDataTable mx_cess = new MX_CESS_rawDataTable();
+                MX_CESS_rawDataTable mx_cess_raw = new MX_CESS_rawDataTable();
+                System.Data.DataTable mx_cess = new System.Data.DataTable();
+                for (int j = 0; j < mx_cess_raw.Columns.Count; j++)
+                    mx_cess.Columns.Add(mx_cess_raw.Columns[j].ColumnName, mx_cess_raw.Columns[j].DataType);
 
                 while (i < firstNull)
                 {
-                    MX_CESS_rawRow row = mx_cess.NewMX_CESS_rawRow();
+                    //MX_CESS_rawRow row = mx_cess.NewMX_CESS_rawRow();
+                    System.Data.DataRow row = mx_cess.NewRow();
 
                     row["Reestr_date"] = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
 
@@ -104,7 +108,8 @@ namespace robot.Parsers
                     row["Price_rate"] = (double)(sheet.Cells[i, 9] as Range).Value;
                     row["DPD"] = (int)(sheet.Cells[i, 11] as Range).Value;
 
-                    mx_cess.AddMX_CESS_rawRow(row);
+                    //mx_cess.AddMX_CESS_rawRow(row);
+                    mx_cess.Rows.Add(row);
                     mx_cess.AcceptChanges();
 
                     Console.WriteLine((i - 1).ToString() + "/" + (firstNull - 2).ToString() + " row uploaded");
@@ -120,7 +125,7 @@ namespace robot.Parsers
 
                     try
                     {
-                        cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MX_CESS_raw @MX_CESS_raw = ", mx_cess);
+                        task = new cl_Tasks("exec Risk.dbo.sp_MX_CESS_raw @MX_CESS_raw = ", mx_cess);
                         //sprisk.sp_MX_CESS_raw(mx_cess);
                     }
                     catch (Exception exc)
@@ -170,7 +175,7 @@ namespace robot.Parsers
 
             if (success == 2)
             {
-                //cl_Send_Report send_report = new cl_Send_Report("MX_CESS", 1);
+                //send_report = new cl_Send_Report("MX_CESS", 1);
                 Console.WriteLine("Report was sent.");
             }
 
@@ -204,6 +209,8 @@ namespace robot.Parsers
                                                                                                                  //MX_DCA.Reestr_date = reestr_date;       //current date
                 MX_DCA_rawDataTable mx_dca_raw = new MX_DCA_rawDataTable();
                 System.Data.DataTable mx_dca = new System.Data.DataTable();
+                for (int j = 0; j < mx_dca_raw.Columns.Count; j++)
+                    mx_dca.Columns.Add(mx_dca_raw.Columns[j].ColumnName, mx_dca_raw.Columns[j].DataType);
 
                 while (i < firstNull)
                 {
@@ -234,7 +241,7 @@ namespace robot.Parsers
 
                     try
                     {
-                        cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MX_DCA_raw @MX_DCA_raw = ", mx_dca);
+                        task = new cl_Tasks("exec Risk.dbo.sp_MX_DCA_raw @MX_DCA_raw = ", mx_dca);
                         //sprisk.sp_MX_DCA_raw(mx_DCA);
                     }
                     catch (Exception exc)
@@ -283,7 +290,7 @@ namespace robot.Parsers
 
             if (success == 1)
             {
-                //cl_Send_Report send_report = new cl_Send_Report("MX_DCA", 1);
+                //send_report = new cl_Send_Report("MX_DCA", 1);
                 Console.WriteLine("Report was sent.");
             }
 
@@ -293,7 +300,7 @@ namespace robot.Parsers
         {
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_DCA @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_DCA @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //task_DCA.RunSynchronously();
 
                 report = "TOTAL_DCA was formed successfully.";
@@ -327,7 +334,7 @@ namespace robot.Parsers
 
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_CESS @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_CESS @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //task_cess.RunSynchronously();
 
                 report = indefinites == 1 ? "TOTAL_CESS was formed. Indefinite loan_ids were found." : "TOTAL_CESS was formed successfully.";
@@ -350,7 +357,7 @@ namespace robot.Parsers
         {
             try
             {
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_SNAP_CFIELD");
+                task = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_SNAP_CFIELD");
                 //task_cess.RunSynchronously();
 
                 report = "TOTAL_SNAP_CFIELD was formed successfully.";
