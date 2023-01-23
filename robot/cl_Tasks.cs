@@ -18,8 +18,9 @@ namespace robot
     {
         //static JObject connections;
         string database_name;
-        //string connectionString = "";
-        
+        string pattern;
+        Match result;
+
         public cl_Tasks(string procedure_calling)
         {
             string _procedure_calling = procedure_calling;
@@ -28,15 +29,15 @@ namespace robot
             //command.CommandTimeout = 300;
             //command.ExecuteNonQuery();
 
-            database_name = procedure_calling.Replace("exec ", "").Substring(0, procedure_calling.IndexOf(".") - 5);
+            pattern = @"\s\w+\.";
+            result = Regex.Match(_procedure_calling, pattern);
+
+            database_name = result.ToString().Replace(" ","").Replace(".",""); //procedure_calling.Replace("exec ", "").Substring(0, procedure_calling.IndexOf(".") - 5);
             cl_Connection_String connection_string = new cl_Connection_String(database_name);
-            //GetConnectionString();
             SqlConnection connection = new SqlConnection(connection_string.connectionString);
 
             Task task = new Task(() =>
             {
-                //SPRisk sprisk = new SPRisk();
-                //SP sp = new SP();
                 try
                 {
                     SqlCommand command = new SqlCommand(_procedure_calling);
@@ -47,7 +48,6 @@ namespace robot
 
                     connection.Close();
 
-                    //sprisk.sp_MD_TOTAL_SNAP_CFIELD(); //(DateTime.Parse("31.07.2022"));
                     Console.WriteLine("Ok");
                 }
                 catch (SqlException exc)
@@ -55,7 +55,6 @@ namespace robot
                     Console.WriteLine(exc.Message);
                     connection.Close();
                 }
-                //sp.sp_SMS_TOTAL_SNAP_CFIELD(); // (DateTime.Parse("31.05.2022"));
             },
             TaskCreationOptions.LongRunning);
 
@@ -76,8 +75,8 @@ namespace robot
 
             database_name = procedure_calling.Replace("exec ", "").Substring(0, procedure_calling.IndexOf(".") - 5);
 
-            string pattern = @"@\S+";
-            Match result = Regex.Match(procedure_calling, pattern); 
+            pattern = @"@\S+";
+            result = Regex.Match(procedure_calling, pattern); 
             string param_name = result.ToString();
 
             pattern = @"exec \S+";
@@ -85,7 +84,6 @@ namespace robot
             procedure_calling = result.ToString().Replace("exec ","");
             
             cl_Connection_String connection_string = new cl_Connection_String(database_name);
-            //GetConnectionString();
             SqlConnection connection = new SqlConnection(connection_string.connectionString);
 
 
@@ -97,7 +95,6 @@ namespace robot
                     command.CommandType = CommandType.StoredProcedure;
                     connection.Open();
                     command.Connection = connection;
-                    //command.Parameters[0].GetType();
                     DataTable dataTable = new DataTable();
                     dataTable = dt;
                     SqlParameter param = command.Parameters.AddWithValue(param_name, dataTable);
@@ -107,7 +104,6 @@ namespace robot
 
                     connection.Close();
 
-                    //sprisk.sp_MD_TOTAL_SNAP_CFIELD(); //(DateTime.Parse("31.07.2022"));
                     Console.WriteLine("Ok");
                 }
                 catch (SqlException exc)
@@ -123,27 +119,5 @@ namespace robot
 
         }
 
-        //private void GetConnectionString()
-        //{
-        //    try
-        //    {
-        //        connections = JObject.Parse(File.ReadAllText(@"js_Connections.json"));
-        //        JToken connection_param;
-        //        foreach (JObject connection in connections["connections"])
-        //            if (connection["name"].ToString().Equals(database_name))
-        //            {
-        //                connection_param = connection["parameters"];
-        //                connectionString = connection_param["connectionString"].ToString();
-
-        //                return;
-        //            }
-        //    }
-        //    catch (FileNotFoundException ex)
-        //    {
-        //        Console.WriteLine("Configuration file wasnt found.");
-        //        Console.ReadLine();
-        //        return;
-        //    }
-        //}
     }
 }

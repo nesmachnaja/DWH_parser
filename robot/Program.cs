@@ -59,6 +59,13 @@ namespace robot
                         cl_Loop_Files loop = new cl_Loop_Files(country);
                         break;
                     }
+                case "kz":
+                    {
+                        /*cl_Parser_SMS Parser = new cl_Parser_SMS();
+                        Parser.StartParsing();*/
+                        cl_Loop_Files loop = new cl_Loop_Files(country);
+                        break;
+                    }
                 case "mx":
                     {
                         cl_Parser_MX Parser = new cl_Parser_MX();

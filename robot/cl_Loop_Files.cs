@@ -25,20 +25,20 @@ namespace robot
                 files = Directory.GetFiles(path, @"*.xlsx", SearchOption.TopDirectoryOnly);
             }
 
-            if (country.ToLower() == "sms")
+            if (country.ToLower() == "sms" || country.ToLower() == "kz")
             {
                 foreach (string file_path in files)
                 {
-                    string pattern = @"(ces\S+$)|(prosh\S+$)|(portf\S+$)";
+                    string pattern = @"([^~\$]ces\S+$)|([^~\$]prosh\S+$)|([^~\$]portf\S+$)";
                     Match result = Regex.Match(file_path, pattern);
                     if (result.Value.ToString() != "")
                     {
                         parse_sms = new cl_Parser_SMS_test();
-                        parse_sms.StartParsing(file_path);
+                        parse_sms.StartParsing(country, file_path);
                     }
                 }
 
-                parse_sms.CessPostProcessing();
+                if (country == "sms") parse_sms.CessPostProcessing();
                 parse_sms.SnapPostProcessing();
             }
             
