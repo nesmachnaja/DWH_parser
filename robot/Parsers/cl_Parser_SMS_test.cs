@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static robot.DataSet1;
 
@@ -14,11 +15,14 @@ namespace robot.Parsers
     class cl_Parser_SMS_test : cl_Parser
     {
         int cess_id = 0;
+        string _country;
+        string _databasename;
 
-        public void StartParsing(string path_file)
+        public void StartParsing(string country, string path_file)
         {
             logAdapter = new COUNTRY_LogTableAdapter();
             int correctPath = 0;
+            _country = country;
 
             while (correctPath == 0)
             {
@@ -52,7 +56,7 @@ namespace robot.Parsers
                 Type.Missing, Type.Missing); //открываем файл
 
             if (pathFile.Contains("ces") || pathFile.Contains("prosh")) parse_SMS_CESS(ex);
-            if (pathFile.Contains("portf")) parse_SNAP_SNAP(ex);
+            if (pathFile.Contains("portf")) parse_SMS_SNAP(ex);
         }
 
         public void CessPostProcessing()
@@ -68,24 +72,25 @@ namespace robot.Parsers
 
         public void SnapPostProcessing()
         {
-            TotalSnapForming();
-            TotalSnapCFForming();
+            if (_country == "sms") TotalSnapForming();
+            if (_country == "sms") TotalSnapCFForming();
 
-            TransportToSmsfinance();
+            if (_country == "kz") success = TransportToCountryLevel();
+            if (_country == "sms") TransportToCountryLevel();
 
-            TransportSnapToRisk();
-            success = TransportSnapCFToRisk();
+            if (_country == "sms") TransportSnapToRisk();
+            if (_country == "sms") success = TransportSnapCFToRisk();
             
             if (success == 1)
             {
-                send_report = new cl_Send_Report("SMS_SNAP", 1);
+                send_report = new cl_Send_Report(_country.ToUpper() + "_SNAP", 1);
             }
         }
 
         private void parse_SMS_CESS(Application ex)
         {
             report = "Loading started.";
-            logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, true, report);
+            logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", _country, DateTime.Now, true, report);
 
             Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
             Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
@@ -166,7 +171,7 @@ namespace robot.Parsers
                     }
                     catch (Exception exc)
                     {
-                        logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, false, exc.Message);
+                        logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", _country, DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
                         Console.WriteLine("Error_descr: " + exc.Message);
                         ex.Quit();
@@ -177,7 +182,7 @@ namespace robot.Parsers
                 else
                 {
                     report = "File was empty. There is no one row.";
-                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, false, report);
+                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", _country, DateTime.Now, false, report);
                     Console.WriteLine("Error");
                     Console.WriteLine("Error_descr: " + report);
                     ex.Quit();
@@ -187,7 +192,7 @@ namespace robot.Parsers
             }
             catch (Exception exc)
             {
-                logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", _country, DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_descr: " + exc.Message);
                 ex.Quit();
@@ -199,7 +204,7 @@ namespace robot.Parsers
             ex.Quit();
 
             report = "Loading is ready. " + (firstNull - 1).ToString() + " rows were processed.";
-            logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", "SMS", DateTime.Now, true, report);
+            logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_CESS", _country, DateTime.Now, true, report);
             Console.WriteLine(report);
 
         }
@@ -211,12 +216,12 @@ namespace robot.Parsers
                 sp.sp_SMS_TOTAL_CESS(reestr_date);
 
                 report = "Data was transported to TOTAL_CESS successfully.";
-                logAdapter.InsertRow("cl_Parser_SMS", "TotalCessForming", "SMS", DateTime.Now, true, report);
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalCessForming", _country, DateTime.Now, true, report);
                 Console.WriteLine(report);
             }
             catch (Exception exc)
             {
-                logAdapter.InsertRow("cl_Parser_SMS", "TotalCessForming", "SMS", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalCessForming", _country, DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_descr: " + exc.Message);
 
@@ -231,14 +236,14 @@ namespace robot.Parsers
                 sprisk.sp_SMS_TOTAL_CESS(reestr_date);
 
                 report = "Cessions were transported to their destination on [Risk]";
-                logAdapter.InsertRow("cl_Parser_SMS", "TransportToRisk", "SMS", DateTime.Now, true, report);
+                logAdapter.InsertRow("cl_Parser_SMS", "TransportToRisk", _country, DateTime.Now, true, report);
                 Console.WriteLine(report);
 
                 return 1;
             }
             catch (Exception exc)
             {
-                logAdapter.InsertRow("cl_Parser_SMS", "TransportToRisk", "SMS", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_SMS", "TransportToRisk", _country, DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_descr: " + exc.Message);
 
@@ -263,14 +268,24 @@ namespace robot.Parsers
             return firstNull;
         }
 
-        private void parse_SNAP_SNAP(Application ex)
+        private void parse_SMS_SNAP(Application ex)
         {
             report = "Loading started.";
-            logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, true, report);
+            logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", _country, DateTime.Now, true, report);
 
             Worksheet sheet = (Worksheet)ex.Worksheets.get_Item(1); // берем первый лист;
             Range last = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
             lastUsedRow = last.Row; // Последняя строка в документе
+            int country_offset = 0;
+            switch (_country)
+            {
+                case "sms":
+                    country_offset = 0;
+                    break;
+                case "kz":
+                    country_offset = -1;
+                    break;
+            }
 
             int i = 2; // Строка начала периода
 
@@ -287,9 +302,14 @@ namespace robot.Parsers
 
 
                 if (fileName.ToLower().Contains("sms")) brand = "SMSFinance";
-                if (fileName.ToLower().Contains("viv")) brand = "Vivus";
+                if (fileName.ToLower().Contains("viv") || fileName.ToLower().Contains("kz")) brand = "Vivus";
 
-                fileName = "01." + fileName.Replace("portf_", "").Replace("smsfin_", "").Replace("vivus_", "").Replace(".xlsx", "").Insert(2, "."); //.Insert(5, "."); //.ToString("yyyy-MM-dd");
+                string pattern = @"\d{4}";
+                Match result = Regex.Match(fileName, pattern);
+
+                fileName = "01." + result.ToString().Insert(2,".");
+
+                //fileName = "01." + fileName.Replace("portf_", "").Replace("smsfin_", "").Replace("vivus_", "").Replace(".xlsx", "").Insert(2, "."); //.Insert(5, "."); //.ToString("yyyy-MM-dd");
 
                 reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
                 reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
@@ -313,11 +333,11 @@ namespace robot.Parsers
                     sms_snap_row["ID_client"] = (sheet.Cells[i, 9] as Range).Value.ToString();
                     sms_snap_row["Interest"] = (double)(sheet.Cells[i, 10] as Range).Value;
                     sms_snap_row["Product"] = (sheet.Cells[i, 11] as Range).Value;
-                    sms_snap_row["Ces"] = (sheet.Cells[i, 12] as Range).Value;
-                    sms_snap_row["Final_interest"] = (double)(sheet.Cells[i, 13] as Range).Value;
-                    sms_snap_row["Prod"] = (sheet.Cells[i, 14] as Range).Value;
-                    sms_snap_row["Status"] = (sheet.Cells[i, 15] as Range).Value;
-                    sms_snap_row["CC"] = (sheet.Cells[i, 18] as Range).Value;
+                    //sms_snap_row["Ces"] = (sheet.Cells[i, 12] as Range).Value;
+                    sms_snap_row["Final_interest"] = (double)(sheet.Cells[i, 13 + country_offset] as Range).Value;
+                    sms_snap_row["Prod"] = (sheet.Cells[i, 14 + country_offset] as Range).Value;
+                    sms_snap_row["Status"] = (sheet.Cells[i, 15 + country_offset] as Range).Value;
+                    sms_snap_row["CC"] = (_country != "kz") ? (sheet.Cells[i, 18] as Range).Value : 0;
 
                     sms_snap_row["brand"] = brand;
 
@@ -333,8 +353,11 @@ namespace robot.Parsers
 
                 if (sms_snap.Rows.Count > 0)
                 {
-                    SMS_SNAP_rawTableAdapter ad_SMS_SNAP_raw = new SMS_SNAP_rawTableAdapter();
+                    /*SMS_SNAP_rawTableAdapter ad_SMS_SNAP_raw = new SMS_SNAP_rawTableAdapter();
                     ad_SMS_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), brand);
+                    ad_KZ_SNAP_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), brand);*/
+
+                    task = new cl_Tasks("delete from DWH_Risk.dbo." + _country + "_SNAP_raw where reestr_date = '" + reestr_date.ToString("yyyy-MM-dd") + "' and brand = '" + brand + "'");
 
                     /*Task task_sms_snap_raw = new Task(() =>
                     {
@@ -345,13 +368,13 @@ namespace robot.Parsers
 
                     try
                     {
-                        task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_SNAP_raw @SMS_SNAP_raw = ", sms_snap);
+                        task = new cl_Tasks("exec DWH_Risk.dbo.sp_" + _country + "_SNAP_raw @" + _country + "_SNAP_raw = ", sms_snap);
                         //task_sms_snap_raw.RunSynchronously();
                         //sp.sp_SMS_SNAP_raw(sms_snap);
                     }
                     catch (Exception exc)
                     {
-                        logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, false, exc.Message);
+                        logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", _country, DateTime.Now, false, exc.Message);
                         Console.WriteLine("Error");
                         Console.WriteLine("Error_descr: " + exc.Message);
                         ex.Quit();
@@ -361,13 +384,13 @@ namespace robot.Parsers
 
 
                     report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
-                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, true, report);
+                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", _country, DateTime.Now, true, report);
                     Console.WriteLine(report);
                 }
                 else
                 {
                     report = "File was empty. There is no one row.";
-                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, false, report);
+                    logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", _country, DateTime.Now, false, report);
                     Console.WriteLine("Error");
                     Console.WriteLine("Error_descr: " + report);
                     ex.Quit();
@@ -377,7 +400,7 @@ namespace robot.Parsers
             }
             catch (Exception exc)
             {
-                logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", "SMS", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_SMS", "parse_SMS_SNAP", _country, DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_descr: " + exc.Message);
                 ex.Quit();
@@ -394,15 +417,15 @@ namespace robot.Parsers
         {
             try
             {
-                task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_TOTAL_SNAP_CFIELD");
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_" + _country + "_TOTAL_SNAP_CFIELD");
 
                 report = "[dbo].[TOTAL_SNAP_CFIELD] was formed.";
-                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFForming", "SMS", DateTime.Now, true, report);
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFForming", _country, DateTime.Now, true, report);
                 Console.WriteLine(report);
             }
             catch (Exception exc)
             {
-                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFForming", "SMS", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFForming", _country, DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
@@ -410,23 +433,28 @@ namespace robot.Parsers
             }
         }
 
-        private void TransportToSmsfinance()
+        private int TransportToCountryLevel()
         {
+            if (_country == "sms") _databasename = "Total_Smsfinance";
+            if (_country == "kz") _databasename = "Total_KZ";
+
             try
             {
-                task = new cl_Tasks("exec Total_Smsfinance.dbo.sp_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec " + _databasename + ".dbo.sp_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
-                report = "[dbo].[TOTAL_SNAP] was transported to Total_Smsfinance.";
-                logAdapter.InsertRow("cl_Parser_SMS", "TransportToSMSFinance", "SMS", DateTime.Now, true, report);
+                report = "[dbo].[TOTAL_SNAP] was transported to " + _databasename + ".";
+                logAdapter.InsertRow("cl_Parser_SMS", "TransportToCountryLevel", _country, DateTime.Now, true, report);
                 Console.WriteLine(report);
+
+                return 1;
             }
             catch (Exception exc)
             {
-                logAdapter.InsertRow("cl_Parser_SMS", "TransportToSMSFinance", "SMS", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_SMS", "TransportToCountryLevel", _country, DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
-                return;
+                return 0;
             }
         }
 
@@ -434,16 +462,16 @@ namespace robot.Parsers
         {
             try
             {
-                task = new cl_Tasks("exec DWH_Risk.dbo.sp_SMS_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_" + _country + "_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //sp.sp_SMS_TOTAL_SNAP(reestr_date);
 
                 report = "[dbo].[TOTAL_SNAP] was formed.";
-                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapForming", "SMS", DateTime.Now, true, report);
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapForming", _country, DateTime.Now, true, report);
                 Console.WriteLine(report);
             }
             catch (Exception exc)
             {
-                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapForming", "SMS", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapForming", _country, DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
@@ -459,11 +487,11 @@ namespace robot.Parsers
 
                 Console.WriteLine("Snap was transported to [Risk].[dbo].[SMS_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].");
                 report = "Snap was transported to [Risk].[dbo].[SMS_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
-                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapToRisk", "SMS", DateTime.Now, true, report);
+                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapToRisk", _country, DateTime.Now, true, report);
             }
             catch (Exception exc)
             {
-                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapToRisk", "SMS", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapToRisk", _country, DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
@@ -480,13 +508,13 @@ namespace robot.Parsers
 
                 Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
                 report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
-                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapCFToRisk", "SMS", DateTime.Now, true, report);
+                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapCFToRisk", _country, DateTime.Now, true, report);
 
                 return 1;
             }
             catch (Exception exc)
             {
-                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapCFToRisk", "SMS", DateTime.Now, false, exc.Message);
+                logAdapter.InsertRow("cl_Parser_SMS", "TransportSnapCFToRisk", _country, DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 

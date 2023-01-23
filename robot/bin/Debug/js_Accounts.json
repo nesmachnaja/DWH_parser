@@ -109,6 +109,20 @@
         "fileNameMask": ""
       }
 
+    },
+
+    {
+      "name": "kz",
+      "transport": {
+        "country": "KZ",
+        "type": "imap",
+        "server": "mx-1.2pp.dev",
+        "login": "report_dwh@2pp.dev",
+        "email": "report_dwh@2pp.dev",
+        "password": "y{M2g47Set",
+        "fileNameMask": ""
+      }
+
     }
   ]
 }
