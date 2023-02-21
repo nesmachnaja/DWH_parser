@@ -68,8 +68,9 @@ namespace robot
                     }
                 case "mx":
                     {
-                        cl_Parser_MX Parser = new cl_Parser_MX();
-                        Parser.StartParsing();
+                        /*cl_Parser_MX Parser = new cl_Parser_MX();
+                        Parser.StartParsing();*/
+                        cl_Loop_Files loop = new cl_Loop_Files(country);
                         break;
                     }
 

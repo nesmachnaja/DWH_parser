@@ -260,15 +260,16 @@ namespace robot.Parsers
 
         private int TransportSnapToRisk()
         {
-            Task task_liga_snap = new Task(() =>
+            /*Task task_liga_snap = new Task(() =>
             {
                 sprisk.sp_LIGA_TOTAL_SNAP(reestr_date);
             },
-            TaskCreationOptions.LongRunning);
+            TaskCreationOptions.LongRunning);*/
 
             try
             {
-                task_liga_snap.RunSynchronously();
+                task = new cl_Tasks("exec Risk.dbo.sp_LIGA_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task_liga_snap.RunSynchronously();
 
                 report = "Snap was transported to [Risk].[dbo].[LIGA_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
                 Console.WriteLine(report);
@@ -548,6 +549,7 @@ namespace robot.Parsers
 
             try
             {
+                //task = new cl_Tasks("exec DWH_Risk.dbo.sp_LIGA2_cessions @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 task_cess.RunSynchronously();
 
                 report = "LIGA2_cessions was formed successfully.";
@@ -575,6 +577,7 @@ namespace robot.Parsers
 
             try
             {
+                //task = new cl_Tasks();
                 task_cess.RunSynchronously();
 
                 report = "TOTAL_CESS was formed successfully.";

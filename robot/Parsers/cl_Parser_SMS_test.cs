@@ -233,7 +233,8 @@ namespace robot.Parsers
         {
             try
             {
-                sprisk.sp_SMS_TOTAL_CESS(reestr_date);
+                task = new cl_Tasks("exec Risk.dbo.sp_SMS_TOTAL_CESS @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //sprisk.sp_SMS_TOTAL_CESS(reestr_date);
 
                 report = "Cessions were transported to their destination on [Risk]";
                 logAdapter.InsertRow("cl_Parser_SMS", "TransportToRisk", _country, DateTime.Now, true, report);

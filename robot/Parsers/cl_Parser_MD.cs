@@ -392,15 +392,16 @@ namespace robot.Parsers
 
         private void TransportMDSnapToRisk()
         {
-            Task task_md2_sn = new Task(() =>
+            /*Task task_md2_sn = new Task(() =>
             {
                 sprisk.sp_MD2_portfolio_snapshot(reestr_date);
             },
-            TaskCreationOptions.LongRunning);
+            TaskCreationOptions.LongRunning);*/
 
             try
             {
-                task_md2_sn.RunSynchronously();
+                task = new cl_Tasks("exec Risk.dbo.sp_MD2_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task_md2_sn.RunSynchronously();
 
                 report = "Snap was transported to [Risk].[dbo].[MD2_portfolio_snapshot]";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportMDSnapToRisk", "MD", DateTime.Now, true, report);
@@ -424,7 +425,7 @@ namespace robot.Parsers
             try
             {
                 //task_md3_sn.RunSynchronously();
-                cl_Tasks task = new cl_Tasks("exec Risk.dbo.sp_MD3_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MD3_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 report = "IL-block was calculated in [Risk].[dbo].[MD3_portfolio_snapshot]";
                 logAdapter.InsertRow("cl_Parser_MD", "TransportMDSnapToRisk", "MD", DateTime.Now, true, report);

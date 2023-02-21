@@ -13,6 +13,7 @@ namespace robot
     {
         string[] files;
         cl_Parser_SMS_test parse_sms;
+        cl_Parser_KZ_test parse_kz;
         cl_Parser_MD_test parse_md;
         cl_Parser_MX_test parse_mx;
 
@@ -25,7 +26,7 @@ namespace robot
                 files = Directory.GetFiles(path, @"*.xlsx", SearchOption.TopDirectoryOnly);
             }
 
-            if (country.ToLower() == "sms" || country.ToLower() == "kz")
+            if (country.ToLower() == "sms") //|| country.ToLower() == "kz")
             {
                 foreach (string file_path in files)
                 {
@@ -40,6 +41,23 @@ namespace robot
 
                 if (country == "sms") parse_sms.CessPostProcessing();
                 parse_sms.SnapPostProcessing();
+            }
+
+            if (country.ToLower() == "kz")
+            {
+                foreach (string file_path in files)
+                {
+                    string pattern = @"([^~\$]ces\S+$)|([^~\$]prosh\S+$)|([^~\$]portf.+$)";
+                    Match result = Regex.Match(file_path, pattern);
+                    if (result.Value.ToString() != "")
+                    {
+                        parse_kz = new cl_Parser_KZ_test();
+                        parse_kz.StartParsing(country, file_path);
+                    }
+                }
+
+                //if (country == "sms") parse_sms.CessPostProcessing();
+                parse_kz.SnapPostProcessing();
             }
             
             if (country.ToLower() == "md")

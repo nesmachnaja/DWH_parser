@@ -53,7 +53,7 @@ namespace robot
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing); //открываем файл
 
-            if (pathFile.Contains("external_collection")) parse_BIH_DCA(ex);
+            if (pathFile.ToLower().Contains("external_collection")) parse_BIH_DCA(ex);
             if (pathFile.Contains("snapshot")) parse_BIH_SNAP(ex);
         }
 
@@ -66,7 +66,7 @@ namespace robot
             string fileName = ex.Workbooks.Item[1].Name;
             
             //int startIndex = fileName.LastIndexOf("_") + 1;
-            fileName = "01." + fileName.Replace(".xlsx","").Replace("external_collection_","").Replace("_",".");
+            fileName = "01." + fileName.ToLower().Replace(".xlsx","").Replace("external_collection_","").Replace("_",".");
             reestr_date = DateTime.Parse(fileName).AddMonths(1).AddDays(-1);
 
             for (int j = 0; j < bih_dca_raw.Columns.Count; j++)
@@ -122,16 +122,17 @@ namespace robot
 
         private int TransportDCAToRisk()
         {
-            Task task = new Task(() =>
+            /*Task task = new Task(() =>
             {
                 SPRisk sprisk = new SPRisk();
                 sprisk.sp_BIH_TOTAL_DCA(reestr_date);
             },
-            TaskCreationOptions.LongRunning);
+            TaskCreationOptions.LongRunning);*/
 
             try
             {
-                task.RunSynchronously();
+                task = new cl_Tasks("exec Risk.dbo.sp_BIH_TOTAL_DCA @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task.RunSynchronously();
 
                 Console.WriteLine("DCA was transported to [Risk].[dbo].[BIH2_DCA], [Risk].[dbo].[TOTAL_DCA]");
                 report = "DCA was transported to [Risk].[dbo].[BIH2_DCA], [Risk].[dbo].[TOTAL_DCA]";

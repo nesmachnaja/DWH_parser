@@ -9,3 +9,10 @@
         }
     }
 }
+
+namespace robot.DataSet1TableAdapters {
+    
+    
+    public partial class KZ_SNAP_rawTableAdapter {
+    }
+}
