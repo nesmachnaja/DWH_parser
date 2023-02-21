@@ -235,6 +235,7 @@
     <Compile Include="cl_Send_Report.cs" />
     <Compile Include="cl_Tasks.cs" />
     <Compile Include="Parsers\cl_Parser.cs" />
+    <Compile Include="Parsers\cl_Parser_KZ.cs" />
     <Compile Include="Parsers\cl_Parser_LIGA.cs" />
     <Compile Include="Parsers\cl_Parser_MD.cs" />
     <Compile Include="Parsers\cl_Parser_MD_test.cs" />

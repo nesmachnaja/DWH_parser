@@ -6078,6 +6078,8 @@ namespace robot {
             
             private global::System.Data.DataColumn columnCC;
             
+            private global::System.Data.DataColumn columnfee_balance;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public KZ_SNAP_rawDataTable() {
@@ -6257,6 +6259,14 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn fee_balanceColumn {
+                get {
+                    return this.columnfee_balance;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -6310,7 +6320,8 @@ namespace robot {
                         string prod, 
                         string status, 
                         string brand, 
-                        int CC) {
+                        int CC, 
+                        decimal fee_balance) {
                 KZ_SNAP_rawRow rowKZ_SNAP_rawRow = ((KZ_SNAP_rawRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         reestr_date,
@@ -6330,7 +6341,8 @@ namespace robot {
                         prod,
                         status,
                         brand,
-                        CC};
+                        CC,
+                        fee_balance};
                 rowKZ_SNAP_rawRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowKZ_SNAP_rawRow);
                 return rowKZ_SNAP_rawRow;
@@ -6371,6 +6383,7 @@ namespace robot {
                 this.columnstatus = base.Columns["status"];
                 this.columnbrand = base.Columns["brand"];
                 this.columnCC = base.Columns["CC"];
+                this.columnfee_balance = base.Columns["fee_balance"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -6412,6 +6425,8 @@ namespace robot {
                 base.Columns.Add(this.columnbrand);
                 this.columnCC = new global::System.Data.DataColumn("CC", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCC);
+                this.columnfee_balance = new global::System.Data.DataColumn("fee_balance", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnfee_balance);
                 this.columnid_loan.MaxLength = 100;
                 this.columnphone.MaxLength = 100;
                 this.columnid_client.MaxLength = 100;
@@ -11211,6 +11226,22 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public decimal fee_balance {
+                get {
+                    try {
+                        return ((decimal)(this[this.tableKZ_SNAP_raw.fee_balanceColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'fee_balance\' в таблице \'KZ_SNAP_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableKZ_SNAP_raw.fee_balanceColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool Isreestr_dateNull() {
                 return this.IsNull(this.tableKZ_SNAP_raw.reestr_dateColumn);
             }
@@ -11423,6 +11454,18 @@ namespace robot {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetCCNull() {
                 this[this.tableKZ_SNAP_raw.CCColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool Isfee_balanceNull() {
+                return this.IsNull(this.tableKZ_SNAP_raw.fee_balanceColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Setfee_balanceNull() {
+                this[this.tableKZ_SNAP_raw.fee_balanceColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -18153,10 +18196,11 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
             tableMapping.ColumnMappings.Add("status", "status");
             tableMapping.ColumnMappings.Add("brand", "brand");
             tableMapping.ColumnMappings.Add("CC", "CC");
+            tableMapping.ColumnMappings.Add("fee_balance", "fee_balance");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[KZ_SNAP_raw] ([reestr_date], [id_loan], [phone], [od], [com], [pen_balance], [od_com], [day_delay], [date_start], [id_client], [interest], [product], [ces], [final_interest], [prod], [status], [brand], [CC]) VALUES (@reestr_date, @id_loan, @phone, @od, @com, @pen_balance, @od_com, @day_delay, @date_start, @id_client, @interest, @product, @ces, @final_interest, @prod, @status, @brand, @CC)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[KZ_SNAP_raw] ([reestr_date], [id_loan], [phone], [od], [com], [pen_balance], [od_com], [day_delay], [date_start], [id_client], [interest], [product], [ces], [final_interest], [prod], [status], [brand], [CC], [fee_balance]) VALUES (@reestr_date, @id_loan, @phone, @od, @com, @pen_balance, @od_com, @day_delay, @date_start, @id_client, @interest, @product, @ces, @final_interest, @prod, @status, @brand, @CC, @fee_balance)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reestr_date", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@id_loan", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id_loan", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -18176,6 +18220,7 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@status", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "status", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@brand", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "brand", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CC", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CC", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@fee_balance", global::System.Data.SqlDbType.Money, 0, global::System.Data.ParameterDirection.Input, 0, 0, "fee_balance", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -18276,7 +18321,8 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
                     string prod, 
                     string status, 
                     string brand, 
-                    global::System.Nullable<int> CC) {
+                    global::System.Nullable<int> CC, 
+                    global::System.Nullable<decimal> fee_balance) {
             if ((reestr_date.HasValue == true)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((System.DateTime)(reestr_date.Value));
             }
@@ -18384,6 +18430,12 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
             }
             else {
                 this.Adapter.InsertCommand.Parameters[17].Value = global::System.DBNull.Value;
+            }
+            if ((fee_balance.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[18].Value = ((decimal)(fee_balance.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[18].Value = global::System.DBNull.Value;
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
