@@ -54,7 +54,7 @@ namespace robot.Parsers
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing); //открываем файл
 
-            if (pathFile.Contains("portf")) parse_KZ_SNAP(ex);
+            if (pathFile.Contains("port")) parse_KZ_SNAP(ex);
         }
 
         public void SnapPostProcessing()
@@ -62,11 +62,14 @@ namespace robot.Parsers
             success = TransportToCountryLevel();
             success += TotalSnapCFForming();
 
-            /*
-            if (success == 2)
+            success += TransportSnapToRisk();
+            success += TransportSnapCFToRisk();
+
+            
+            if (success == 4)
             {
                 send_report = new cl_Send_Report(_country.ToUpper() + "_SNAP", 1);
-            }*/
+            }
         }
 
         private static int SearchFirstNullRow(Worksheet sheet, int lastUsedRow)
@@ -288,15 +291,18 @@ namespace robot.Parsers
             }
         }
 
-        private void TransportSnapToRisk()
+        private int TransportSnapToRisk()
         {
             try
             {
                 task = new cl_Tasks("exec Risk.dbo.sp_KZ_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
-                Console.WriteLine("Snap was transported to [Risk].[dbo].[KZ_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].");
-                report = "Snap was transported to [Risk].[dbo].[KZ_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
+                //Console.WriteLine("Snap was transported to [Risk].[dbo].[TOTAL_SNAP].");
+                report = "Snap was transported to [Risk].[dbo].[TOTAL_SNAP].";
+                Console.WriteLine(report);
                 logAdapter.InsertRow("cl_Parser_KZ", "TransportSnapToRisk", _country, DateTime.Now, true, report);
+
+                return 1;
             }
             catch (Exception exc)
             {
@@ -304,7 +310,7 @@ namespace robot.Parsers
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
-                return;
+                return 0;
             }
 
         }
@@ -315,8 +321,8 @@ namespace robot.Parsers
             {
                 task = new cl_Tasks("exec Risk.dbo.sp_KZ_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
-                Console.WriteLine("[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.");
                 report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
+                Console.WriteLine(report);
                 logAdapter.InsertRow("cl_Parser_KZ", "TransportSnapCFToRisk", _country, DateTime.Now, true, report);
 
                 return 1;

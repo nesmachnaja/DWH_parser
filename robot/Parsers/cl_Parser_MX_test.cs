@@ -11,10 +11,15 @@ namespace robot.Parsers
 {
     class cl_Parser_MX_test : cl_Parser
     {
-        public void StartParsing(string path_file)
+        string _country;
+
+        public void StartParsing(string country, string path_file)
         {
             logAdapter = new COUNTRY_LogTableAdapter();
             int correctPath = 0;
+            _country = country;
+
+            MX_Total_Snap_transport_from_DWH();
 
             while (correctPath == 0)
             {
@@ -144,6 +149,9 @@ namespace robot.Parsers
                     Console.WriteLine(report);
 
                     success = MX_Total_CESS_forming(reestr_date);
+                    MX_Transport_Total_CESS_to_DWH(reestr_date);
+                    MX_Total_Snap_Cfield_DWH();
+                    MX_Total_Snap_transport_from_DWH();
                     success += MX_Total_Snap_Cfield_forming();
                 }
                 else
@@ -319,6 +327,28 @@ namespace robot.Parsers
             }
         }
 
+        private void MX_Transport_Total_CESS_to_DWH(DateTime reestr_date)
+        {
+
+            try
+            {
+                task = new cl_Tasks("exec Total_MX.dbo.sp_TOTAL_CESS @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                //task_cess.RunSynchronously();
+
+                report = "TOTAL_CESS was transported to DWH.";
+                logAdapter.InsertRow("cl_Parser_MX", "MX_Transport_Total_CESS_to_DWH", "MX", DateTime.Now, true, report);
+                Console.WriteLine(report);
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_MX", "MX_Transport_Total_CESS_to_DWH", "MX", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return;
+            }
+        }
+
         private int MX_Total_CESS_forming(DateTime reestr_date)
         {
             object result;
@@ -334,7 +364,7 @@ namespace robot.Parsers
 
             try
             {
-                task = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_CESS @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                indefinites = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_CESS @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'").query_result;
                 //task_cess.RunSynchronously();
 
                 report = indefinites == 1 ? "TOTAL_CESS was formed. Indefinite loan_ids were found." : "TOTAL_CESS was formed successfully.";
@@ -350,6 +380,27 @@ namespace robot.Parsers
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
                 return 0;
+            }
+        }
+
+        private void MX_Total_Snap_Cfield_DWH()
+        {
+            try
+            {
+                task = new cl_Tasks("exec Total_MX.dbo.sp_TOTAL_SNAP_CFIELD");
+                //task_cess.RunSynchronously();
+
+                report = "TOTAL_SNAP_CFIELD was formed successfully.";
+                logAdapter.InsertRow("cl_Parser_MX", "MX_Total_Snap_Cfield_DWH", "MX", DateTime.Now, true, report);
+                Console.WriteLine(report);
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_MX", "MX_Total_Snap_Cfield_DWH", "MX", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return;
             }
         }
 
@@ -373,6 +424,41 @@ namespace robot.Parsers
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
                 return 0;
+            }
+        }
+
+        private void MX_Total_Snap_transport_from_DWH()
+        {
+            try
+            {
+                //reestr_date = DateTime.Parse("31.03.2023");
+                int snap_count = new cl_Tasks("select count(0) result from Risk.dbo.TOTAL_SNAP where country = '" + _country + "' and snapdate = '" + reestr_date.ToString("yyyy-MM-dd") + "'","result").query_result;
+
+                if (snap_count == 0)
+                {
+                    task = new cl_Tasks("exec Risk.dbo.sp_MX_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                    //task_cess.RunSynchronously();
+
+                    report = "TOTAL_SNAP transported successfully.";
+                    logAdapter.InsertRow("cl_Parser_MX", "MX_Total_Snap_transport_from_DWH", "MX", DateTime.Now, true, report);
+                    Console.WriteLine(report);
+                }
+                else
+                {
+                    report = "TOTAL_SNAP already transported from DWH.";
+                    logAdapter.InsertRow("cl_Parser_MX", "MX_Total_Snap_transport_from_DWH", "MX", DateTime.Now, true, report);
+                    Console.WriteLine(report); 
+                    
+                    return; 
+                }
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_MX", "MX_Total_Snap_transport_from_DWH", "MX", DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return;
             }
         }
 
