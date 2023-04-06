@@ -12,8 +12,8 @@ namespace robot
     {
         static void Main(string[] args)
         {
-            //cl_Send_Report send_report = new cl_Send_Report("SMS_SNAP", 1);
-            //cl_PQR_Forming pqr_test = new cl_PQR_Forming("mexico_excel");
+            //cl_Send_Report send_report = new cl_Send_Report("KZ_SNAP", 1);
+            //cl_PQR_Forming pqr_test = new cl_PQR_Forming("mx");
 
             //cl_Tasks task = new cl_Tasks("exec DWH_Risk.dbo.sp_MD_SNAP_raw @MD_SNAP_raw = ", new System.Data.DataTable());
 

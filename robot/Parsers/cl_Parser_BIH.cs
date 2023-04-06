@@ -30,8 +30,9 @@ namespace robot
                     OpenFile(pathFile);
                     correctPath = 1;
                 }
-                catch
+                catch (Exception exc)
                 {
+                    Console.WriteLine(exc.Message);
                     Console.WriteLine("Incorrect file path.");
                 }
             }
@@ -183,9 +184,9 @@ namespace robot
 
                     bih_dca_row["Reestr_date"] = reestr_date;
 
-                    bih_dca_row["Loan"] = (sheet.Cells[i, 1] as Range).Value.ToString();
+                    bih_dca_row["Loan"] = (sheet.Cells[i, 1] as Range).Value == null? 0 : (sheet.Cells[i, 1] as Range).Value.ToString();
                     bih_dca_row["Client"] = (sheet.Cells[i, 2] as Range).Value;
-                    bih_dca_row["DPD"] = (int)(sheet.Cells[i, 3] as Range).Value;
+                    bih_dca_row["DPD"] = (sheet.Cells[i, 3] as Range).Value == null? 0 : (int)(sheet.Cells[i, 3] as Range).Value;
                     bih_dca_row["Bucket"] = (sheet.Cells[i, 4] as Range).Value;
                     bih_dca_row["Debt_collector"] = debt_collector;
                     bih_dca_row["Amount"] = (double)(sheet.Cells[i, 6] as Range).Value;

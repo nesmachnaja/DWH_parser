@@ -23,7 +23,7 @@ namespace robot
             string path = Console.ReadLine();
             if (Directory.Exists(path))
             {
-                files = Directory.GetFiles(path, @"*.xlsx", SearchOption.TopDirectoryOnly);
+                files = Directory.GetFiles(path, @"*.xls?", SearchOption.TopDirectoryOnly);
             }
 
             if (country.ToLower() == "sms") //|| country.ToLower() == "kz")
@@ -47,7 +47,7 @@ namespace robot
             {
                 foreach (string file_path in files)
                 {
-                    string pattern = @"([^~\$]ces\S+$)|([^~\$]prosh\S+$)|([^~\$]portf.+$)";
+                    string pattern = @"([^~\$]ces\S+$)|([^~\$]prosh\S+$)|([^~\$]port.+$)";
                     Match result = Regex.Match(file_path, pattern);
                     if (result.Value.ToString() != "")
                     {
@@ -93,7 +93,7 @@ namespace robot
                     if (result.Value.ToString() != "")
                     {
                         parse_mx = new cl_Parser_MX_test();
-                        parse_mx.StartParsing(file_path);
+                        parse_mx.StartParsing(country, file_path);
                         //Console.WriteLine(result.Value.ToString());
                     }
                 }
