@@ -214,7 +214,7 @@ namespace robot
 
             try
             {
-                string fileName = ex.Workbooks.Item[1].Name;
+                fileName = ex.Workbooks.Item[1].Name;
                 fileName = fileName.Substring(fileName.IndexOf("_") + 1, 10).Replace("+", ""); //.ToString("yyyy-MM-dd");
 
                 reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Excel.Range).Value;

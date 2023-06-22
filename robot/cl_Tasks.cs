@@ -21,6 +21,7 @@ namespace robot
         string pattern;
         Match result;
         public int query_result = 0;
+        public int success = 0;
 
         public cl_Tasks(string procedure_calling)
         {
@@ -103,6 +104,7 @@ namespace robot
                     connection.Close();
 
                     Console.WriteLine("Ok");
+                    success = 1;
                 }
                 catch (SqlException exc)
                 {
@@ -151,6 +153,7 @@ namespace robot
                     connection.Close();
 
                     Console.WriteLine("Ok");
+                    success = 1;
                 }
                 catch (SqlException exc)
                 {

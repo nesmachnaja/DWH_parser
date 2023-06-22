@@ -73,16 +73,26 @@ namespace robot
                         cl_Loop_Files loop = new cl_Loop_Files(country);
                         break;
                     }
+                case "budget":
+                    {
+                        /*cl_Parser_MX Parser = new cl_Parser_MX();
+                        Parser.StartParsing();*/
+                        cl_Loop_Files loop = new cl_Loop_Files(country);
+                        break;
+                    }
 
             }
 
-            Console.WriteLine("Do you want to form PQR? Y - Yes, N - No");
-            string reply = Console.ReadKey().Key.ToString();
-
-
-            if (reply.Equals("Y"))
+            if (country != "budget")
             {
-                cl_PQR_Forming pqr = new cl_PQR_Forming(country);
+                Console.WriteLine("Do you want to form PQR? Y - Yes, N - No");
+                string reply = Console.ReadKey().Key.ToString();
+
+
+                if (reply.Equals("Y"))
+                {
+                    cl_PQR_Forming pqr = new cl_PQR_Forming(country);
+                }
             }
 
             Console.ReadKey();

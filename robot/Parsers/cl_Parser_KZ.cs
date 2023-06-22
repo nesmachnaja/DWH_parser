@@ -103,7 +103,7 @@ namespace robot.Parsers
 
             try
             {
-                string fileName = ex.Workbooks.Item[1].Name;
+                fileName = ex.Workbooks.Item[1].Name;
 
                 KZ_SNAP_rawDataTable kz_snap_raw = new KZ_SNAP_rawDataTable();
                 System.Data.DataTable kz_snap = new System.Data.DataTable();

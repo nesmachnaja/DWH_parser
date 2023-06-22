@@ -55,6 +55,15 @@
     },
 
     {
+      "name": "Total_DB",
+      "parameters": {
+        "connectionString": "Data Source=dwh.2pp.dev;Initial Catalog=Total_DB;Persist Security Info=True;User ID=nesmachnaja;Password=7ujmvfr49ol.",
+        "extName": "robot.Properties.Settings.Total_DBConnectionString",
+        "providerName": "System.Data.SqlClient"
+      }
+    },
+
+    {
       "name": "msdb",
       "parameters": {
         "connectionString": "Data Source=10.50.50.20;Initial Catalog=msdb;Persist Security Info=True;User ID=LyudmilaNesmachnaya;Password=vP1Ch57Q7mPD",

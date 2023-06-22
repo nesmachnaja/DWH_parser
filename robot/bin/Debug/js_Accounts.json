@@ -123,6 +123,20 @@
         "fileNameMask": ""
       }
 
+    },
+
+    {
+      "name": "budget",
+      "transport": {
+        "country": "budget",
+        "type": "imap",
+        "server": "my.itexp.pro",
+        "login": "dwh_robot@itexp.pro",
+        "email": "dwh_robot@itexp.pro",
+        "password": "62Go(34Od.85",
+        "fileNameMask": ""
+      }
+
     }
   ]
 }

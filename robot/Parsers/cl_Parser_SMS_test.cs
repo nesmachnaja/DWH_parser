@@ -110,7 +110,7 @@ namespace robot.Parsers
 
             try
             {
-                string fileName = ex.Workbooks.Item[1].Name;
+                fileName = ex.Workbooks.Item[1].Name;
 
                 if (fileName.Contains("SMS")) brand = "SMSFinance";
                 if (fileName.Contains("VIV")) brand = "Vivus";
@@ -295,7 +295,7 @@ namespace robot.Parsers
 
             try
             {
-                string fileName = ex.Workbooks.Item[1].Name;
+                fileName = ex.Workbooks.Item[1].Name;
 
                 SMS_SNAP_rawDataTable sms_snap_raw = new SMS_SNAP_rawDataTable();
                 System.Data.DataTable sms_snap = new System.Data.DataTable();

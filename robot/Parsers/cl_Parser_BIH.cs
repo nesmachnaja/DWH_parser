@@ -64,7 +64,7 @@ namespace robot
             logAdapter.InsertRow("cl_Parser_BIH", "parse_BIH_DCA", "BIH", DateTime.Now, true, report);
 
             lastUsedRow = 0;
-            string fileName = ex.Workbooks.Item[1].Name;
+            fileName = ex.Workbooks.Item[1].Name;
             
             //int startIndex = fileName.LastIndexOf("_") + 1;
             fileName = "01." + fileName.ToLower().Replace(".xlsx","").Replace("external_collection_","").Replace("_",".");
@@ -265,7 +265,7 @@ namespace robot
 
             try
             {
-                string fileName = ex.Workbooks.Item[1].Name;
+                fileName = ex.Workbooks.Item[1].Name;
                 fileName = fileName.Substring(fileName.IndexOf("_") + 1, 10); //.ToString("yyyy-MM-dd");
 
                 reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;

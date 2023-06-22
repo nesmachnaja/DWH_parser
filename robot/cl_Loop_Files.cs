@@ -16,6 +16,7 @@ namespace robot
         cl_Parser_KZ_test parse_kz;
         cl_Parser_MD_test parse_md;
         cl_Parser_MX_test parse_mx;
+        cl_Parser_budget parse_budget;
         int dca_num = 0;
         int snap_num = 0;
         int cess_num = 0;
@@ -109,6 +110,21 @@ namespace robot
 
                 //if (dca_num != 0) parse_mx.DcaPostProcessing();
                 //if (cess_num != 0) parse_mx.CessPostProcessing();
+            }
+            
+            if (country.ToLower() == "budget")
+            {
+                foreach (string file_path in files)
+                {
+                    string pattern = @".*\\[^~\$]*\w*_budg.+$";
+                    Match result = Regex.Match(file_path, pattern);
+                    if (result.Value.ToString() != "")
+                    {
+                        parse_budget = new cl_Parser_budget();
+                        parse_budget.StartParsing(file_path);
+                    }
+                }
+
             }
         }
     }

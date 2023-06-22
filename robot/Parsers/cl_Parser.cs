@@ -22,6 +22,7 @@ namespace robot.Parsers
         public string brand = "";
         public cl_Tasks task;
         public cl_Send_Report send_report;
+        public string fileName;
         //public Application ex = new Application();
     }
 }
