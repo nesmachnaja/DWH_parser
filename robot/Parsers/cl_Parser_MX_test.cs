@@ -98,7 +98,7 @@ namespace robot.Parsers
 
             try
             {
-                string fileName = ex.Workbooks.Item[1].Name;
+                fileName = ex.Workbooks.Item[1].Name;
 
                 fileName = "01." + fileName.Replace("cessions_", "").Replace(".xlsx", "").Substring(4, 2) + "." + fileName.Replace("cessions_", "").Replace(".xlsx", "").Substring(0, 4); //.ToString("yyyy-MM-dd");
 
@@ -210,7 +210,7 @@ namespace robot.Parsers
             
             try
             {
-                string fileName = ex.Workbooks.Item[1].Name;
+                fileName = ex.Workbooks.Item[1].Name;
 
                 string pattern = @"\D{4}\d{4}";
                 Match result = Regex.Match(fileName, pattern);

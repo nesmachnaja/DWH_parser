@@ -260,7 +260,7 @@ namespace robot.Parsers
 
             try
             {
-                string fileName = ex.Workbooks.Item[1].Name;
+                fileName = ex.Workbooks.Item[1].Name;
                 fileName = fileName.Replace("Moldova_SNAP ", "").Replace("Moldova_WO ", "").Replace("Moldova_WO_accumulated_", "").Replace(".xlsx", "").Replace("_", " "); //.ToString("yyyy-MM-dd");
 
                 string pattern = @"\d+\.\d+\.\d+";

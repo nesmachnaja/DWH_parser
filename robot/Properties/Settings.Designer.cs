@@ -66,5 +66,16 @@ namespace robot.Properties {
                 return ((string)(this["msdbConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=dwh.2pp.dev;Initial Catalog=Total_DB;Persist Security Info=True;User " +
+            "ID=nesmachnaja;Password=7ujmvfr49ol.")]
+        public string Total_DBConnectionString {
+            get {
+                return ((string)(this["Total_DBConnectionString"]));
+            }
+        }
     }
 }

@@ -235,6 +235,7 @@
     <Compile Include="cl_Send_Report.cs" />
     <Compile Include="cl_Tasks.cs" />
     <Compile Include="Parsers\cl_Parser.cs" />
+    <Compile Include="Parsers\cl_Parser_budjet.cs" />
     <Compile Include="Parsers\cl_Parser_KZ.cs" />
     <Compile Include="Parsers\cl_Parser_LIGA.cs" />
     <Compile Include="Parsers\cl_Parser_MD.cs" />
@@ -275,6 +276,14 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Total_Bosnia.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Total_DB.cs">
+      <DependentUpon>Total_DB.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Total_DB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Total_DB.xsd</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -317,6 +326,17 @@
     </None>
     <None Include="Total_Bosnia.xss">
       <DependentUpon>Total_Bosnia.xsd</DependentUpon>
+    </None>
+    <None Include="Total_DB.xsc">
+      <DependentUpon>Total_DB.xsd</DependentUpon>
+    </None>
+    <None Include="Total_DB.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Total_DB.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Total_DB.xss">
+      <DependentUpon>Total_DB.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
