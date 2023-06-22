@@ -17071,10 +17071,10 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "select * from dbo.COUNTRY_contacts where country = @country and Active = 1 and (C" +
-                "omment is null or Comment = @country_file)";
+            this._commandCollection[1].CommandText = "select * from dbo.COUNTRY_contacts where country in (@country,\'all\') and Active =" +
+                " 1 and (Comment is null or Comment = @country_file)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
-            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@country", global::System.Data.SqlDbType.NVarChar, 20, global::System.Data.ParameterDirection.Input, 0, 0, "Country", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@country", global::System.Data.SqlDbType.NVarChar, 1024, global::System.Data.ParameterDirection.Input, 0, 0, "", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@country_file", global::System.Data.SqlDbType.NVarChar, 4000, global::System.Data.ParameterDirection.Input, 0, 0, "Comment", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
@@ -17109,7 +17109,7 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
         public virtual int FillBy(DataSet1.COUNTRY_contactsDataTable dataTable, string country, string country_file) {
             this.Adapter.SelectCommand = this.CommandCollection[1];
             if ((country == null)) {
-                this.Adapter.SelectCommand.Parameters[0].Value = global::System.DBNull.Value;
+                throw new global::System.ArgumentNullException("country");
             }
             else {
                 this.Adapter.SelectCommand.Parameters[0].Value = ((string)(country));
@@ -17134,7 +17134,7 @@ SELECT ID, Country, Contact, Comment FROM COUNTRY_contacts WHERE (ID = @ID)";
         public virtual DataSet1.COUNTRY_contactsDataTable GetCountryContacts(string country, string country_file) {
             this.Adapter.SelectCommand = this.CommandCollection[1];
             if ((country == null)) {
-                this.Adapter.SelectCommand.Parameters[0].Value = global::System.DBNull.Value;
+                throw new global::System.ArgumentNullException("country");
             }
             else {
                 this.Adapter.SelectCommand.Parameters[0].Value = ((string)(country));

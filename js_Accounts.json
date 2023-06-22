@@ -5,7 +5,7 @@
       "transport": {
         "country": "AL",
         "type": "imap",
-        "server": "my.itexp.pro",
+        "server": "mx-1.2pp.dev",
         "login": "AL_RISK@2pp.dev",
         "email": "AL_RISK@2pp.dev",
         "password": "48pe4{2Hkm",
@@ -19,10 +19,10 @@
       "transport": {
         "country": "BIH",
         "type": "imap",
-        "server": "my.itexp.pro",
-        "login": "dwh_robot@itexp.pro",
-        "email": "dwh_robot@itexp.pro",
-        "password": "62Go(34Od.85",
+        "server": "mx-1.2pp.dev",
+        "login": "BIH_RISK@2pp.dev",
+        "email": "BIH_RISK@2pp.dev",
+        "password": "w8VW8ntP3}",
         "fileNameMask": ""
       }
 
@@ -33,7 +33,7 @@
       "transport": {
         "country": "LIGA",
         "type": "imap",
-        "server": "my.itexp.pro",
+        "server": "mx-1.2pp.dev",
         "login": "LIGA_RISK@2pp.dev",
         "email": "LIGA_RISK@2pp.dev",
         "password": "P8u9=RDy47",
@@ -47,10 +47,10 @@
       "transport": {
         "country": "MD",
         "type": "imap",
-        "server": "my.itexp.pro",
-        "login": "dwh_robot@itexp.pro",
-        "email": "dwh_robot@itexp.pro",
-        "password": "62Go(34Od.85",
+        "server": "mx-1.2pp.dev",
+        "login": "MD_RISK@2pp.dev",
+        "email": "MD_RISK@2pp.dev",
+        "password": "~D7Zr7ZtZN",
         "fileNameMask": ""
       }
 
@@ -61,10 +61,10 @@
       "transport": {
         "country": "MKD",
         "type": "imap",
-        "server": "my.itexp.pro",
-        "login": "dwh_robot@itexp.pro",
-        "email": "dwh_robot@itexp.pro",
-        "password": "62Go(34Od.85",
+        "server": "mx-1.2pp.dev",
+        "login": "MKD_RISK@2pp.dev",
+        "email": "MKD_RISK@2pp.dev",
+        "password": "M3&jh83AmE",
         "fileNameMask": ""
       }
 
@@ -75,10 +75,10 @@
       "transport": {
         "country": "MX",
         "type": "imap",
-        "server": "my.itexp.pro",
-        "login": "dwh_robot@itexp.pro",
-        "email": "dwh_robot@itexp.pro",
-        "password": "62Go(34Od.85",
+        "server": "mx-1.2pp.dev",
+        "login": "MX_RISK@2pp.dev",
+        "email": "MX_RISK@2pp.dev",
+        "password": "Yp76dE$Lvm",
         "fileNameMask": ""
       }
 
@@ -89,10 +89,10 @@
       "transport": {
         "country": "test",
         "type": "imap",
-        "server": "my.itexp.pro",
-        "login": "dwh_robot@itexp.pro",
-        "email": "dwh_robot@itexp.pro",
-        "password": "62Go(34Od.85",
+        "server": "mx-1.2pp.dev",
+        "login": "MX_RISK@2pp.dev",
+        "email": "MX_RISK@2pp.dev",
+        "password": "Yp76dE$Lvm",
         "fileNameMask": ""
       }
     },
@@ -102,7 +102,7 @@
       "transport": {
         "country": "SMS",
         "type": "imap",
-        "server": "my.itexp.pro",
+        "server": "mx-1.2pp.dev",
         "login": "report_dwh@2pp.dev",
         "email": "report_dwh@2pp.dev",
         "password": "y{M2g47Set",
@@ -116,10 +116,10 @@
       "transport": {
         "country": "KZ",
         "type": "imap",
-        "server": "my.itexp.pro",
-        "login": "dwh_robot@itexp.pro",
-        "email": "dwh_robot@itexp.pro",
-        "password": "62Go(34Od.85",
+        "server": "mx-1.2pp.dev",
+        "login": "report_dwh@2pp.dev",
+        "email": "report_dwh@2pp.dev",
+        "password": "y{M2g47Set",
         "fileNameMask": ""
       }
 

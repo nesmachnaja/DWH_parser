@@ -16,6 +16,9 @@ namespace robot
         cl_Parser_KZ_test parse_kz;
         cl_Parser_MD_test parse_md;
         cl_Parser_MX_test parse_mx;
+        int dca_num = 0;
+        int snap_num = 0;
+        int cess_num = 0;
 
         public cl_Loop_Files(string country)
         {
@@ -62,12 +65,13 @@ namespace robot
             
             if (country.ToLower() == "md")
             {
-                int dca_num = 0;
-                int snap_num = 0;
+                dca_num = 0;
+                snap_num = 0;
+                cess_num = 0;
 
                 foreach (string file_path in files)
                 {
-                    string pattern = @"(Plati.+$)|(Moldova_SNAP.+$)|(Moldova_WO.+$)";
+                    string pattern = @"([^~\$]Plati.+$)|([^~\$]Moldova_SNAP.+$)|([^~\$]Moldova_WO.+$)";
                     Match result = Regex.Match(file_path, pattern);
                     if (result.Value.ToString() != "")
                     {
@@ -79,24 +83,32 @@ namespace robot
                     }
                 }
 
-                //Console.WriteLine(dca_num.ToString() + snap_num.ToString());
                 if (dca_num != 0) parse_md.DcaPostProcessing();
                 if (snap_num != 0) parse_md.SnapPostProcessing();
             }
             
             if (country.ToLower() == "mx")
             {
+                //dca_num = 0;
+                //snap_num = 0;
+                //cess_num = 0;
+
                 foreach (string file_path in files)
                 {
-                    string pattern = @"(Data_exchance_format.+$)|(cessions.+$)";
+                    string pattern = @"(.*\\[^~\$]*Data_exchance_format.+$)|(.*\\[^~\$]*cessions.+$)";
                     Match result = Regex.Match(file_path, pattern);
                     if (result.Value.ToString() != "")
                     {
+                        //Console.WriteLine(result.Value.ToString());
+                        if (result.Value.ToString().Contains("Data_exchance_format")) dca_num++;
+                        if (result.Value.ToString().Contains("cessions")) cess_num++;
                         parse_mx = new cl_Parser_MX_test();
                         parse_mx.StartParsing(country, file_path);
-                        //Console.WriteLine(result.Value.ToString());
                     }
                 }
+
+                //if (dca_num != 0) parse_mx.DcaPostProcessing();
+                //if (cess_num != 0) parse_mx.CessPostProcessing();
             }
         }
     }

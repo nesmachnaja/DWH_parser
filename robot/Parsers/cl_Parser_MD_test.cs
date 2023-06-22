@@ -311,7 +311,7 @@ namespace robot.Parsers
                     {
                         task = new cl_Tasks("exec DWH_Risk.dbo.sp_MD_SNAP_raw @MD_SNAP_raw = ", md_snap);
                         //sp.sp_MD_SNAP_raw(md_snap);
-                        ad_MD_SNAP_raw.UpdateInitialsAndClients();
+                        //ad_MD_SNAP_raw.UpdateInitialsAndClients();
 
                         report = "Loading is ready. " + (firstNull - startPosition - 1).ToString() + " rows were processed.";
                         logAdapter.InsertRow("cl_Parser_MD", "parse_MD_SNAP", "MD", DateTime.Now, true, report);

@@ -112,7 +112,7 @@ namespace robot.Parsers
 
                 brand = "Vivus";
 
-                string pattern = @"\d{2}\.\d{4}";
+                string pattern = @"(\d{2}\.\d{4})|(\d{2}\.\d{2})|(\d{4})";
                 Match result = Regex.Match(fileName, pattern);
 
                 fileName = "01." + result.ToString().Insert(2, ".");
@@ -130,23 +130,23 @@ namespace robot.Parsers
 
                     kz_snap_row["reestr_date"] = reestr_date;
 
-                    kz_snap_row["ID_loan"] = (sheet.Cells[i, 3] as Range).Value.ToString();
-                    kz_snap_row["Phone"] = (sheet.Cells[i, 4] as Range).Value.ToString();
-                    kz_snap_row["Od"] = (double)(sheet.Cells[i, 5] as Range).Value;
-                    kz_snap_row["Com"] = (double)(sheet.Cells[i, 6] as Range).Value;
-                    kz_snap_row["Pen_balance"] = (double)(sheet.Cells[i, 7] as Range).Value;
-                    kz_snap_row["Fee_balance"] = (double)(sheet.Cells[i, 8] as Range).Value;
-                    kz_snap_row["Od_com"] = (double)(sheet.Cells[i, 9] as Range).Value;
-                    kz_snap_row["Day_delay"] = (int)(sheet.Cells[i, 10] as Range).Value;
-                    kz_snap_row["Date_start"] = DateTime.Parse((sheet.Cells[i, 11] as Range).Value);
-                    kz_snap_row["ID_client"] = (sheet.Cells[i, 12] as Range).Value.ToString();
-                    kz_snap_row["Interest"] = (double)(sheet.Cells[i, 13] as Range).Value;
-                    kz_snap_row["Product"] = (sheet.Cells[i, 14] as Range).Value;
+                    kz_snap_row["ID_loan"] = (sheet.Cells[i, 1] as Range).Value.ToString();
+                    kz_snap_row["Phone"] = (sheet.Cells[i, 2] as Range).Value.ToString();
+                    kz_snap_row["Od"] = (double)(sheet.Cells[i, 3] as Range).Value;
+                    kz_snap_row["Com"] = (sheet.Cells[i, 4] as Range).Value == null ? 0 : (double)(sheet.Cells[i, 4] as Range).Value;
+                    kz_snap_row["Pen_balance"] = (double)(sheet.Cells[i, 5] as Range).Value;
+                    kz_snap_row["Fee_balance"] = (double)(sheet.Cells[i, 6] as Range).Value;
+                    kz_snap_row["Od_com"] = (double)(sheet.Cells[i, 7] as Range).Value;
+                    kz_snap_row["Day_delay"] = (int)(sheet.Cells[i, 8] as Range).Value;
+                    kz_snap_row["Date_start"] = DateTime.Parse((sheet.Cells[i, 9] as Range).Value);
+                    kz_snap_row["ID_client"] = (sheet.Cells[i, 10] as Range).Value.ToString();
+                    kz_snap_row["Interest"] = (sheet.Cells[i, 11] as Range).Value == null ? 0 : (double)(sheet.Cells[i, 11] as Range).Value;
+                    kz_snap_row["Product"] = (sheet.Cells[i, 12] as Range).Value;
                     //kz_snap_row["Ces"] = (sheet.Cells[i, 12] as Range).Value;
-                    kz_snap_row["Final_interest"] = (double)(sheet.Cells[i, 16] as Range).Value;
-                    kz_snap_row["Prod"] = (sheet.Cells[i, 18] as Range).Value;
-                    kz_snap_row["Status"] = (sheet.Cells[i, 17] as Range).Value;
-                    kz_snap_row["CC"] = (sheet.Cells[i, 21] as Range).Value;
+                    kz_snap_row["Final_interest"] = (sheet.Cells[i, 14] as Range).Value == null ? 0 : (double)(sheet.Cells[i, 14] as Range).Value;
+                    kz_snap_row["Prod"] = (sheet.Cells[i, 16] as Range).Value;
+                    kz_snap_row["Status"] = (sheet.Cells[i, 15] as Range).Value;
+                    kz_snap_row["CC"] = (sheet.Cells[i, 19] as Range).Value;
 
                     kz_snap_row["brand"] = brand;
 
