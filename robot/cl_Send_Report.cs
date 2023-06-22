@@ -62,6 +62,7 @@ namespace robot
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(from_address.Address, from_password)
             };
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             foreach (MailAddress to_address in to_address_list)
             {
                 using (var message = new MailMessage(from_address, to_address)

@@ -77,6 +77,7 @@ namespace robot.Parsers
 
             if (_country == "kz") success = TransportToCountryLevel();
             if (_country == "sms") TransportToCountryLevel();
+            if (_country == "sms") TotalSnapCFFormingCountryLevel();
 
             if (_country == "sms") TransportSnapToRisk();
             if (_country == "sms") success = TransportSnapCFToRisk();
@@ -427,6 +428,26 @@ namespace robot.Parsers
             catch (Exception exc)
             {
                 logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFForming", _country, DateTime.Now, false, exc.Message);
+                Console.WriteLine("Error");
+                Console.WriteLine("Error_desc: " + exc.Message.ToString());
+
+                return;
+            }
+        }
+
+        private void TotalSnapCFFormingCountryLevel()
+        {
+            try
+            {
+                task = new cl_Tasks("exec Total_Smsfinance.dbo.sp_TOTAL_SNAP_CFIELD");
+
+                report = "[dbo].[TOTAL_SNAP_CFIELD] was formed in Total_Smsfinance.";
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFFormingCountryLevel", _country, DateTime.Now, true, report);
+                Console.WriteLine(report);
+            }
+            catch (Exception exc)
+            {
+                logAdapter.InsertRow("cl_Parser_SMS", "TotalSnapCFFormingCountryLevel", _country, DateTime.Now, false, exc.Message);
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 

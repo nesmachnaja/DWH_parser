@@ -19,8 +19,6 @@ namespace robot.Parsers
             int correctPath = 0;
             _country = country;
 
-            MX_Total_Snap_transport_from_DWH();
-
             while (correctPath == 0)
             {
                 try
@@ -29,9 +27,10 @@ namespace robot.Parsers
                     OpenFile(pathFile);
                     correctPath = 1;
                 }
-                catch
+                catch (Exception exc)
                 {
                     Console.WriteLine("Incorrect file path.");
+                    Console.WriteLine(exc.Message);
                 }
             }
         }
@@ -57,15 +56,31 @@ namespace robot.Parsers
             if (pathFile.Contains("Data_exchance_format")) parse_MX_DCA(ex);
         }
 
-        /*public void DcaPostProcessing()
+        public void DcaPostProcessing()
         {
+            success = MX_Total_DCA_forming(reestr_date);
 
+            if (success == 1)
+            {
+                send_report = new cl_Send_Report("MX_DCA", 1);
+                //Console.WriteLine("Report was sent.");
+            }
         }
 
         public void CessPostProcessing()
         {
+            success = MX_Total_CESS_forming(reestr_date);
+            MX_Transport_Total_CESS_to_DWH(reestr_date);
+            MX_Total_Snap_Cfield_DWH();
+            success += MX_Total_Snap_transport_from_DWH();
+            success += MX_Total_Snap_Cfield_forming();
 
-        }*/
+            if (success == 3)
+            {
+                send_report = new cl_Send_Report("MX_CESS", 1);
+                //Console.WriteLine("Report was sent.");
+            }
+        }
 
         private void parse_MX_CESS(Application ex)
         {
@@ -87,7 +102,7 @@ namespace robot.Parsers
 
                 fileName = "01." + fileName.Replace("cessions_", "").Replace(".xlsx", "").Substring(4, 2) + "." + fileName.Replace("cessions_", "").Replace(".xlsx", "").Substring(0, 4); //.ToString("yyyy-MM-dd");
 
-                DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
+                reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
                 reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
                                                                                                                  //MX_CESS.Reestr_date = reestr_date;       //current date
                 MX_CESS_rawDataTable mx_cess_raw = new MX_CESS_rawDataTable();
@@ -106,8 +121,8 @@ namespace robot.Parsers
                     row["Cession_date"] = (DateTime)(sheet.Cells[i, 2] as Range).Value;
                     row["Principal"] = (decimal)(sheet.Cells[i, 3] as Range).Value;
                     row["Interest"] = (sheet.Cells[i, 4] as Range).Text.ToString() != "#ЗНАЧ!" ? (decimal)(sheet.Cells[i, 4] as Range).Value : 0;
-                    row["Fee"] = !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("$") && (sheet.Cells[i, 5] as Range).Text.ToString() != "" && (sheet.Cells[i, 5] as Range).Text.ToString() != null ? (decimal)(sheet.Cells[i, 5] as Range).Value : 0;
-                    row["Penalty"] = !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("$") && !((sheet.Cells[i, 6] as Range).Value == null) ? (decimal)(sheet.Cells[i, 6] as Range).Value : 0;
+                    row["Fee"] = !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 5] as Range).Text.ToString().Equals("$") && (sheet.Cells[i, 5] as Range).Text.ToString() != "" && (sheet.Cells[i, 5] as Range).Text.ToString() != null ? (decimal)(sheet.Cells[i, 5] as Range).Value : 0;
+                    row["Penalty"] = !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 6] as Range).Text.ToString().Equals("$") && !((sheet.Cells[i, 6] as Range).Value == null) ? (decimal)(sheet.Cells[i, 6] as Range).Value : 0;
                     row["Otherdebt"] = !((sheet.Cells[i, 7] as Range).Text.ToString() == "") && !((sheet.Cells[i, 7] as Range).Text.ToString() == null) ? (decimal)(sheet.Cells[i, 7] as Range).Value : 0;
                     row["Price_amount"] = (decimal)(sheet.Cells[i, 8] as Range).Value;
                     row["Price_rate"] = (double)(sheet.Cells[i, 9] as Range).Value;
@@ -148,11 +163,6 @@ namespace robot.Parsers
                     logAdapter.InsertRow("cl_Parser_MX", "parse_MX_CESS", "MX", DateTime.Now, true, report);
                     Console.WriteLine(report);
 
-                    success = MX_Total_CESS_forming(reestr_date);
-                    MX_Transport_Total_CESS_to_DWH(reestr_date);
-                    MX_Total_Snap_Cfield_DWH();
-                    MX_Total_Snap_transport_from_DWH();
-                    success += MX_Total_Snap_Cfield_forming();
                 }
                 else
                 {
@@ -165,6 +175,8 @@ namespace robot.Parsers
 
                     return;
                 }
+
+                CessPostProcessing();
 
             }
             catch (Exception exc)
@@ -180,12 +192,6 @@ namespace robot.Parsers
 
 
             ex.Quit();
-
-            if (success == 2)
-            {
-                //send_report = new cl_Send_Report("MX_CESS", 1);
-                Console.WriteLine("Report was sent.");
-            }
 
         }
 
@@ -212,7 +218,7 @@ namespace robot.Parsers
                 fileName = "01 " + result.ToString().Replace("_", " ");
                 //"01 " + fileName.Replace("190725_Data_exchance_format_", "").Replace(".xlsx", "").Replace("_", " ");
 
-                DateTime reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
+                reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
                 reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
                                                                                                                  //MX_DCA.Reestr_date = reestr_date;       //current date
                 MX_DCA_rawDataTable mx_dca_raw = new MX_DCA_rawDataTable();
@@ -230,8 +236,8 @@ namespace robot.Parsers
                     row["agreement_id"] = (sheet.Cells[i, 2] as Range).Value;
                     row["Payment_date"] = (DateTime)(sheet.Cells[i, 3] as Range).Value;
                     row["DCA_name"] = (sheet.Cells[i, 4] as Range).Value;
-                    row["Payment_Amount"] = !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("$") && (sheet.Cells[i, 5] as Range).Text.ToString() != "" ? (decimal)(sheet.Cells[i, 5] as Range).Value : 0;
-                    row["DCA_Comission_amount"] = !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("$") ? (decimal)(sheet.Cells[i, 6] as Range).Value : 0;
+                    row["Payment_Amount"] = !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 5] as Range).Text.ToString().Equals("$") && (sheet.Cells[i, 5] as Range).Text.ToString() != "" ? (decimal)(sheet.Cells[i, 5] as Range).Value : 0;
+                    row["DCA_Comission_amount"] = !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 6] as Range).Text.ToString().Equals("$") ? (decimal)(sheet.Cells[i, 6] as Range).Value : 0;
 
                     mx_dca.Rows.Add(row);
                     mx_dca.AcceptChanges();
@@ -267,7 +273,6 @@ namespace robot.Parsers
                     logAdapter.InsertRow("cl_Parser_MX", "parse_MX_DCA", "MX", DateTime.Now, true, report);
                     Console.WriteLine(report);
 
-                    success = MX_Total_DCA_forming(reestr_date);
                 }
                 else
                 {
@@ -296,12 +301,7 @@ namespace robot.Parsers
             
             ex.Quit();
 
-            if (success == 1)
-            {
-                //send_report = new cl_Send_Report("MX_DCA", 1);
-                Console.WriteLine("Report was sent.");
-            }
-
+            DcaPostProcessing();
         }
 
         private int MX_Total_DCA_forming(DateTime reestr_date)
@@ -332,7 +332,7 @@ namespace robot.Parsers
 
             try
             {
-                task = new cl_Tasks("exec Total_MX.dbo.sp_TOTAL_CESS @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Total_MX.dbo.sp_TOTAL_CESS_from_risk @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
                 //task_cess.RunSynchronously();
 
                 report = "TOTAL_CESS was transported to DWH.";
@@ -427,7 +427,7 @@ namespace robot.Parsers
             }
         }
 
-        private void MX_Total_Snap_transport_from_DWH()
+        private int MX_Total_Snap_transport_from_DWH()
         {
             try
             {
@@ -449,8 +449,10 @@ namespace robot.Parsers
                     logAdapter.InsertRow("cl_Parser_MX", "MX_Total_Snap_transport_from_DWH", "MX", DateTime.Now, true, report);
                     Console.WriteLine(report); 
                     
-                    return; 
+                    //return; 
                 }
+
+                return 1;
             }
             catch (Exception exc)
             {
@@ -458,7 +460,7 @@ namespace robot.Parsers
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
-                return;
+                return 0;
             }
         }
 
