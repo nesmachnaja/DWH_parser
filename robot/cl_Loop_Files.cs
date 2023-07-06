@@ -16,6 +16,7 @@ namespace robot
         cl_Parser_KZ_test parse_kz;
         cl_Parser_MD_test parse_md;
         cl_Parser_MX_test parse_mx;
+        cl_Parser_MKD_test parse_mkd;
         cl_Parser_budget parse_budget;
         int dca_num = 0;
         int snap_num = 0;
@@ -63,7 +64,7 @@ namespace robot
                 //if (country == "sms") parse_sms.CessPostProcessing();
                 parse_kz.SnapPostProcessing();
             }
-            
+
             if (country.ToLower() == "md")
             {
                 dca_num = 0;
@@ -87,7 +88,7 @@ namespace robot
                 if (dca_num != 0) parse_md.DcaPostProcessing();
                 if (snap_num != 0) parse_md.SnapPostProcessing();
             }
-            
+
             if (country.ToLower() == "mx")
             {
                 //dca_num = 0;
@@ -107,11 +108,25 @@ namespace robot
                         parse_mx.StartParsing(country, file_path);
                     }
                 }
-
-                //if (dca_num != 0) parse_mx.DcaPostProcessing();
-                //if (cess_num != 0) parse_mx.CessPostProcessing();
             }
-            
+            if (country.ToLower() == "mkd")
+            {
+                //dca_num = 0;
+                //snap_num = 0;
+                //cess_num = 0;
+
+                foreach (string file_path in files)
+                {
+                    string pattern = @"(.*\\[^~\$]*Loan\+snapshot.+$)|(.*\\[^~\$]*DCA.+$)";
+                    Match result = Regex.Match(file_path, pattern);
+                    if (result.Value.ToString() != "")
+                    {
+                        parse_mkd = new cl_Parser_MKD_test();
+                        parse_mkd.StartParsing(country, file_path);
+                    }
+                }
+            }
+
             if (country.ToLower() == "budget")
             {
                 foreach (string file_path in files)

@@ -261,6 +261,23 @@ namespace robot
             for (int j = 0; j < bih_snap_raw.Columns.Count; j++)
                 bih_snap.Columns.Add(bih_snap_raw.Columns[j].ColumnName, bih_snap_raw.Columns[j].DataType);
 
+            new cl_Field_mapping(sheet, "loan", out int loan);
+            new cl_Field_mapping(sheet, "client", out int client);
+            new cl_Field_mapping(sheet, "status", out int status);
+            new cl_Field_mapping(sheet, "loan disbursment date", out int loan_disbursment_date);
+            new cl_Field_mapping(sheet, "product", out int product);
+            new cl_Field_mapping(sheet, "dpd", out int dpd);
+            new cl_Field_mapping(sheet, "matured principle", out int matured_principle);
+            new cl_Field_mapping(sheet, "outstanding principle", out int outstanding_principle);
+            new cl_Field_mapping(sheet, "principal balance", out int principal_balance);
+            new cl_Field_mapping(sheet, "monthly fee", out int monthly_fee);
+            new cl_Field_mapping(sheet, "guarantor fee", out int guarantor_fee);
+            new cl_Field_mapping(sheet, "penalty fee", out int penalty_fee);
+            new cl_Field_mapping(sheet, "penalty interest", out int penalty_interest);
+            new cl_Field_mapping(sheet, "interest balance", out int interest_balance);
+            new cl_Field_mapping(sheet, "credit amount", out int credit_amount);
+            new cl_Field_mapping(sheet, "available limit", out int available_limit);
+
             int i = 2; // Строка начала периода
 
             try
@@ -279,22 +296,22 @@ namespace robot
 
                     bih_snap_row["Reestr_date"] = reestr_date;
 
-                    bih_snap_row["Loan"] = (sheet.Cells[i, 1] as Range).Value;
-                    bih_snap_row["Client"] = (sheet.Cells[i, 2] as Range).Value;
-                    bih_snap_row["Status"] = (sheet.Cells[i, 3] as Range).Value;
-                    bih_snap_row["Loan_disbursment_date"] = DateTime.Parse((sheet.Cells[i, 4] as Range).Value);
-                    bih_snap_row["Product"] = (sheet.Cells[i, 5] as Range).Value;
-                    bih_snap_row["DPD"] = (int)(sheet.Cells[i, 6] as Range).Value;
-                    bih_snap_row["Matured_principle"] = (double)(sheet.Cells[i, 7] as Range).Value;
-                    bih_snap_row["Outstanding_principle"] = (double)(sheet.Cells[i, 8] as Range).Value;
-                    bih_snap_row["Principal_balance"] = (double)(sheet.Cells[i, 9] as Range).Value;
-                    bih_snap_row["Monthly_fee"] = (double)(sheet.Cells[i, 10] as Range).Value;
-                    bih_snap_row["Guarantor_fee"] = (double)(sheet.Cells[i, 11] as Range).Value;
-                    bih_snap_row["Penalty_fee"] = (double)(sheet.Cells[i, 12] as Range).Value;
-                    bih_snap_row["Penalty_interest"] = (double)(sheet.Cells[i, 13] as Range).Value;
-                    bih_snap_row["Interest_balance"] = (double)(sheet.Cells[i, 14] as Range).Value;
-                    bih_snap_row["Credit_amount"] = (double)(sheet.Cells[i, 15] as Range).Value;
-                    bih_snap_row["Available_limit"] = (double)(sheet.Cells[i, 16] as Range).Value;
+                    bih_snap_row["Loan"] = (sheet.Cells[i, loan] as Range).Value;
+                    bih_snap_row["Client"] = (sheet.Cells[i, client] as Range).Value;
+                    bih_snap_row["Status"] = (sheet.Cells[i, status] as Range).Value;
+                    bih_snap_row["Loan_disbursment_date"] = DateTime.Parse((sheet.Cells[i, loan_disbursment_date] as Range).Value);
+                    bih_snap_row["Product"] = (sheet.Cells[i, product] as Range).Value;
+                    bih_snap_row["DPD"] = (int)(sheet.Cells[i, dpd] as Range).Value;
+                    bih_snap_row["Matured_principle"] = (double)(sheet.Cells[i, matured_principle] as Range).Value;
+                    bih_snap_row["Outstanding_principle"] = (double)(sheet.Cells[i, outstanding_principle] as Range).Value;
+                    bih_snap_row["Principal_balance"] = (double)(sheet.Cells[i, principal_balance] as Range).Value;
+                    bih_snap_row["Monthly_fee"] = (double)(sheet.Cells[i, monthly_fee] as Range).Value;
+                    bih_snap_row["Guarantor_fee"] = (double)(sheet.Cells[i, guarantor_fee] as Range).Value;
+                    bih_snap_row["Penalty_fee"] = (double)(sheet.Cells[i, penalty_fee] as Range).Value;
+                    bih_snap_row["Penalty_interest"] = (double)(sheet.Cells[i, penalty_interest] as Range).Value;
+                    bih_snap_row["Interest_balance"] = (double)(sheet.Cells[i, interest_balance] as Range).Value;
+                    bih_snap_row["Credit_amount"] = (double)(sheet.Cells[i, credit_amount] as Range).Value;
+                    bih_snap_row["Available_limit"] = (double)(sheet.Cells[i, available_limit] as Range).Value;
 
                     //bih_snap.AddBIH_SNAP_rawRow(bih_snap_raw);
                     bih_snap.Rows.Add(bih_snap_row);

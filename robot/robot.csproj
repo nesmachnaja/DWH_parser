@@ -230,6 +230,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="cl_Connection_String.cs" />
+    <Compile Include="cl_Field_mapping.cs" />
     <Compile Include="cl_Loop_Files.cs" />
     <Compile Include="cl_PQR_Forming.cs" />
     <Compile Include="cl_Send_Report.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Parsers\cl_Parser_LIGA.cs" />
     <Compile Include="Parsers\cl_Parser_MD.cs" />
     <Compile Include="Parsers\cl_Parser_MD_test.cs" />
+    <Compile Include="Parsers\cl_Parser_MKD_test.cs" />
     <Compile Include="Parsers\cl_Parser_MX.cs" />
     <Compile Include="Parsers\cl_Parser_MX_test.cs" />
     <Compile Include="Parsers\cl_Parser_SMS.cs" />
