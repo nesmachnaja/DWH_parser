@@ -48,8 +48,9 @@ namespace robot
                     }
                 case "mkd":
                     {
-                        cl_Parser_MKD Parser = new cl_Parser_MKD();
-                        Parser.StartParsing();
+                        /*cl_Parser_MKD Parser = new cl_Parser_MKD();
+                        Parser.StartParsing();*/
+                        cl_Loop_Files loop = new cl_Loop_Files(country);
                         break;
                     }
                 case "sms":

@@ -94,6 +94,17 @@ namespace robot.Parsers
             int firstNull = SearchFirstNullRow(sheet, lastUsedRow);
             //int firstNull = 12;
 
+            new cl_Field_mapping(sheet, "loan_id", out int loan_id);
+            new cl_Field_mapping(sheet, "cession_date", out int cession_date);
+            new cl_Field_mapping(sheet, "principal", out int principal);
+            new cl_Field_mapping(sheet, "interest", out int interest);
+            new cl_Field_mapping(sheet, "fee", out int fee);
+            new cl_Field_mapping(sheet, "penalty", out int penalty);
+            new cl_Field_mapping(sheet, "otherdebt", out int otherdebt);
+            new cl_Field_mapping(sheet, "price_amount", out int price_amount);
+            new cl_Field_mapping(sheet, "price_rate", out int price_rate);
+            new cl_Field_mapping(sheet, "dpd", out int dpd);
+
             int i = 2; // Строка начала периода
 
             try
@@ -117,16 +128,16 @@ namespace robot.Parsers
 
                     row["Reestr_date"] = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
 
-                    row["Loan_id"] = (double)(sheet.Cells[i, 1] as Range).Value;
-                    row["Cession_date"] = (DateTime)(sheet.Cells[i, 2] as Range).Value;
-                    row["Principal"] = (decimal)(sheet.Cells[i, 3] as Range).Value;
-                    row["Interest"] = (sheet.Cells[i, 4] as Range).Text.ToString() != "#ЗНАЧ!" ? (decimal)(sheet.Cells[i, 4] as Range).Value : 0;
-                    row["Fee"] = !(sheet.Cells[i, 5] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 5] as Range).Text.ToString().Equals("$") && (sheet.Cells[i, 5] as Range).Text.ToString() != "" && (sheet.Cells[i, 5] as Range).Text.ToString() != null ? (decimal)(sheet.Cells[i, 5] as Range).Value : 0;
-                    row["Penalty"] = !(sheet.Cells[i, 6] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 6] as Range).Text.ToString().Equals("$") && !((sheet.Cells[i, 6] as Range).Value == null) ? (decimal)(sheet.Cells[i, 6] as Range).Value : 0;
-                    row["Otherdebt"] = !((sheet.Cells[i, 7] as Range).Text.ToString() == "") && !((sheet.Cells[i, 7] as Range).Text.ToString() == null) ? (decimal)(sheet.Cells[i, 7] as Range).Value : 0;
-                    row["Price_amount"] = (decimal)(sheet.Cells[i, 8] as Range).Value;
-                    row["Price_rate"] = (double)(sheet.Cells[i, 9] as Range).Value;
-                    row["DPD"] = (int)(sheet.Cells[i, 11] as Range).Value;
+                    row["Loan_id"] = (double)(sheet.Cells[i, loan_id] as Range).Value;
+                    row["Cession_date"] = (DateTime)(sheet.Cells[i, cession_date] as Range).Value;
+                    row["Principal"] = (decimal)(sheet.Cells[i, principal] as Range).Value;
+                    row["Interest"] = (sheet.Cells[i, interest] as Range).Text.ToString() != "#ЗНАЧ!" ? (decimal)(sheet.Cells[i, 4] as Range).Value : 0;
+                    row["Fee"] = !(sheet.Cells[i, fee] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 5] as Range).Text.ToString().Equals("$") && (sheet.Cells[i, 5] as Range).Text.ToString() != "" && (sheet.Cells[i, 5] as Range).Text.ToString() != null ? (decimal)(sheet.Cells[i, 5] as Range).Value : 0;
+                    row["Penalty"] = !(sheet.Cells[i, penalty] as Range).Text.ToString().Contains("-") && !(sheet.Cells[i, 6] as Range).Text.ToString().Equals("$") && !((sheet.Cells[i, 6] as Range).Value == null) ? (decimal)(sheet.Cells[i, 6] as Range).Value : 0;
+                    row["Otherdebt"] = !((sheet.Cells[i, otherdebt] as Range).Text.ToString() == "") && !((sheet.Cells[i, 7] as Range).Text.ToString() == null) ? (decimal)(sheet.Cells[i, 7] as Range).Value : 0;
+                    row["Price_amount"] = (decimal)(sheet.Cells[i, price_amount] as Range).Value;
+                    row["Price_rate"] = (double)(sheet.Cells[i, price_rate] as Range).Value;
+                    row["DPD"] = (int)(sheet.Cells[i, dpd] as Range).Value;
 
                     //mx_cess.AddMX_CESS_rawRow(row);
                     mx_cess.Rows.Add(row);
@@ -205,6 +216,13 @@ namespace robot.Parsers
             int lastUsedRow = last.Row; // Последняя строка в документе
 
             int firstNull = SearchFirstNullRow(sheet, lastUsedRow);
+
+            new cl_Field_mapping(sheet, "loan_id", out int loan_id);
+            new cl_Field_mapping(sheet, "agreement_id", out int agreement_id);
+            new cl_Field_mapping(sheet, "payment_date", out int payment_date);
+            new cl_Field_mapping(sheet, "dca_name", out int dca_name);
+            new cl_Field_mapping(sheet, "payment_amount", out int payment_amount);
+            new cl_Field_mapping(sheet, "dca_comission_amount", out int dca_comission_amount);
 
             int i = 2; // Строка начала периода
             

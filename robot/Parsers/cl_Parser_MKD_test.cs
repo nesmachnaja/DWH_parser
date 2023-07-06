@@ -9,44 +9,41 @@ using robot.Parsers;
 
 namespace robot
 {
-    class cl_Parser_MKD : cl_Parser
+    class cl_Parser_MKD_test : cl_Parser
     {
-        //COUNTRY_LogTableAdapter logAdapter = new COUNTRY_LogTableAdapter();
-        //SP sp = new SP();
-        //SPRisk sprisk = new SPRisk();
-        //DateTime reestr_date;
-        //string report;
-        //string pathFile;
-        //int success = 0;
+        string _country;
 
-        public void StartParsing()
+        public void StartParsing(string country, string path_file)
         {
             logAdapter = new COUNTRY_LogTableAdapter();
             int correctPath = 0;
+            _country = country;
 
             while (correctPath == 0)
             {
                 try
                 {
-                    pathFile = GetPath();
+                    pathFile = path_file;
                     OpenFile(pathFile);
                     correctPath = 1;
                 }
-                catch
+                catch (Exception exc)
                 {
                     Console.WriteLine("Incorrect file path.");
+                    Console.WriteLine(exc.Message);
                 }
             }
         }
 
-        private static string GetPath()
+        /*private static string GetPath()
         {
             Console.WriteLine("Appoint file path: ");
             string pathFile = Console.ReadLine();
             return pathFile;
         }
+        */
 
-        public void OpenFile(string pathFile) 
+        public void OpenFile(string pathFile)
         {
             string fullPath = Path.GetFullPath(pathFile); // Заплатка для корректности прав
             Excel.Application ex = new Excel.Application();
@@ -54,7 +51,7 @@ namespace robot
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing); //открываем файл
-            
+
             if (pathFile.Contains("DCA")) parse_MKD_DCA(ex);
             if (pathFile.Contains("snapshot")) parse_MKD_SNAP(ex);
         }
@@ -140,30 +137,28 @@ namespace robot
             logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_DCA", "MKD", DateTime.Now, true, report);
             Console.WriteLine(report);
 
+            DcaPostProcessing();
+
+        }
+
+        private void DcaPostProcessing()
+        {
             TotalDcaForming();
 
-            Console.WriteLine("Do you want to transport DCA to Risk? Y - Yes, N - No");
-            string reply = Console.ReadKey().Key.ToString();
+            success = TransportDCAToRisk();
             
-
-            if (reply.Equals("Y"))
-            {
-                success = TransportDCAToRisk();
-            }
-
             if (success == 1)
             {
                 send_report = new cl_Send_Report("MKD_DCA", 1);
                 //Console.WriteLine("Report was sended.");
             }
-
         }
 
         private void TotalDcaForming()
         {
             try
             {
-                sp.sp_MKD_TOTAL_DCA(reestr_date);
+                task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_DCA @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 report = "[DWH_Risk].[dbo].[TOTAL_DCA] was formed.";
                 logAdapter.InsertRow("cl_Parser_MKD", "TotalDcaForming", "MKD", DateTime.Now, false, report);
@@ -213,7 +208,7 @@ namespace robot
             new cl_Field_mapping(sheet, "loan", out int loan);
             new cl_Field_mapping(sheet, "current status", out int current_status);
             new cl_Field_mapping(sheet, "historical loan status", out int historical_loan_status);
-            new cl_Field_mapping(sheet, "loan disbursment date", out int loan_disbursment_date);
+            new cl_Field_mapping(sheet, "loan disbursement date", out int loan_disbursement_date);
             new cl_Field_mapping(sheet, "product", out int product);
             new cl_Field_mapping(sheet, "dpd", out int dpd);
             new cl_Field_mapping(sheet, "principal balance", out int principal_balance);
@@ -247,7 +242,7 @@ namespace robot
 
                     mkd_snap_row["Loan"] = (sheet.Cells[i, loan] as Excel.Range).Value.ToString();
                     mkd_snap_row["Current_status"] = (sheet.Cells[i, current_status] as Excel.Range).Value;
-                    mkd_snap_row["Loan_disbursement_date"] = DateTime.Parse((sheet.Cells[i, loan_disbursment_date] as Excel.Range).Value);
+                    mkd_snap_row["Loan_disbursement_date"] = DateTime.Parse((sheet.Cells[i, loan_disbursement_date] as Excel.Range).Value);
                     mkd_snap_row["Product"] = (sheet.Cells[i, product] as Excel.Range).Value;
                     mkd_snap_row["DPD"] = (int)(sheet.Cells[i, dpd] as Excel.Range).Value;
                     mkd_snap_row["Historical_loan_status"] = (sheet.Cells[i, historical_loan_status] as Excel.Range).Value;
@@ -292,7 +287,6 @@ namespace robot
                     Console.WriteLine(report);
                     logAdapter.InsertRow("cl_Parser_MKD", "parse_MKD_SNAP", "MKD", DateTime.Now, true, report);
 
-                    TotalSnapForming();
                 }
                 else
                 {
@@ -318,62 +312,91 @@ namespace robot
 
             ex.Quit();
 
-            //report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";
-
-            Console.WriteLine("Do you want to transport Snap to Risk? Y - Yes, N - No");
-            string reply = Console.ReadKey().Key.ToString();
-
-
-            if (reply.Equals("Y"))
-            {
-                TransportSnapToRisk(reestr_date);
-                TransportSnapCFToRisk(reestr_date);
-            }
-
-            send_report = new cl_Send_Report("MKD_SNAP", 1);
-            //Console.WriteLine("Report was sended.");
+            SnapPostProcessing();
 
         }
 
-        private void TotalSnapForming()                     //to do: insert into try-catch
+        private void SnapPostProcessing()
         {
-            sp.sp_MKD2_portfolio_snapshot();
+            success += PortfolioSnapshotForming();
+            success += TotalSnapForming();
+            success += TotalSnapCFForming();
 
+            success += TransportSnapToRisk();
+            success += TransportSnapCFToRisk();
+            
+            if (success == 5) send_report = new cl_Send_Report("MKD_SNAP", 1);
+        }
+
+        private int TotalSnapForming()
+        {
+            //sp.sp_MKD2_portfolio_snapshot();
             try
             {
-                task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD_TOTAL_SNAP");
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
-                report = "[DWH_Risk].[dbo].[MKD2_portfolio_snapshot], [DWH_Risk].[dbo].[TOTAL_SNAP] were formed.";
+                report = "[DWH_Risk].[dbo].[TOTAL_SNAP] was formed.";
                 Console.WriteLine(report);
                 logAdapter.InsertRow("cl_Parser_MKD", "TotalSnapForming", "MKD", DateTime.Now, true, report);
+
+                return 1;
             }
             catch (Exception ex)
             {
                 report = ex.Message;
                 Console.WriteLine(report);
                 logAdapter.InsertRow("cl_Parser_MKD", "TotalSnapForming", "MKD", DateTime.Now, false, report);
+
+                return 0;
             }
 
+        }
+
+        private int PortfolioSnapshotForming()
+        {
+            try
+            {
+                task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD2_portfolio_snapshot @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
+
+                report = "[DWH_Risk].[dbo].[MKD2_portfolio_snapshot] was formed.";
+                Console.WriteLine(report);
+                logAdapter.InsertRow("cl_Parser_MKD", "PortfolioSnapshotForming", "MKD", DateTime.Now, true, report);
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                report = ex.Message;
+                Console.WriteLine(report);
+                logAdapter.InsertRow("cl_Parser_MKD", "PortfolioSnapshotForming", "MKD", DateTime.Now, false, report);
+
+                return 0;
+            }
+        }
+
+        private int TotalSnapCFForming()
+        {
             try
             {
                 task = new cl_Tasks("exec DWH_Risk.dbo.sp_MKD_TOTAL_SNAP_CFIELD");
 
                 report = "[DWH_Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 Console.WriteLine(report);
-                logAdapter.InsertRow("cl_Parser_MKD", "TotalSnapForming", "MKD", DateTime.Now, true, report);
+                logAdapter.InsertRow("cl_Parser_MKD", "TotalSnapCFForming", "MKD", DateTime.Now, true, report);
+
+                return 1;
             }
             catch (Exception ex)
             {
                 report = ex.Message;
                 Console.WriteLine(report);
-                logAdapter.InsertRow("cl_Parser_MKD", "TotalSnapForming", "MKD", DateTime.Now, false, report);
+                logAdapter.InsertRow("cl_Parser_MKD", "TotalSnapCFForming", "MKD", DateTime.Now, false, report);
+
+                return 0;
             }
-
-            //sp.sp_MKD_TOTAL_SNAP_CFIELD();
-
         }
 
-        private void TransportSnapToRisk(DateTime snapdate)
+        private int TransportSnapToRisk()
         {
             //Task task_snap = new Task(() =>
             //{
@@ -384,12 +407,13 @@ namespace robot
             try
             {
                 //task_snap.RunSynchronously();
-                task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_SNAP @date = '" + snapdate.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_SNAP @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 report = "Snap was transported to [Risk].[dbo].[MKD2_portfolio_snapshot], [Risk].[dbo].[TOTAL_SNAP].";
                 Console.WriteLine(report);
                 logAdapter.InsertRow("cl_Parser_MKD", "TransportSnapToRisk", "MKD", DateTime.Now, true, report);
 
+                return 1;
             }
             catch (Exception exc)
             {
@@ -397,12 +421,12 @@ namespace robot
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
-                return;
+                return 0;
             }
 
         }
 
-        private void TransportSnapCFToRisk(DateTime snapdate)
+        private int TransportSnapCFToRisk()
         {
             //Task task_snap_cf = new Task(() =>
             //{
@@ -413,13 +437,13 @@ namespace robot
             try
             {
                 //task_snap_cf.RunSynchronously();
-                task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_SNAP_CFIELD @date = '" + snapdate.ToString("yyyy-MM-dd") + "'");
+                task = new cl_Tasks("exec Risk.dbo.sp_MKD_TOTAL_SNAP_CFIELD @date = '" + reestr_date.ToString("yyyy-MM-dd") + "'");
 
                 report = "[Risk].[dbo].[TOTAL_SNAP_CFIELD] was formed.";
                 Console.WriteLine(report);
                 logAdapter.InsertRow("cl_Parser_MKD", "TransportSnapToRisk", "MKD", DateTime.Now, true, report);
 
-                //report into log
+                return 1;
             }
             catch (Exception exc)
             {
@@ -427,7 +451,7 @@ namespace robot
                 Console.WriteLine("Error");
                 Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
-                return;
+                return 0;
             }
 
         }
