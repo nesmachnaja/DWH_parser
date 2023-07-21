@@ -98,6 +98,16 @@ namespace robot.Parsers
 
             int i = lastUsedRow; // Строка начала периода
 
+            new cl_Field_mapping(sheet, "Collection company", out int сollection_company);
+            new cl_Field_mapping(sheet, "Payment month", out int payment_month);
+            new cl_Field_mapping(sheet, "Debtor", out int debtor);
+            new cl_Field_mapping(sheet, "IDNP debitorului", out int idnp_debitorului);
+            new cl_Field_mapping(sheet, "Contract no.", out int contract);
+            new cl_Field_mapping(sheet, "Total paid", out int total_paid);
+            new cl_Field_mapping(sheet, "Fee", out int fee);
+            new cl_Field_mapping(sheet, "Fee (incl. VAT)", out int fee_including_vat);
+            new cl_Field_mapping(sheet, "Payment date", out int payment_date);
+
             try
             {
                 reestr_date = (DateTime)(sheet.Cells[i, 2] as Range).Value;
@@ -110,16 +120,16 @@ namespace robot.Parsers
 
                     md_dca_row["reestr_date"] = reestr_date;
 
-                    md_dca_row["Collection_company"] = (sheet.Cells[i, 1] as Range).Value;
-                    md_dca_row["Payment_month"] = (DateTime)(sheet.Cells[i, 2] as Range).Value;
-                    md_dca_row["Debtor"] = (sheet.Cells[i, 3] as Range).Value;
-                    md_dca_row["IDNP_debitorului"] = (sheet.Cells[i, 4] as Range).Value;
-                    md_dca_row["Contract"] = (sheet.Cells[i, 5] as Range).Value;
-                    md_dca_row["Total_paid"] = (double)(sheet.Cells[i, 6] as Range).Value;
-                    md_dca_row["Fee"] = (double)(sheet.Cells[i, 7] as Range).Value;
-                    md_dca_row["Fee_including_VAT"] = (double)(sheet.Cells[i, 8] as Range).Value;
+                    md_dca_row["Collection_company"] = (sheet.Cells[i, сollection_company] as Range).Value;
+                    md_dca_row["Payment_month"] = (DateTime)(sheet.Cells[i, payment_month] as Range).Value;
+                    md_dca_row["Debtor"] = (sheet.Cells[i, debtor] as Range).Value;
+                    md_dca_row["IDNP_debitorului"] = (sheet.Cells[i, idnp_debitorului] as Range).Value;
+                    md_dca_row["Contract"] = (sheet.Cells[i, contract] as Range).Value;
+                    md_dca_row["Total_paid"] = (double)(sheet.Cells[i, total_paid] as Range).Value;
+                    md_dca_row["Fee"] = (double)(sheet.Cells[i, fee] as Range).Value;
+                    md_dca_row["Fee_including_VAT"] = (double)(sheet.Cells[i, fee_including_vat] as Range).Value;
                     //md_dca_row["Types"] = (sheet.Cells[i, 9] as Range).Value;
-                    md_dca_row["Payment_date"] = DateTime.Parse((sheet.Cells[i, 10] as Range).Value.ToString().Replace("0:00:00", ""));
+                    md_dca_row["Payment_date"] = DateTime.Parse((sheet.Cells[i, payment_date] as Range).Value.ToString().Replace("0:00:00", ""));
 
                     //if ((DateTime)md_dca_row["Payment_month"] != reestr_date)
 
@@ -258,6 +268,15 @@ namespace robot.Parsers
             //int i = 3; // Строка начала периода
             int startPosition = i - 1; // Строка начала периода
 
+            new cl_Field_mapping(sheet, "Account ID", out int account_id);
+            new cl_Field_mapping(sheet, "Loan Amount", out int loan_amount);
+            new cl_Field_mapping(sheet, "Days In Arrears", out int dpd);
+            new cl_Field_mapping(sheet, "Principal Balance", out int principal_balance);
+            new cl_Field_mapping(sheet, "Principal", out int principal);
+            new cl_Field_mapping(sheet, "origin.Fee", out int origination_fee);
+            new cl_Field_mapping(sheet, "origin.Fee IL", out int origination_fee_il);
+            new cl_Field_mapping(sheet, "Interest balance for provisions", out int interest_balance_for_provisions);
+            
             try
             {
                 fileName = ex.Workbooks.Item[1].Name;
@@ -282,14 +301,14 @@ namespace robot.Parsers
                     md_snap_row["reestr_date"] = reestr_date.ToString("yyyy-MM-dd");
                     md_snap_row["SnapDate"] = reestr_date.ToString("yyyy-MM-dd");
 
-                    md_snap_row["Account_ID"] = (sheet.Cells[i, 1] as Range).Value.ToString();
-                    md_snap_row["Loan_amount"] = (double)(sheet.Cells[i, 4] as Range).Value;
-                    md_snap_row["DPD"] = (int)(sheet.Cells[i, 23] as Range).Value;
-                    md_snap_row["Principal_balance"] = (double)(sheet.Cells[i, 7] as Range).Value;
-                    md_snap_row["Principal"] = (double)(sheet.Cells[i, 8] as Range).Value;
-                    md_snap_row["Origination_fee"] = (double)(sheet.Cells[i, 9] as Range).Value;
-                    md_snap_row["Origination_fee_IL"] = (double)(sheet.Cells[i, 10] as Range).Value;
-                    md_snap_row["Interest_balance_for_provisions"] = (double)(sheet.Cells[i, 11] as Range).Value;
+                    md_snap_row["Account_ID"] = (sheet.Cells[i, account_id] as Range).Value.ToString();
+                    md_snap_row["Loan_amount"] = (double)(sheet.Cells[i, loan_amount] as Range).Value;
+                    md_snap_row["DPD"] = (int)(sheet.Cells[i, dpd] as Range).Value;
+                    md_snap_row["Principal_balance"] = (double)(sheet.Cells[i, principal_balance] as Range).Value;
+                    md_snap_row["Principal"] = (double)(sheet.Cells[i, principal] as Range).Value;
+                    md_snap_row["Origination_fee"] = (double)(sheet.Cells[i, origination_fee] as Range).Value;
+                    md_snap_row["Origination_fee_IL"] = (double)(sheet.Cells[i, origination_fee_il] as Range).Value;
+                    md_snap_row["Interest_balance_for_provisions"] = (double)(sheet.Cells[i, interest_balance_for_provisions] as Range).Value;
 
                     md_snap_row["source_type"] = source_type;
 
