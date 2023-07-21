@@ -173,9 +173,18 @@ namespace robot
 
             int i = 2; // Строка начала периода
 
+            new cl_Field_mapping(sheet, "Loan", out int loan);
+            new cl_Field_mapping(sheet, "Client", out int client);
+            new cl_Field_mapping(sheet, "DPD", out int dpd);
+            new cl_Field_mapping(sheet, "Bucket", out int bucket);
+            new cl_Field_mapping(sheet, "Debt collector", out int debt_collector);
+            new cl_Field_mapping(sheet, "Amount", out int amount);
+            new cl_Field_mapping(sheet, "%", out int percent);
+            new cl_Field_mapping(sheet, "Fee amount", out int fee_amount);
+
             try
             {
-                string debt_collector = (sheet.Cells[i, 5] as Range).Value;
+                string debt_collector_str = (sheet.Cells[i, debt_collector] as Range).Value;
 
                 while (i < firstNull)
                 {
@@ -184,14 +193,14 @@ namespace robot
 
                     bih_dca_row["Reestr_date"] = reestr_date;
 
-                    bih_dca_row["Loan"] = (sheet.Cells[i, 1] as Range).Value == null? 0 : (sheet.Cells[i, 1] as Range).Value.ToString();
-                    bih_dca_row["Client"] = (sheet.Cells[i, 2] as Range).Value;
-                    bih_dca_row["DPD"] = (sheet.Cells[i, 3] as Range).Value == null? 0 : (int)(sheet.Cells[i, 3] as Range).Value;
-                    bih_dca_row["Bucket"] = (sheet.Cells[i, 4] as Range).Value;
-                    bih_dca_row["Debt_collector"] = debt_collector;
-                    bih_dca_row["Amount"] = (double)(sheet.Cells[i, 6] as Range).Value;
-                    bih_dca_row["Percent"] = (double)(sheet.Cells[i, 7] as Range).Value;
-                    bih_dca_row["Fee_amount"] = (double)(sheet.Cells[i, 8] as Range).Value;
+                    bih_dca_row["Loan"] = (sheet.Cells[i, loan] as Range).Value == null? 0 : (sheet.Cells[i, 1] as Range).Value.ToString();
+                    bih_dca_row["Client"] = (sheet.Cells[i, client] as Range).Value;
+                    bih_dca_row["DPD"] = (sheet.Cells[i, dpd] as Range).Value == null? 0 : (int)(sheet.Cells[i, 3] as Range).Value;
+                    bih_dca_row["Bucket"] = (sheet.Cells[i, bucket] as Range).Value;
+                    bih_dca_row["Debt_collector"] = debt_collector_str;
+                    bih_dca_row["Amount"] = (double)(sheet.Cells[i, amount] as Range).Value;
+                    bih_dca_row["Percent"] = (double)(sheet.Cells[i, percent] as Range).Value;
+                    bih_dca_row["Fee_amount"] = (double)(sheet.Cells[i, fee_amount] as Range).Value;
 
                     //bih_dca.AddBIH_DCA_rawRow(bih_dca_row);
                     bih_dca.Rows.Add(bih_dca_row);
@@ -205,7 +214,7 @@ namespace robot
                 if (bih_dca.Rows.Count > 0)
                 {
                     BIH_DCA_rawTableAdapter ad_BIH_DCA_raw = new BIH_DCA_rawTableAdapter();
-                    ad_BIH_DCA_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), debt_collector);
+                    ad_BIH_DCA_raw.DeletePeriod(reestr_date.ToString("yyyy-MM-dd"), debt_collector_str);
 
 
                     try

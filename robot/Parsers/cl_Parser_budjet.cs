@@ -83,6 +83,14 @@ namespace robot.Parsers
 
             int i = 2; // Строка начала периода
 
+            new cl_Field_mapping(sheet, "country", out int country);
+            new cl_Field_mapping(sheet, "product", out int product);
+            new cl_Field_mapping(sheet, "channel", out int channel);
+            new cl_Field_mapping(sheet, "cycle_type", out int cycle_type);
+            new cl_Field_mapping(sheet, "cost_(EUR)", out int cost);
+            new cl_Field_mapping(sheet, "last day of the week", out int last_day_week);
+            new cl_Field_mapping(sheet, "last day of the month", out int last_day_month);
+
             try
             {
                 fileName = ex.Workbooks.Item[1].Name;
@@ -100,13 +108,13 @@ namespace robot.Parsers
 
                     //budget_row["reestr_date"] = reestr_date;
 
-                    budget_row["country"] = (sheet.Cells[i, 1] as Range).Value.ToString();
-                    budget_row["product"] = (sheet.Cells[i, 2] as Range).Value.ToString();
-                    budget_row["channel"] = (sheet.Cells[i, 3] as Range).Value.ToString();
-                    budget_row["cycle_type"] = (sheet.Cells[i, 4] as Range).Value.ToString();
-                    budget_row["cost"] = (double?)(sheet.Cells[i, 5] as Range).Value == null ? 0 : (double?)(sheet.Cells[i, 5] as Range).Value;
-                    budget_row["last_day_week"] = (DateTime)(sheet.Cells[i, 6] as Range).Value;
-                    budget_row["last_day_month"] = (DateTime)(sheet.Cells[i, 7] as Range).Value;
+                    budget_row["country"] = (sheet.Cells[i, country] as Range).Value.ToString();
+                    budget_row["product"] = (sheet.Cells[i, product] as Range).Value.ToString();
+                    budget_row["channel"] = (sheet.Cells[i, channel] as Range).Value.ToString();
+                    budget_row["cycle_type"] = (sheet.Cells[i, cycle_type] as Range).Value.ToString();
+                    budget_row["cost"] = (double?)(sheet.Cells[i, cost] as Range).Value == null ? 0 : (double?)(sheet.Cells[i, 5] as Range).Value;
+                    budget_row["last_day_week"] = (DateTime)(sheet.Cells[i, last_day_week] as Range).Value;
+                    budget_row["last_day_month"] = (DateTime)(sheet.Cells[i, last_day_month] as Range).Value;
                     
 
                     //budget.Addbudget_rawRow(budget_row);
