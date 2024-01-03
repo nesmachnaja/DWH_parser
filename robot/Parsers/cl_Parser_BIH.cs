@@ -229,7 +229,7 @@ namespace robot
                         Console.WriteLine("Error_desc: " + exc.Message.ToString());
                         sheet.Application.Quit();
 
-                        return;
+                        throw;
                     }
                 }
                 else
@@ -355,7 +355,7 @@ namespace robot
                         Console.WriteLine("Error_desc: " + exc.Message.ToString());
                         ex.Quit();
 
-                        return;
+                        throw;
                     }
 
 

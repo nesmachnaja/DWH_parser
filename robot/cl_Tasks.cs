@@ -110,6 +110,8 @@ namespace robot
                 {
                     Console.WriteLine(exc.Message);
                     connection.Close();
+
+                    throw;
                 }
             },
             TaskCreationOptions.LongRunning);
@@ -159,6 +161,8 @@ namespace robot
                 {
                     Console.WriteLine(exc.Message);
                     connection.Close();
+
+                    throw;
                 }
             },
             TaskCreationOptions.LongRunning);

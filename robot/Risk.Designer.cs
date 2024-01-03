@@ -371,6 +371,8 @@ namespace robot {
             
             private global::System.Data.DataColumn columnDPD;
             
+            private global::System.Data.DataColumn columnsource_name;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public MX_CESS_rawDataTable() {
@@ -494,6 +496,14 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn source_nameColumn {
+                get {
+                    return this.columnsource_name;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -529,7 +539,7 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MX_CESS_rawRow AddMX_CESS_rawRow(System.DateTime reestr_date, double loan_id, System.DateTime cession_date, decimal principal, decimal interest, decimal fee, decimal penalty, decimal otherdebt, decimal price_amount, double price_rate, double DPD) {
+            public MX_CESS_rawRow AddMX_CESS_rawRow(System.DateTime reestr_date, double loan_id, System.DateTime cession_date, decimal principal, decimal interest, decimal fee, decimal penalty, decimal otherdebt, decimal price_amount, double price_rate, double DPD, string source_name) {
                 MX_CESS_rawRow rowMX_CESS_rawRow = ((MX_CESS_rawRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         reestr_date,
@@ -542,7 +552,8 @@ namespace robot {
                         otherdebt,
                         price_amount,
                         price_rate,
-                        DPD};
+                        DPD,
+                        source_name};
                 rowMX_CESS_rawRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMX_CESS_rawRow);
                 return rowMX_CESS_rawRow;
@@ -576,6 +587,7 @@ namespace robot {
                 this.columnprice_amount = base.Columns["price_amount"];
                 this.columnprice_rate = base.Columns["price_rate"];
                 this.columnDPD = base.Columns["DPD"];
+                this.columnsource_name = base.Columns["source_name"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -603,6 +615,9 @@ namespace robot {
                 base.Columns.Add(this.columnprice_rate);
                 this.columnDPD = new global::System.Data.DataColumn("DPD", typeof(double), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDPD);
+                this.columnsource_name = new global::System.Data.DataColumn("source_name", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnsource_name);
+                this.columnsource_name.MaxLength = 100;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1670,6 +1685,22 @@ namespace robot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string source_name {
+                get {
+                    try {
+                        return ((string)(this[this.tableMX_CESS_raw.source_nameColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'source_name\' в таблице \'MX_CESS_raw\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableMX_CESS_raw.source_nameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool Isreestr_dateNull() {
                 return this.IsNull(this.tableMX_CESS_raw.reestr_dateColumn);
             }
@@ -1798,6 +1829,18 @@ namespace robot {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetDPDNull() {
                 this[this.tableMX_CESS_raw.DPDColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool Issource_nameNull() {
+                return this.IsNull(this.tableMX_CESS_raw.source_nameColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Setsource_nameNull() {
+                this[this.tableMX_CESS_raw.source_nameColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -2555,10 +2598,11 @@ namespace robot.RiskTableAdapters {
             tableMapping.ColumnMappings.Add("price_amount", "price_amount");
             tableMapping.ColumnMappings.Add("price_rate", "price_rate");
             tableMapping.ColumnMappings.Add("DPD", "DPD");
+            tableMapping.ColumnMappings.Add("source_name", "source_name");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[MX_CESS_raw] ([reestr_date], [loan_id], [cession_date], [principal], [interest], [fee], [penalty], [otherdebt], [price_amount], [price_rate], [DPD]) VALUES (@reestr_date, @loan_id, @cession_date, @principal, @interest, @fee, @penalty, @otherdebt, @price_amount, @price_rate, @DPD)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[MX_CESS_raw] ([reestr_date], [loan_id], [cession_date], [principal], [interest], [fee], [penalty], [otherdebt], [price_amount], [price_rate], [DPD], [source_name]) VALUES (@reestr_date, @loan_id, @cession_date, @principal, @interest, @fee, @penalty, @otherdebt, @price_amount, @price_rate, @DPD, @source_name)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reestr_date", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reestr_date", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@loan_id", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "loan_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2571,6 +2615,7 @@ namespace robot.RiskTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@price_amount", global::System.Data.SqlDbType.Money, 0, global::System.Data.ParameterDirection.Input, 0, 0, "price_amount", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@price_rate", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "price_rate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@DPD", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, 0, 0, "DPD", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@source_name", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "source_name", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2667,7 +2712,7 @@ namespace robot.RiskTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(global::System.Nullable<global::System.DateTime> reestr_date, global::System.Nullable<double> loan_id, global::System.Nullable<global::System.DateTime> cession_date, global::System.Nullable<decimal> principal, global::System.Nullable<decimal> interest, global::System.Nullable<decimal> fee, global::System.Nullable<decimal> penalty, global::System.Nullable<decimal> otherdebt, global::System.Nullable<decimal> price_amount, global::System.Nullable<double> price_rate, global::System.Nullable<double> DPD) {
+        public virtual int Insert(global::System.Nullable<global::System.DateTime> reestr_date, global::System.Nullable<double> loan_id, global::System.Nullable<global::System.DateTime> cession_date, global::System.Nullable<decimal> principal, global::System.Nullable<decimal> interest, global::System.Nullable<decimal> fee, global::System.Nullable<decimal> penalty, global::System.Nullable<decimal> otherdebt, global::System.Nullable<decimal> price_amount, global::System.Nullable<double> price_rate, global::System.Nullable<double> DPD, string source_name) {
             if ((reestr_date.HasValue == true)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((System.DateTime)(reestr_date.Value));
             }
@@ -2733,6 +2778,12 @@ namespace robot.RiskTableAdapters {
             }
             else {
                 this.Adapter.InsertCommand.Parameters[10].Value = global::System.DBNull.Value;
+            }
+            if ((source_name == null)) {
+                this.Adapter.InsertCommand.Parameters[11].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[11].Value = ((string)(source_name));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 

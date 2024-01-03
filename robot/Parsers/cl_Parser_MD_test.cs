@@ -176,7 +176,7 @@ namespace robot.Parsers
                         Console.WriteLine("Error");
                         Console.WriteLine("Error_desc: " + exc.Message.ToString());
 
-                        return;
+                        throw;
                     }
                 }
                 else
@@ -343,7 +343,7 @@ namespace robot.Parsers
                         Console.WriteLine("Error_descr: " + exc.Message.ToString());
                         ex.Quit();
 
-                        return;
+                        throw;
                     }
                 }
                 else

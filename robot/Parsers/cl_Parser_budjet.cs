@@ -150,7 +150,7 @@ namespace robot.Parsers
                         Console.WriteLine("Error_descr: " + exc.Message);
                         ex.Quit();
 
-                        return;
+                        throw;
                     }
                 }
                 else

@@ -280,7 +280,7 @@ namespace robot
                         Console.WriteLine("Error_desc: " + exc.Message.ToString());
                         ex.Quit();
 
-                        return;
+                        throw;
                     }
 
                     report = "Loading is ready. " + (lastUsedRow - 1).ToString() + " rows were processed.";

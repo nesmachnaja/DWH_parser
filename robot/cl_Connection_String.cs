@@ -39,7 +39,7 @@ namespace robot
             {
                 Console.WriteLine("Configuration file wasnt found.");
                 Console.ReadLine();
-                return;
+                throw;
             }
         }
     }
