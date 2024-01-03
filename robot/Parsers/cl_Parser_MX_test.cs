@@ -111,9 +111,9 @@ namespace robot.Parsers
             {
                 fileName = ex.Workbooks.Item[1].Name;
 
-                fileName = "01." + fileName.Replace("cessions_", "").Replace(".xlsx", "").Substring(4, 2) + "." + fileName.Replace("cessions_", "").Replace(".xlsx", "").Substring(0, 4); //.ToString("yyyy-MM-dd");
+                string date_to_parse = "01." + fileName.Replace("cessions_", "").Replace(".xlsx", "").Substring(4, 2) + "." + fileName.Replace("cessions_", "").Replace(".xlsx", "").Substring(0, 4); //.ToString("yyyy-MM-dd");
 
-                reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
+                reestr_date = DateTime.Parse(date_to_parse); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
                 reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
                                                                                                                  //MX_CESS.Reestr_date = reestr_date;       //current date
                 MX_CESS_rawDataTable mx_cess_raw = new MX_CESS_rawDataTable();
@@ -128,7 +128,7 @@ namespace robot.Parsers
 
                     row["Reestr_date"] = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
 
-                    row["Loan_id"] = (double)(sheet.Cells[i, loan_id] as Range).Value;
+                    row["Loan_id"] = double.Parse((sheet.Cells[i, loan_id] as Range).Value.ToString());
                     row["Cession_date"] = (DateTime)(sheet.Cells[i, cession_date] as Range).Value;
                     row["Principal"] = (decimal)(sheet.Cells[i, principal] as Range).Value;
                     row["Interest"] = (sheet.Cells[i, interest] as Range).Text.ToString() != "#ЗНАЧ!" ? (decimal)(sheet.Cells[i, 4] as Range).Value : 0;
@@ -138,6 +138,8 @@ namespace robot.Parsers
                     row["Price_amount"] = (decimal)(sheet.Cells[i, price_amount] as Range).Value;
                     row["Price_rate"] = (double)(sheet.Cells[i, price_rate] as Range).Value;
                     row["DPD"] = (int)(sheet.Cells[i, dpd] as Range).Value;
+                    
+                    row["source_name"] = fileName;
 
                     //mx_cess.AddMX_CESS_rawRow(row);
                     mx_cess.Rows.Add(row);
@@ -167,7 +169,7 @@ namespace robot.Parsers
                         ex.Quit();
                         //Console.ReadKey();
 
-                        return;
+                        throw;
                     }
 
                     report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";
@@ -237,7 +239,8 @@ namespace robot.Parsers
                 //"01 " + fileName.Replace("190725_Data_exchance_format_", "").Replace(".xlsx", "").Replace("_", " ");
 
                 reestr_date = DateTime.Parse(fileName); //(DateTime)(sheet.Cells[i, 2] as Range).Value;
-                reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
+                //reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddMonths(1).AddDays(-1);     //eomonth
+                reestr_date = new DateTime(reestr_date.Year, reestr_date.Month, 1).AddDays(-1);     //eomonth
                                                                                                                  //MX_DCA.Reestr_date = reestr_date;       //current date
                 MX_DCA_rawDataTable mx_dca_raw = new MX_DCA_rawDataTable();
                 System.Data.DataTable mx_dca = new System.Data.DataTable();
@@ -284,7 +287,7 @@ namespace robot.Parsers
                         ex.Quit();
                         //Console.ReadKey();
 
-                        return;
+                        throw;
                     }
 
                     report = "Loading is ready. " + (firstNull - 2).ToString() + " rows were processed.";

@@ -1,7 +1,6 @@
 C:\Users\Людмила\source\repos\robot\robot\bin\Debug\robot.exe.config
 C:\Users\Людмила\source\repos\robot\robot\bin\Debug\robot.exe
 C:\Users\Людмила\source\repos\robot\robot\bin\Debug\robot.pdb
-C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.csprojAssemblyReference.cache
 C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.csproj.CoreCompileInputs.cache
 C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.exe
 C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.pdb
@@ -155,3 +154,4 @@ C:\Users\Людмила\source\repos\robot\robot\bin\Debug\pt-BR\Microsoft.Data.
 C:\Users\Людмила\source\repos\robot\robot\bin\Debug\ru\Microsoft.Data.SqlClient.resources.dll
 C:\Users\Людмила\source\repos\robot\robot\bin\Debug\zh-Hans\Microsoft.Data.SqlClient.resources.dll
 C:\Users\Людмила\source\repos\robot\robot\bin\Debug\zh-Hant\Microsoft.Data.SqlClient.resources.dll
+C:\Users\Людмила\source\repos\robot\robot\obj\Debug\robot.csproj.AssemblyReference.cache

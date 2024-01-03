@@ -21,15 +21,20 @@ namespace robot
         int dca_num = 0;
         int snap_num = 0;
         int cess_num = 0;
+        string path = "";
 
         public cl_Loop_Files(string country)
         {
-            Console.WriteLine("Appoint folder path:");
-            string path = Console.ReadLine();
-            if (Directory.Exists(path))
+
+            while (files == null || files.Length == 0)
             {
+                SearchTheFolderToParse();
                 files = Directory.GetFiles(path, @"*.xls?", SearchOption.TopDirectoryOnly);
+                if (files == null || files.Length == 0) Console.WriteLine("Nothing to parse. Appoint the other path or download the files into current folder.");
+                else break;
+                path = "";
             }
+
 
             if (country.ToLower() == "sms") //|| country.ToLower() == "kz")
             {
@@ -140,6 +145,15 @@ namespace robot
                     }
                 }
 
+            }
+        }
+
+        private void SearchTheFolderToParse()
+        {
+            while (!Directory.Exists(path))
+            {
+                Console.WriteLine("Appoint folder path:");
+                path = Console.ReadLine();
             }
         }
     }
