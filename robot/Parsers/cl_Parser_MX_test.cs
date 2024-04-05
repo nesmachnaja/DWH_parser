@@ -230,7 +230,20 @@ namespace robot.Parsers
             
             try
             {
-                fileName = ex.Workbooks.Item[1].Name;
+                fileName = ex.Workbooks.Item[1].Name.ToLower()
+                    .Replace("enero","JAN")
+                    .Replace("febrero", "FEB")
+                    .Replace("marzo", "MAR")
+                    .Replace("abril", "APR")
+                    .Replace("mayo", "MAY")
+                    .Replace("junio", "JUN")
+                    .Replace("julio", "JUL")
+                    .Replace("agosto", "AUG")
+                    .Replace("septriembre", "SEP")
+                    .Replace("octubre", "OCT")
+                    .Replace("noviembre", "NOV")
+                    .Replace("diciembre", "DEC")
+                    ;
 
                 string pattern = @"\D{4}\d{4}";
                 Match result = Regex.Match(fileName, pattern);
