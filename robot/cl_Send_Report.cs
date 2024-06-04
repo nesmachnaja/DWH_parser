@@ -103,7 +103,7 @@ namespace robot
 
         private void PrintReport()
         {
-            Console.WriteLine("Report was sended to:");
+            Console.WriteLine("Report was sent to:");
             foreach (MailAddress email in to_address_list)
                 Console.WriteLine(email.Address.ToString());
         }
