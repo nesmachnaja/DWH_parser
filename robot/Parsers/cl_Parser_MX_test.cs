@@ -239,7 +239,7 @@ namespace robot.Parsers
                     .Replace("junio", "JUN")
                     .Replace("julio", "JUL")
                     .Replace("agosto", "AUG")
-                    .Replace("septriembre", "SEP")
+                    .Replace("septiembre", "SEP")
                     .Replace("octubre", "OCT")
                     .Replace("noviembre", "NOV")
                     .Replace("diciembre", "DEC")
